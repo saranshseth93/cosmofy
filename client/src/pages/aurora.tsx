@@ -51,7 +51,7 @@ export default function Aurora() {
   const activity = currentForecast ? getActivityLevel(currentForecast.kpIndex) : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[hsl(222,47%,8%)] via-[hsl(261,57%,29%)] to-[hsl(222,47%,8%)]">
+    <div className="min-h-screen">
       <Navigation />
       
       {/* Hero Section */}

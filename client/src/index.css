@@ -66,12 +66,20 @@
     @apply border-border;
   }
 
-  body {
-    @apply bg-background text-foreground font-sans antialiased;
+  html, body {
+    @apply text-foreground font-sans antialiased;
     font-family: 'Inter', sans-serif;
     background: linear-gradient(135deg, var(--space-deep) 0%, var(--space-blue) 50%, var(--space-purple) 100%);
+    background-attachment: fixed;
     min-height: 100vh;
+    margin: 0;
+    padding: 0;
     overflow-x: hidden;
+  }
+
+  #root {
+    min-height: 100vh;
+    background: transparent;
   }
   
   .font-orbitron {

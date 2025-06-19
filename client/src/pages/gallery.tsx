@@ -52,7 +52,7 @@ export default function Gallery() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[hsl(222,47%,8%)] via-[hsl(217,91%,29%)] to-[hsl(222,47%,8%)]">
+    <div className="min-h-screen">
       <Navigation />
       
       {/* Hero Section */}
