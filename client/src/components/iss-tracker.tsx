@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { SatelliteOrbit } from '@/components/lottie-loader';
 import { useGSAP } from '@/hooks/use-gsap';
 import { useGeolocation } from '@/hooks/use-geolocation';
 import { IssPosition, IssPass, IssCrew } from '@/types/space';
@@ -98,9 +99,7 @@ export function ISSTracker({ id = "iss-tracker" }: ISSTrackerProps) {
               <div className="relative bg-[hsl(222,47%,8%)] rounded-xl overflow-hidden mb-6 h-64 bg-gradient-to-br from-blue-900 to-purple-900">
                 <div className="absolute inset-0 bg-gradient-to-t from-[hsl(222,47%,8%)] via-transparent to-transparent" />
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                  <div className="animate-pulse">
-                    <Satellite className="h-12 w-12 text-[hsl(158,76%,36%)]" />
-                  </div>
+                  <SatelliteOrbit size={100} />
                 </div>
                 {position && (
                   <div className="absolute bottom-4 left-4 text-sm">

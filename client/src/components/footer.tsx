@@ -54,10 +54,11 @@ export function Footer() {
           {/* Brand Section */}
           <div className="md:col-span-1">
             <div className="flex items-center space-x-2 mb-6">
-              <Rocket className="h-8 w-8 text-[hsl(158,76%,36%)]" />
-              <span className="text-2xl font-orbitron font-bold text-gradient">
-                COSMOFY
-              </span>
+              <img 
+                src="/attached_assets/Cosmo - 1_1750298158776.png" 
+                alt="Cosmofy" 
+                className="h-8 w-auto"
+              />
             </div>
             <p className="text-sm opacity-70 mb-6 leading-relaxed">
               Exploring the cosmos through cutting-edge NASA data and real-time space tracking. 

@@ -28,10 +28,11 @@ export function Navigation() {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
-            <Rocket className="h-8 w-8 text-[hsl(158,76%,36%)]" />
-            <span className="text-2xl font-orbitron font-bold text-gradient">
-              COSMOFY
-            </span>
+            <img 
+              src="/attached_assets/Cosmo - 1_1750298158776.png" 
+              alt="Cosmofy" 
+              className="h-8 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}

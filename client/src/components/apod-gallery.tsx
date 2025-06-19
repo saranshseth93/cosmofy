@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { LottieLoader } from '@/components/lottie-loader';
 import { useGSAP } from '@/hooks/use-gsap';
 import { ApodImage } from '@/types/space';
 
@@ -101,18 +102,22 @@ export function APODGallery({ id = "gallery" }: APODGalleryProps) {
         {/* Gallery Grid */}
         <div className="mb-12">
           {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {Array.from({ length: 6 }).map((_, index) => (
-                <Card key={index} className="glass-effect">
-                  <Skeleton className="w-full h-64" />
-                  <CardContent className="p-6">
-                    <Skeleton className="h-6 w-3/4 mb-2" />
-                    <Skeleton className="h-4 w-1/2 mb-3" />
-                    <Skeleton className="h-4 w-full mb-2" />
-                    <Skeleton className="h-4 w-2/3" />
-                  </CardContent>
-                </Card>
-              ))}
+            <div className="flex flex-col items-center justify-center py-20">
+              <LottieLoader size={120} className="mb-6" />
+              <p className="text-lg opacity-70 mb-4">Loading cosmic imagery...</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <Card key={index} className="glass-effect">
+                    <Skeleton className="w-full h-64" />
+                    <CardContent className="p-6">
+                      <Skeleton className="h-6 w-3/4 mb-2" />
+                      <Skeleton className="h-4 w-1/2 mb-3" />
+                      <Skeleton className="h-4 w-full mb-2" />
+                      <Skeleton className="h-4 w-2/3" />
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
