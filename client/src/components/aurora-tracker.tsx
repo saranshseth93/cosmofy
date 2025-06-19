@@ -118,6 +118,9 @@ export function AuroraTracker({ id = "aurora" }: AuroraTrackerProps) {
               {/* Aurora Activity Display */}
               <div className="relative rounded-xl overflow-hidden mb-6 h-64 bg-gradient-to-br from-green-900 via-blue-900 to-purple-900">
                 <div className="absolute inset-0 bg-gradient-to-t from-[hsl(222,47%,8%)] via-transparent to-transparent" />
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                  <CosmicPulse size={80} />
+                </div>
                 <div className="absolute bottom-4 left-4">
                   {isLoading ? (
                     <div className="glass-effect px-3 py-2 rounded-lg">

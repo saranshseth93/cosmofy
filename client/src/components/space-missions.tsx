@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { LottieLoader } from '@/components/lottie-loader';
 import { useGSAP } from '@/hooks/use-gsap';
 import { SpaceMission } from '@/types/space';
 
@@ -101,30 +102,36 @@ export function SpaceMissions({ id = "missions" }: SpaceMissionsProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {isLoading ? (
-            Array.from({ length: 4 }).map((_, index) => (
-              <Card key={index} className="glass-effect rounded-2xl overflow-hidden">
-                <Skeleton className="w-full h-64" />
-                <CardContent className="p-8">
-                  <div className="flex items-center justify-between mb-4">
-                    <Skeleton className="h-8 w-48" />
-                    <Skeleton className="h-6 w-20" />
-                  </div>
-                  <Skeleton className="h-4 w-full mb-4" />
-                  <Skeleton className="h-4 w-3/4 mb-6" />
-                  <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div>
-                      <Skeleton className="h-4 w-20 mb-1" />
-                      <Skeleton className="h-5 w-24" />
-                    </div>
-                    <div>
-                      <Skeleton className="h-4 w-24 mb-1" />
-                      <Skeleton className="h-5 w-20" />
-                    </div>
-                  </div>
-                  <Skeleton className="h-12 w-full" />
-                </CardContent>
-              </Card>
-            ))
+            <div className="col-span-full flex flex-col items-center justify-center py-20">
+              <LottieLoader size={120} className="mb-6" />
+              <p className="text-lg opacity-70 mb-8">Loading active space missions...</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+                {Array.from({ length: 4 }).map((_, index) => (
+                  <Card key={index} className="glass-effect rounded-2xl overflow-hidden">
+                    <Skeleton className="w-full h-64" />
+                    <CardContent className="p-8">
+                      <div className="flex items-center justify-between mb-4">
+                        <Skeleton className="h-8 w-48" />
+                        <Skeleton className="h-6 w-20" />
+                      </div>
+                      <Skeleton className="h-4 w-full mb-4" />
+                      <Skeleton className="h-4 w-3/4 mb-6" />
+                      <div className="grid grid-cols-2 gap-4 mb-6">
+                        <div>
+                          <Skeleton className="h-4 w-20 mb-1" />
+                          <Skeleton className="h-5 w-24" />
+                        </div>
+                        <div>
+                          <Skeleton className="h-4 w-24 mb-1" />
+                          <Skeleton className="h-5 w-20" />
+                        </div>
+                      </div>
+                      <Skeleton className="h-12 w-full" />
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
           ) : missions && missions.length > 0 ? (
             missions.map((mission) => (
               <Card 

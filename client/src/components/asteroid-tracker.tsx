@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { LottieLoader } from '@/components/lottie-loader';
 import { useGSAP } from '@/hooks/use-gsap';
 import { Asteroid } from '@/types/space';
 
@@ -157,27 +158,31 @@ export function AsteroidTracker({ id = "asteroids" }: AsteroidTrackerProps) {
 
             <div className="space-y-6">
               {isLoading ? (
-                Array.from({ length: 3 }).map((_, index) => (
-                  <div key={index} className="flex flex-col md:flex-row md:items-center justify-between p-6 bg-[hsl(222,47%,8%)] bg-opacity-50 rounded-xl">
-                    <div className="flex-1">
-                      <div className="flex items-center mb-2">
-                        <Skeleton className="h-6 w-48 mr-3" />
-                        <Skeleton className="h-6 w-32" />
+                <div className="flex flex-col items-center justify-center py-20">
+                  <LottieLoader size={100} className="mb-6" />
+                  <p className="text-lg opacity-70 mb-8">Tracking near-Earth objects...</p>
+                  {Array.from({ length: 3 }).map((_, index) => (
+                    <div key={index} className="flex flex-col md:flex-row md:items-center justify-between p-6 bg-[hsl(222,47%,8%)] bg-opacity-50 rounded-xl w-full mb-4">
+                      <div className="flex-1">
+                        <div className="flex items-center mb-2">
+                          <Skeleton className="h-6 w-48 mr-3" />
+                          <Skeleton className="h-6 w-32" />
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          {Array.from({ length: 4 }).map((_, i) => (
+                            <div key={i}>
+                              <Skeleton className="h-4 w-16 mb-1" />
+                              <Skeleton className="h-5 w-20" />
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {Array.from({ length: 4 }).map((_, i) => (
-                          <div key={i}>
-                            <Skeleton className="h-4 w-16 mb-1" />
-                            <Skeleton className="h-5 w-20" />
-                          </div>
-                        ))}
+                      <div className="mt-4 md:mt-0 md:ml-6">
+                        <Skeleton className="h-10 w-24" />
                       </div>
                     </div>
-                    <div className="mt-4 md:mt-0 md:ml-6">
-                      <Skeleton className="h-10 w-24" />
-                    </div>
-                  </div>
-                ))
+                  ))}
+                </div>
               ) : asteroids && asteroids.length > 0 ? (
                 asteroids.slice(0, 5).map((asteroid) => (
                   <div key={asteroid.id} className="flex flex-col md:flex-row md:items-center justify-between p-6 bg-[hsl(222,47%,8%)] bg-opacity-50 rounded-xl">

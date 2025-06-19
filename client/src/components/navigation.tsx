@@ -3,6 +3,7 @@ import { Link } from 'wouter';
 import { Rocket, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import logoPath from '@assets/Cosmo - 1_1750298158776.png';
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,10 +30,15 @@ export function Navigation() {
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
             <img 
-              src="/attached_assets/Cosmo - 1_1750298158776.png" 
+              src={logoPath} 
               alt="Cosmofy" 
               className="h-8 w-auto"
+              onError={(e) => {
+                console.error('Logo failed to load:', e);
+                e.currentTarget.style.display = 'none';
+              }}
             />
+            <span className="text-xl font-bold text-white">Cosmofy</span>
           </Link>
 
           {/* Desktop Navigation */}
