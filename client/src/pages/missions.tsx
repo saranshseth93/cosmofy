@@ -85,7 +85,7 @@ export default function Missions() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[hsl(222,47%,8%)] via-[hsl(244,62%,26%)] to-[hsl(222,47%,8%)]">
+    <div className="min-h-screen">
       <Navigation />
       
       {/* Hero Section */}
