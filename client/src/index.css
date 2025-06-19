@@ -1,0 +1,227 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --background: hsl(222, 47%, 8%);
+  --foreground: hsl(0, 0%, 100%);
+  --muted: hsl(225, 25%, 15%);
+  --muted-foreground: hsl(215, 16%, 60%);
+  --popover: hsl(222, 47%, 8%);
+  --popover-foreground: hsl(0, 0%, 100%);
+  --card: hsl(222, 47%, 8%);
+  --card-foreground: hsl(0, 0%, 100%);
+  --border: hsl(215, 28%, 25%);
+  --input: hsl(215, 28%, 25%);
+  --primary: hsl(158, 76%, 36%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(215, 28%, 25%);
+  --secondary-foreground: hsl(0, 0%, 100%);
+  --accent: hsl(215, 28%, 25%);
+  --accent-foreground: hsl(0, 0%, 100%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(158, 76%, 36%);
+  --radius: 0.5rem;
+  
+  /* Cosmic Color Palette */
+  --space-deep: hsl(222, 47%, 8%);
+  --space-blue: hsl(217, 91%, 29%);
+  --space-purple: hsl(261, 57%, 29%);
+  --space-indigo: hsl(244, 62%, 26%);
+  --space-gray: hsl(220, 13%, 18%);
+  
+  --cosmic-white: hsl(0, 0%, 100%);
+  --cosmic-green: hsl(158, 76%, 36%);
+  --cosmic-orange: hsl(43, 96%, 56%);
+  --cosmic-pink: hsl(330, 81%, 60%);
+}
+
+.dark {
+  --background: hsl(222, 47%, 8%);
+  --foreground: hsl(0, 0%, 100%);
+  --muted: hsl(225, 25%, 15%);
+  --muted-foreground: hsl(215, 16%, 60%);
+  --popover: hsl(222, 47%, 8%);
+  --popover-foreground: hsl(0, 0%, 100%);
+  --card: hsl(222, 47%, 8%);
+  --card-foreground: hsl(0, 0%, 100%);
+  --border: hsl(215, 28%, 25%);
+  --input: hsl(215, 28%, 25%);
+  --primary: hsl(158, 76%, 36%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(215, 28%, 25%);
+  --secondary-foreground: hsl(0, 0%, 100%);
+  --accent: hsl(215, 28%, 25%);
+  --accent-foreground: hsl(0, 0%, 100%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(158, 76%, 36%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, var(--space-deep) 0%, var(--space-blue) 50%, var(--space-purple) 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  
+  .font-orbitron {
+    font-family: 'Orbitron', monospace;
+  }
+  
+  .font-inter {
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .cosmic-gradient {
+    background: linear-gradient(135deg, var(--space-deep) 0%, var(--space-blue) 50%, var(--space-purple) 100%);
+  }
+  
+  .nebula-gradient {
+    background: linear-gradient(45deg, var(--space-purple), var(--cosmic-pink), var(--cosmic-green));
+  }
+  
+  .text-gradient {
+    background: linear-gradient(135deg, var(--cosmic-white) 0%, var(--cosmic-green) 50%, var(--cosmic-pink) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+  
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .section-reveal {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  
+  .star-field {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+  }
+  
+  .star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s ease-in-out infinite;
+  }
+  
+  .particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  
+  .particle {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .scroll-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100vh;
+    background: linear-gradient(to bottom, var(--cosmic-green), var(--cosmic-pink));
+    transform-origin: top;
+    z-index: 1000;
+  }
+  
+  .cosmic-cursor {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--cosmic-green);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    transition: all 0.1s ease;
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+  
+  .animate-twinkle {
+    animation: twinkle 3s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px);
+  }
+  50% { 
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes glow {
+  0% { 
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  }
+  100% { 
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.6);
+  }
+}
+
+@keyframes twinkle {
+  0%, 100% { 
+    opacity: 0.3;
+  }
+  50% { 
+    opacity: 1;
+  }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--space-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, var(--cosmic-green), var(--cosmic-pink));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, var(--cosmic-pink), var(--cosmic-green));
+}
