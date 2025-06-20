@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
 import { Menu, X, Home, Camera, Satellite, Zap, Circle, Rocket } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import logoPath from '@assets/Cosmo - 1_1750298158776.png';
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,23 +27,17 @@ export function Navigation() {
   }, []);
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
       isScrolled 
-        ? 'bg-[hsl(222,47%,8%)]/90 backdrop-blur-xl border-b border-white/10' 
+        ? 'bg-neutral-900/80 backdrop-blur-xl border-b border-neutral-700/50' 
         : 'bg-transparent'
     }`}>
-      <div className="container mx-auto px-6 py-4">
+      <div className="container mx-auto px-4 sm:px-6 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center">
-            <img 
-              src={logoPath} 
-              alt="Cosmofy" 
-              className="h-10 w-auto transition-transform duration-300 hover:scale-105"
-              onError={(e) => {
-                console.error('Logo failed to load:', e);
-                e.currentTarget.style.display = 'none';
-              }}
-            />
+            <div className="text-2xl font-bold text-white">
+              cosmofy
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -56,17 +49,14 @@ export function Navigation() {
                 <Link key={item.href} href={item.href}>
                   <Button
                     variant="ghost"
-                    className={`group relative px-4 py-2 rounded-full transition-all duration-300 ${
+                    className={`relative px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
                       isActive 
-                        ? 'bg-gradient-to-r from-[hsl(158,76%,36%)]/20 to-[hsl(330,81%,60%)]/20 text-[hsl(158,76%,36%)]' 
-                        : 'text-white/80 hover:text-white hover:bg-white/10'
+                        ? 'text-blue-400 bg-blue-500/10' 
+                        : 'text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800'
                     }`}
                   >
                     <Icon className="mr-2 h-4 w-4" />
                     {item.label}
-                    {isActive && (
-                      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[hsl(158,76%,36%)] to-[hsl(330,81%,60%)] opacity-20" />
-                    )}
                   </Button>
                 </Link>
               );
@@ -77,7 +67,7 @@ export function Navigation() {
           <Button 
             variant="ghost" 
             size="icon" 
-            className="md:hidden text-white"
+            className="md:hidden text-neutral-300 hover:text-white"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -86,8 +76,8 @@ export function Navigation() {
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div className="md:hidden absolute top-full left-0 w-full bg-[hsl(222,47%,8%)]/95 backdrop-blur-xl border-b border-white/10">
-            <div className="container mx-auto px-6 py-4">
+          <div className="md:hidden absolute top-full left-0 w-full bg-neutral-900/95 backdrop-blur-xl border-b border-neutral-700/50">
+            <div className="container mx-auto px-4 sm:px-6 py-4">
               <div className="space-y-2">
                 {navItems.map((item) => {
                   const Icon = item.icon;
@@ -96,14 +86,14 @@ export function Navigation() {
                     <Link key={item.href} href={item.href}>
                       <Button
                         variant="ghost"
-                        className={`w-full justify-start px-4 py-3 rounded-xl transition-all duration-300 ${
+                        className={`w-full justify-start px-4 py-3 text-sm font-medium rounded-md transition-all duration-200 ${
                           isActive 
-                            ? 'bg-gradient-to-r from-[hsl(158,76%,36%)]/20 to-[hsl(330,81%,60%)]/20 text-[hsl(158,76%,36%)]' 
-                            : 'text-white/80 hover:text-white hover:bg-white/10'
+                            ? 'text-blue-400 bg-blue-500/10' 
+                            : 'text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800'
                         }`}
                         onClick={() => setIsOpen(false)}
                       >
-                        <Icon className="mr-3 h-5 w-5" />
+                        <Icon className="mr-3 h-4 w-4" />
                         {item.label}
                       </Button>
                     </Link>
