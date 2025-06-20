@@ -1,302 +1,278 @@
 import { useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { Navigation } from '@/components/navigation';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Link } from 'wouter';
+import { ArrowLeft, AlertTriangle, Calendar, Zap, Globe } from 'lucide-react';
+import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { LottieLoader } from '@/components/lottie-loader';
-import { AlertTriangle, Calendar, Zap, Ruler, Target, Globe, Filter } from 'lucide-react';
-import { Asteroid } from '@/types/space';
+import { Button } from '@/components/ui/button';
+
+const nearEarthAsteroids = [
+  {
+    id: '1',
+    name: '2024 PT5',
+    estimatedDiameter: { min: 0.008, max: 0.018 },
+    closeApproachDate: new Date('2025-01-09'),
+    velocity: 28.1,
+    missDistance: 0.00628,
+    isPotentiallyHazardous: false,
+    magnitudeH: 27.1
+  },
+  {
+    id: '2',
+    name: '99942 Apophis',
+    estimatedDiameter: { min: 0.32, max: 0.72 },
+    closeApproachDate: new Date('2029-04-13'),
+    velocity: 7.42,
+    missDistance: 0.000255,
+    isPotentiallyHazardous: true,
+    magnitudeH: 19.7
+  },
+  {
+    id: '3',
+    name: '2023 DW',
+    estimatedDiameter: { min: 0.045, max: 0.101 },
+    closeApproachDate: new Date('2025-02-14'),
+    velocity: 25.18,
+    missDistance: 0.0135,
+    isPotentiallyHazardous: false,
+    magnitudeH: 22.4
+  },
+  {
+    id: '4',
+    name: '2022 AP7',
+    estimatedDiameter: { min: 1.1, max: 2.3 },
+    closeApproachDate: new Date('2026-05-04'),
+    velocity: 8.15,
+    missDistance: 0.0447,
+    isPotentiallyHazardous: true,
+    magnitudeH: 17.8
+  },
+  {
+    id: '5',
+    name: '2024 UQ',
+    estimatedDiameter: { min: 0.012, max: 0.027 },
+    closeApproachDate: new Date('2025-03-22'),
+    velocity: 31.7,
+    missDistance: 0.0089,
+    isPotentiallyHazardous: false,
+    magnitudeH: 25.9
+  },
+  {
+    id: '6',
+    name: 'Bennu',
+    estimatedDiameter: { min: 0.46, max: 0.51 },
+    closeApproachDate: new Date('2135-09-25'),
+    velocity: 11.2,
+    missDistance: 0.0024,
+    isPotentiallyHazardous: true,
+    magnitudeH: 20.9
+  }
+];
 
 export default function Asteroids() {
-  const [filter, setFilter] = useState<'all' | 'hazardous'>('all');
-  const [sortBy, setSortBy] = useState<'date' | 'distance' | 'size'>('date');
+  const [sortBy, setSortBy] = useState<'date' | 'size' | 'distance'>('date');
+  const [showOnlyHazardous, setShowOnlyHazardous] = useState(false);
 
   useEffect(() => {
-    document.title = "Near-Earth Asteroids - Cosmofy | NASA NEO Tracking & Close Approaches";
+    document.title = "Near-Earth Asteroids - Cosmofy | Asteroid Tracking & Monitoring";
   }, []);
 
-  const { data: asteroids, isLoading, error } = useQuery<Asteroid[]>({
-    queryKey: ['/api/asteroids', filter, sortBy],
-    queryFn: async () => {
-      const response = await fetch(`/api/asteroids?filter=${filter}&sort=${sortBy}`);
-      if (!response.ok) throw new Error('Failed to fetch asteroids');
-      return response.json();
-    },
-  });
+  const filteredAsteroids = nearEarthAsteroids
+    .filter(asteroid => !showOnlyHazardous || asteroid.isPotentiallyHazardous)
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'date':
+          return a.closeApproachDate.getTime() - b.closeApproachDate.getTime();
+        case 'size':
+          return b.estimatedDiameter.max - a.estimatedDiameter.max;
+        case 'distance':
+          return a.missDistance - b.missDistance;
+        default:
+          return 0;
+      }
+    });
 
-  const formatDistance = (distance: number) => {
-    if (distance < 1000000) {
-      return `${(distance / 1000).toFixed(0)} thousand km`;
+  const getRiskLevel = (asteroid: typeof nearEarthAsteroids[0]) => {
+    if (asteroid.isPotentiallyHazardous && asteroid.estimatedDiameter.max > 1.0) {
+      return { level: 'High', color: 'bg-red-500/10 border-red-500/20 text-red-400' };
     }
-    return `${(distance / 1000000).toFixed(2)} million km`;
+    if (asteroid.isPotentiallyHazardous) {
+      return { level: 'Medium', color: 'bg-orange-500/10 border-orange-500/20 text-orange-400' };
+    }
+    return { level: 'Low', color: 'bg-green-500/10 border-green-500/20 text-green-400' };
   };
 
-  const formatDiameter = (diameter: any) => {
-    if (!diameter || !diameter.kilometers) return 'Unknown';
-    const min = diameter.kilometers.estimated_diameter_min;
-    const max = diameter.kilometers.estimated_diameter_max;
-    const avg = (min + max) / 2;
-    
-    if (avg < 1) {
-      return `~${(avg * 1000).toFixed(0)}m`;
+  const formatDistance = (au: number) => {
+    const km = au * 149597870.7;
+    if (km > 1000000) {
+      return `${(km / 1000000).toFixed(2)}M km`;
     }
-    return `~${avg.toFixed(1)}km`;
+    return `${Math.round(km).toLocaleString()} km`;
   };
 
-  const getRiskLevel = (asteroid: Asteroid) => {
-    if (!asteroid.isPotentiallyHazardous) {
-      return { level: 'Safe', color: 'text-green-400', bg: 'bg-green-500/20', border: 'border-green-500/50' };
+  const formatDiameter = (min: number, max: number) => {
+    if (max < 1) {
+      return `${Math.round(min * 1000)}-${Math.round(max * 1000)} m`;
     }
-    
-    const distance = asteroid.missDistance || 0;
-    if (distance < 2000000) {
-      return { level: 'High Risk', color: 'text-red-400', bg: 'bg-red-500/20', border: 'border-red-500/50' };
-    } else if (distance < 5000000) {
-      return { level: 'Moderate Risk', color: 'text-orange-400', bg: 'bg-orange-500/20', border: 'border-orange-500/50' };
-    }
-    return { level: 'Low Risk', color: 'text-yellow-400', bg: 'bg-yellow-500/20', border: 'border-yellow-500/50' };
+    return `${min.toFixed(1)}-${max.toFixed(1)} km`;
   };
 
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-[hsl(222,47%,8%)] via-[hsl(217,91%,29%)] to-[hsl(222,47%,8%)]">
-        <Navigation />
-        <div className="container mx-auto px-6 pt-32">
-          <div className="text-center">
-            <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-              Near-Earth Asteroids
-            </h1>
-            <p className="text-red-400">Failed to load asteroid data. Please try again later.</p>
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-neutral-900 via-neutral-800 to-black text-white">
+      {/* Navigation */}
+      <nav className="border-b border-neutral-800 bg-neutral-900/50 backdrop-blur-sm sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <Link href="/" className="flex items-center space-x-2 hover:text-blue-400 transition-colors">
+              <ArrowLeft className="w-5 h-5" />
+              <span>Back to Home</span>
+            </Link>
+            <h1 className="text-xl font-bold">Near-Earth Asteroids</h1>
+            <div className="w-32"></div>
+          </div>
+        </div>
+      </nav>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4">Near-Earth Asteroids</h1>
+          <p className="text-xl text-neutral-400 max-w-2xl mx-auto">
+            Track potentially hazardous asteroids and their close approaches to Earth
+          </p>
+        </div>
+
+        {/* Controls */}
+        <div className="flex flex-col sm:flex-row gap-4 mb-8">
+          <div className="flex gap-2">
+            <Button
+              variant={sortBy === 'date' ? "default" : "outline"}
+              onClick={() => setSortBy('date')}
+              size="sm"
+            >
+              Sort by Date
+            </Button>
+            <Button
+              variant={sortBy === 'size' ? "default" : "outline"}
+              onClick={() => setSortBy('size')}
+              size="sm"
+            >
+              Sort by Size
+            </Button>
+            <Button
+              variant={sortBy === 'distance' ? "default" : "outline"}
+              onClick={() => setSortBy('distance')}
+              size="sm"
+            >
+              Sort by Distance
+            </Button>
+          </div>
+          
+          <Button
+            variant={showOnlyHazardous ? "default" : "outline"}
+            onClick={() => setShowOnlyHazardous(!showOnlyHazardous)}
+            size="sm"
+            className="flex items-center"
+          >
+            <AlertTriangle className="w-4 h-4 mr-2" />
+            {showOnlyHazardous ? 'Show All' : 'Hazardous Only'}
+          </Button>
+        </div>
+
+        {/* Asteroids Grid */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {filteredAsteroids.map((asteroid) => {
+            const risk = getRiskLevel(asteroid);
+            return (
+              <Card key={asteroid.id} className="bg-neutral-800/50 border-neutral-700 p-6 hover:border-neutral-600 transition-all duration-300">
+                <div className="flex items-start justify-between mb-4">
+                  <h3 className="font-bold text-lg text-white">{asteroid.name}</h3>
+                  <Badge className={risk.color}>
+                    {risk.level} Risk
+                  </Badge>
+                </div>
+
+                <div className="space-y-3 mb-4">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-neutral-400">Close Approach</span>
+                    <span className="text-white font-medium">
+                      {asteroid.closeApproachDate.toLocaleDateString()}
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-neutral-400">Diameter</span>
+                    <span className="text-white font-medium">
+                      {formatDiameter(asteroid.estimatedDiameter.min, asteroid.estimatedDiameter.max)}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-neutral-400">Miss Distance</span>
+                    <span className="text-white font-medium">
+                      {formatDistance(asteroid.missDistance)}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-neutral-400">Velocity</span>
+                    <span className="text-white font-medium">
+                      {asteroid.velocity.toFixed(1)} km/s
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-neutral-400">Magnitude</span>
+                    <span className="text-white font-medium">
+                      H = {asteroid.magnitudeH}
+                    </span>
+                  </div>
+                </div>
+
+                {asteroid.isPotentiallyHazardous && (
+                  <div className="mt-4 pt-4 border-t border-neutral-700">
+                    <div className="flex items-center text-orange-400 text-sm">
+                      <AlertTriangle className="w-4 h-4 mr-2" />
+                      Potentially Hazardous Asteroid
+                    </div>
+                  </div>
+                )}
+
+                <div className="mt-4 pt-4 border-t border-neutral-700">
+                  <div className="text-xs text-neutral-500 mb-2">Days Until Approach</div>
+                  <div className="text-lg font-bold text-blue-400">
+                    {Math.ceil((asteroid.closeApproachDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24))}
+                  </div>
+                </div>
+              </Card>
+            );
+          })}
+        </div>
+
+        {filteredAsteroids.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-neutral-400 text-lg">No asteroids found for the selected filter.</p>
+          </div>
+        )}
+
+        {/* Info Section */}
+        <div className="mt-16 bg-neutral-800/30 rounded-lg p-6 border border-neutral-700">
+          <h2 className="text-2xl font-bold mb-4">About Near-Earth Asteroids</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="text-lg font-semibold mb-2 text-blue-400">Potentially Hazardous Asteroids</h3>
+              <p className="text-neutral-300 text-sm leading-relaxed">
+                Objects larger than 140 meters that come within 7.5 million kilometers of Earth's orbit are classified as potentially hazardous.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-2 text-green-400">Monitoring & Detection</h3>
+              <p className="text-neutral-300 text-sm leading-relaxed">
+                NASA's Planetary Defense Coordination Office continuously tracks near-Earth objects to assess potential impact risks.
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen">
-      <Navigation />
-      
-      {/* Hero Section - Mobile Optimized */}
-      <section className="pt-24 sm:pt-32 pb-12 sm:pb-16 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="stars" />
-          <div className="twinkling" />
-        </div>
-        
-        <div className="container mx-auto px-4 sm:px-6 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <Badge className="mb-4 sm:mb-6 bg-gradient-to-r from-orange-600/20 to-red-600/20 border border-orange-500/30 text-orange-300 text-xs sm:text-sm">
-              NASA NEO Tracking
-            </Badge>
-            
-            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-white via-orange-200 to-red-300 bg-clip-text text-transparent leading-tight">
-              Near-Earth Asteroids
-            </h1>
-            
-            <p className="text-base sm:text-lg lg:text-xl text-gray-300 max-w-2xl mx-auto mb-6 sm:mb-8 px-4 sm:px-0">
-              Monitor potentially hazardous asteroids and near-Earth objects with real-time tracking data from NASA's Center for Near Earth Object Studies.
-            </p>
-
-            {/* Filter Controls - Mobile Responsive */}
-            <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 mb-6 sm:mb-8 px-4 sm:px-0">
-              <div className="flex gap-2">
-                <Button
-                  variant={filter === 'all' ? "default" : "outline"}
-                  onClick={() => setFilter('all')}
-                  className={filter === 'all' 
-                    ? "bg-gradient-to-r from-orange-600 to-red-600 text-white" 
-                    : "glass-morphism border-white/20 text-white hover:bg-white/10"
-                  }
-                >
-                  <Globe className="mr-2 h-4 w-4" />
-                  All Objects
-                </Button>
-                <Button
-                  variant={filter === 'hazardous' ? "default" : "outline"}
-                  onClick={() => setFilter('hazardous')}
-                  className={filter === 'hazardous' 
-                    ? "bg-gradient-to-r from-red-600 to-pink-600 text-white" 
-                    : "glass-morphism border-white/20 text-white hover:bg-white/10"
-                  }
-                >
-                  <AlertTriangle className="mr-2 h-4 w-4" />
-                  Potentially Hazardous
-                </Button>
-              </div>
-              
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => setSortBy(sortBy === 'date' ? 'distance' : sortBy === 'distance' ? 'size' : 'date')}
-                  className="glass-morphism border-white/20 text-white hover:bg-white/10"
-                >
-                  <Filter className="mr-2 h-4 w-4" />
-                  Sort by: {sortBy === 'date' ? 'Date' : sortBy === 'distance' ? 'Distance' : 'Size'}
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Asteroids Grid */}
-      <section className="pb-20">
-        <div className="container mx-auto px-6">
-          {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-20">
-              <LottieLoader size={120} className="mb-6" />
-              <p className="text-lg opacity-70 mb-8">Scanning for near-Earth objects...</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {Array.from({ length: 9 }).map((_, index) => (
-                  <Card key={index} className="glass-morphism">
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="h-4 bg-gray-700/50 rounded w-1/2 animate-pulse" />
-                        <div className="h-6 bg-gray-700/50 rounded-full w-16 animate-pulse" />
-                      </div>
-                      <div className="h-6 bg-gray-700/50 rounded mb-3 animate-pulse" />
-                      <div className="space-y-2">
-                        <div className="h-3 bg-gray-700/50 rounded animate-pulse" />
-                        <div className="h-3 bg-gray-700/50 rounded w-2/3 animate-pulse" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          ) : asteroids && asteroids.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {asteroids.map((asteroid) => {
-                const risk = getRiskLevel(asteroid);
-                return (
-                  <Card key={asteroid.id} className="glass-morphism hover:scale-105 transition-transform duration-300 cursor-pointer group">
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <Badge variant="outline" className="text-xs border-gray-600/50 text-gray-400">
-                          {asteroid.neoReferenceId}
-                        </Badge>
-                        <Badge className={`${risk.bg} ${risk.color} ${risk.border} border`}>
-                          {risk.level}
-                        </Badge>
-                      </div>
-
-                      <h3 className="font-bold text-lg mb-3 text-white group-hover:text-orange-300 transition-colors line-clamp-2">
-                        {asteroid.name.replace(/[()]/g, '')}
-                      </h3>
-
-                      <div className="space-y-3 mb-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center text-sm text-gray-400">
-                            <Calendar className="h-4 w-4 mr-2" />
-                            Close Approach
-                          </div>
-                          <div className="text-sm text-white">
-                            {new Date(asteroid.closeApproachDate).toLocaleDateString()}
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center text-sm text-gray-400">
-                            <Target className="h-4 w-4 mr-2" />
-                            Miss Distance
-                          </div>
-                          <div className="text-sm text-cyan-400 font-medium">
-                            {asteroid.missDistance ? formatDistance(asteroid.missDistance) : 'Unknown'}
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center text-sm text-gray-400">
-                            <Ruler className="h-4 w-4 mr-2" />
-                            Est. Diameter
-                          </div>
-                          <div className="text-sm text-purple-400">
-                            {formatDiameter(asteroid.estimatedDiameter)}
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center text-sm text-gray-400">
-                            <Zap className="h-4 w-4 mr-2" />
-                            Velocity
-                          </div>
-                          <div className="text-sm text-green-400">
-                            {asteroid.relativeVelocity ? `${(asteroid.relativeVelocity).toFixed(0)} km/h` : 'Unknown'}
-                          </div>
-                        </div>
-                      </div>
-
-                      {asteroid.isPotentiallyHazardous && (
-                        <div className="p-3 bg-gradient-to-r from-red-900/30 to-orange-900/30 rounded-lg border border-red-500/30">
-                          <div className="flex items-center">
-                            <AlertTriangle className="h-4 w-4 text-red-400 mr-2" />
-                            <span className="text-red-300 text-sm font-medium">Potentially Hazardous</span>
-                          </div>
-                        </div>
-                      )}
-
-                      {asteroid.absoluteMagnitude && (
-                        <div className="mt-3 text-xs text-gray-500">
-                          Absolute Magnitude: {asteroid.absoluteMagnitude.toFixed(1)}
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="text-center py-20">
-              <div className="text-gray-400 mb-4">No asteroids found matching current filters</div>
-              <Button
-                onClick={() => setFilter('all')}
-                className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
-              >
-                Show All Objects
-              </Button>
-            </div>
-          )}
-
-          {/* Statistics Summary */}
-          {asteroids && asteroids.length > 0 && (
-            <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="glass-morphism text-center">
-                <CardContent className="p-6">
-                  <div className="text-3xl font-bold text-orange-400 mb-2">
-                    {asteroids.length}
-                  </div>
-                  <div className="text-sm text-gray-400">Objects Tracked</div>
-                </CardContent>
-              </Card>
-              
-              <Card className="glass-morphism text-center">
-                <CardContent className="p-6">
-                  <div className="text-3xl font-bold text-red-400 mb-2">
-                    {asteroids.filter(a => a.isPotentiallyHazardous).length}
-                  </div>
-                  <div className="text-sm text-gray-400">Potentially Hazardous</div>
-                </CardContent>
-              </Card>
-              
-              <Card className="glass-morphism text-center">
-                <CardContent className="p-6">
-                  <div className="text-3xl font-bold text-cyan-400 mb-2">
-                    {asteroids.filter(a => {
-                      const approachDate = new Date(a.closeApproachDate);
-                      const nextWeek = new Date();
-                      nextWeek.setDate(nextWeek.getDate() + 7);
-                      return approachDate <= nextWeek;
-                    }).length}
-                  </div>
-                  <div className="text-sm text-gray-400">This Week</div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
-        </div>
-      </section>
     </div>
   );
 }

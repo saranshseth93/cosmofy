@@ -26,6 +26,12 @@ export function ISSLiveMap({ position, userLocation, className = "" }: ISSLiveMa
       zoom: 2,
       zoomControl: false,
       attributionControl: false,
+      dragging: false,
+      touchZoom: false,
+      doubleClickZoom: false,
+      scrollWheelZoom: false,
+      boxZoom: false,
+      keyboard: false,
     });
 
     // Add dark tile layer

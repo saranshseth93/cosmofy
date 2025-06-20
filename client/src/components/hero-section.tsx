@@ -5,10 +5,10 @@ import { Link } from 'wouter';
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-20">
       <div className="max-w-4xl mx-auto text-center">
         {/* Badge */}
-        <Badge className="mb-8 bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 transition-all duration-300 px-4 py-2">
+        <Badge className="mb-8 bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 transition-all duration-300 px-4 py-2 mt-8">
           Real-time Space Data Platform
         </Badge>
         
