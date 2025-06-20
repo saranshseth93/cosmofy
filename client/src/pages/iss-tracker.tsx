@@ -110,32 +110,14 @@ export default function ISSTracker() {
     },
   });
 
-  const getApproximateLocation = (lat: number, lon: number) => {
-    const cities = [
-      { name: "London, UK", lat: 51.5074, lon: -0.1278 },
-      { name: "New York, USA", lat: 40.7128, lon: -74.0060 },
-      { name: "Tokyo, Japan", lat: 35.6762, lon: 139.6503 },
-      { name: "Sydney, Australia", lat: -33.8688, lon: 151.2093 },
-      { name: "Moscow, Russia", lat: 55.7558, lon: 37.6173 },
-      { name: "Beijing, China", lat: 39.9042, lon: 116.4074 },
-      { name: "Mumbai, India", lat: 19.0760, lon: 72.8777 },
-      { name: "São Paulo, Brazil", lat: -23.5505, lon: -46.6333 },
-      { name: "Cairo, Egypt", lat: 30.0444, lon: 31.2357 },
-      { name: "Los Angeles, USA", lat: 34.0522, lon: -118.2437 },
-    ];
-
-    let closest = cities[0];
-    let minDistance = Math.sqrt(Math.pow(lat - cities[0].lat, 2) + Math.pow(lon - cities[0].lon, 2));
-
-    cities.forEach(city => {
-      const distance = Math.sqrt(Math.pow(lat - city.lat, 2) + Math.pow(lon - city.lon, 2));
-      if (distance < minDistance) {
-        minDistance = distance;
-        closest = city;
-      }
-    });
-
-    return `Near ${closest.name}`;
+  const getLocationDisplay = (position: any) => {
+    // Use the location from the server response if available
+    if (position?.location) {
+      return position.location;
+    }
+    
+    // Fallback to coordinates if no location available
+    return `${position?.latitude?.toFixed(2)}°, ${position?.longitude?.toFixed(2)}°`;
   };
 
   const formatDuration = (seconds: number) => {
@@ -155,7 +137,7 @@ export default function ISSTracker() {
     }).format(new Date(date));
   };
 
-  const getLocationDisplay = () => {
+  const getUserLocationDisplay = () => {
     if (!activeCoordinates) return "Location required";
     
     // Simple location name approximation based on coordinates
@@ -277,7 +259,7 @@ export default function ISSTracker() {
                         {position.latitude.toFixed(4)}°, {position.longitude.toFixed(4)}°
                       </div>
                       <div className="text-sm text-gray-400">
-                        {getApproximateLocation(position.latitude, position.longitude)}
+                        {getLocationDisplay(position)}
                       </div>
                     </>
                   ) : (

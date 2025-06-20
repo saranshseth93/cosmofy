@@ -23,15 +23,15 @@ export function ISSLiveMap({ position, userLocation, className = "" }: ISSLiveMa
     // Initialize map
     const map = L.map(mapRef.current, {
       center: [0, 0],
-      zoom: 2,
-      zoomControl: false,
+      zoom: 3,
+      zoomControl: true,
       attributionControl: false,
-      dragging: false,
-      touchZoom: false,
-      doubleClickZoom: false,
-      scrollWheelZoom: false,
-      boxZoom: false,
-      keyboard: false,
+      dragging: true,
+      touchZoom: true,
+      doubleClickZoom: true,
+      scrollWheelZoom: true,
+      boxZoom: true,
+      keyboard: true,
     });
 
     // Add dark tile layer
@@ -43,31 +43,52 @@ export function ISSLiveMap({ position, userLocation, className = "" }: ISSLiveMa
     // Add zoom control in bottom right
     L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-    // Create custom ISS icon
+    // Create custom ISS icon (larger and more detailed)
     const issIcon = L.divIcon({
       html: `
         <div style="
-          width: 32px; 
-          height: 32px; 
-          background: linear-gradient(135deg, #00ff88, #00ccff);
+          width: 48px; 
+          height: 48px; 
+          background: linear-gradient(45deg, #00f5ff, #0080ff);
           border-radius: 50%;
+          border: 3px solid #ffffff;
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
-          border: 2px solid rgba(255, 255, 255, 0.3);
+          box-shadow: 0 0 25px rgba(0, 245, 255, 0.8), 0 0 50px rgba(0, 245, 255, 0.4);
+          animation: issRotate 4s linear infinite;
+          position: relative;
         ">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-            <path d="M4.5 16.5c-1.5 1.5-1.5 3.5 0 5s3.5 1.5 5 0l7-7c1.5-1.5 1.5-3.5 0-5s-3.5-1.5-5 0l-7 7z"/>
-            <path d="M13.5 10.5L10.5 7.5"/>
-            <path d="M16 3l5 5"/>
-            <path d="M3 16l5 5"/>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+            <path d="M12 2l-1 4h-2l-1-2h-2v2l-2 1v2h2l1 1v6l-1 1h-2v2l2 1h2l1-2h2l1 2h2l2-1v-2h-2l-1-1v-6l1-1h2v-2l-2-1v-2h-2l-1 2h-2l-1-4z"/>
+            <circle cx="12" cy="12" r="1.5" fill="#ffff00"/>
           </svg>
+          <div style="
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            right: -6px;
+            bottom: -6px;
+            border: 1px solid rgba(0, 245, 255, 0.4);
+            border-radius: 50%;
+            animation: issOrbit 3s linear infinite reverse;
+          "></div>
         </div>
+        <style>
+          @keyframes issRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+          @keyframes issOrbit {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.05); }
+            100% { transform: rotate(360deg) scale(1); }
+          }
+        </style>
       `,
       className: 'iss-marker',
-      iconSize: [32, 32],
-      iconAnchor: [16, 16],
+      iconSize: [48, 48],
+      iconAnchor: [24, 24],
     });
 
     // Create user location icon
@@ -111,7 +132,7 @@ export function ISSLiveMap({ position, userLocation, className = "" }: ISSLiveMa
         `, { closeButton: false });
       
       issMarkerRef.current = issMarker;
-      map.setView([position.latitude, position.longitude], 3);
+      map.setView([position.latitude, position.longitude], 4);
     }
 
     // Add user location marker
@@ -146,11 +167,16 @@ export function ISSLiveMap({ position, userLocation, className = "" }: ISSLiveMa
     if (issMarkerRef.current) {
       issMarkerRef.current.setLatLng([position.latitude, position.longitude]);
       
-      // Update popup content
+      // Make map follow ISS position
+      map.setView([position.latitude, position.longitude], map.getZoom(), { animate: true });
+      
+      // Update popup content with location name
+      const locationInfo = (position as any).location || `${position.latitude.toFixed(2)}°, ${position.longitude.toFixed(2)}°`;
       issMarkerRef.current.setPopupContent(`
         <div style="color: #333; font-weight: bold;">
           <div style="color: #00ff88; font-size: 14px; margin-bottom: 8px;">🛰️ International Space Station</div>
-          <div><strong>Position:</strong> ${position.latitude.toFixed(4)}°, ${position.longitude.toFixed(4)}°</div>
+          <div><strong>Location:</strong> ${locationInfo}</div>
+          <div><strong>Coordinates:</strong> ${position.latitude.toFixed(4)}°, ${position.longitude.toFixed(4)}°</div>
           <div><strong>Altitude:</strong> ${position.altitude || 408} km</div>
           <div><strong>Velocity:</strong> ${position.velocity || 27600} km/h</div>
           <div style="color: #666; font-size: 12px; margin-top: 4px;">Last updated: ${new Date().toLocaleTimeString()}</div>
