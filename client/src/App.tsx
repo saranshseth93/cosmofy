@@ -5,6 +5,10 @@ import { Toaster } from "@/components/ui/toaster";
 import Home from "@/pages/home";
 import Gallery from "@/pages/gallery";
 import ISSTracker from "@/pages/iss-tracker";
+import Aurora from "@/pages/aurora";
+import Asteroids from "@/pages/asteroids";
+import Missions from "@/pages/missions";
+import NotFound from "@/pages/not-found";
 
 function Router() {
   return (
@@ -12,7 +16,10 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/gallery" component={Gallery} />
       <Route path="/iss-tracker" component={ISSTracker} />
-      <Route component={() => <div className="min-h-screen flex items-center justify-center text-white">Page not found</div>} />
+      <Route path="/aurora" component={Aurora} />
+      <Route path="/asteroids" component={Asteroids} />
+      <Route path="/missions" component={Missions} />
+      <Route component={NotFound} />
     </Switch>
   );
 }
@@ -20,7 +27,7 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-gradient-to-b from-neutral-900 via-neutral-800 to-black">
         <Toaster />
         <Router />
       </div>
