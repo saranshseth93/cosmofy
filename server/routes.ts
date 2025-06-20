@@ -575,7 +575,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         missions = await storage.getActiveMissions();
       }
       
-      console.log("Sending missions data:", missions.length, "missions");
       res.json(missions);
     } catch (error) {
       console.error("Error fetching active missions:", error);

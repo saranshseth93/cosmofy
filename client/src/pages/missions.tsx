@@ -55,7 +55,6 @@ export default function SpaceMissions() {
       const response = await fetch('/api/missions');
       if (!response.ok) throw new Error('Failed to fetch missions');
       const data = await response.json();
-      console.log('Missions data received:', data);
       return data;
     },
   });
@@ -173,7 +172,7 @@ export default function SpaceMissions() {
                 </Card>
               ))}
             </div>
-          ) : (
+          ) : filteredMissions.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredMissions.map((mission) => (
                 <Card key={mission.id} className="glass-morphism hover:scale-105 transition-all duration-300 cursor-pointer" onClick={() => setSelectedMission(mission)}>
@@ -231,6 +230,28 @@ export default function SpaceMissions() {
                   </CardContent>
                 </Card>
               ))}
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <div className="max-w-md mx-auto">
+                <div className="w-16 h-16 mx-auto mb-4 opacity-50">
+                  <Rocket className="w-full h-full text-gray-500" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-300 mb-2">No missions found</h3>
+                <p className="text-gray-500 mb-4">
+                  {selectedFilter === 'All' 
+                    ? 'No space missions are currently available.' 
+                    : `No missions with status "${selectedFilter}" found.`
+                  }
+                </p>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setSelectedFilter('All')}
+                  className="glass-morphism hover:bg-white/10"
+                >
+                  Show All Missions
+                </Button>
+              </div>
             </div>
           )}
         </div>
