@@ -121,6 +121,7 @@ Changelog:
   * Added comprehensive aurora education including types, colors, and scientific explanations
   * Implemented detailed forecast information with Kp index explanations and viewing conditions
   * Added animated asteroid background effect to asteroids page with realistic physics
+  * Fixed asteroids page navigation to use global header instead of back button
   * Implemented space weather notifications schema and storage layer (in progress)
 ```
 

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'wouter';
-import { ArrowLeft, AlertTriangle, Calendar, Zap, Globe } from 'lucide-react';
+import { AlertTriangle, Calendar, Zap, Globe } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Navigation } from '@/components/navigation';
 import { AnimatedAsteroids } from '@/components/animated-asteroids';
 
 const nearEarthAsteroids = [
@@ -121,19 +121,9 @@ export default function Asteroids() {
     <div className="min-h-screen bg-gradient-to-b from-neutral-900 via-neutral-800 to-black text-white relative overflow-hidden">
       {/* Animated Asteroids Background */}
       <AnimatedAsteroids />
-      {/* Navigation */}
-      <nav className="border-b border-neutral-800 bg-neutral-900/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center space-x-2 hover:text-blue-400 transition-colors">
-              <ArrowLeft className="w-5 h-5" />
-              <span>Back to Home</span>
-            </Link>
-            <h1 className="text-xl font-bold">Near-Earth Asteroids</h1>
-            <div className="w-32"></div>
-          </div>
-        </div>
-      </nav>
+      
+      {/* Global Navigation */}
+      <Navigation />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         {/* Header */}
