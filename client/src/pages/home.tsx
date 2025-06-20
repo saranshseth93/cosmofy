@@ -5,7 +5,7 @@ import { HeroSection } from '@/components/hero-section';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Camera, Satellite, Zap, Circle, Rocket, ArrowRight, Globe, Newspaper } from 'lucide-react';
+import { Camera, Satellite, Zap, Circle, Rocket, ArrowRight, Globe, Newspaper, Volume2 } from 'lucide-react';
 import { Footer } from '@/components/footer';
 
 export default function Home() {
@@ -79,6 +79,14 @@ export default function Home() {
       icon: Newspaper,
       href: '/news',
       stats: 'Real-time'
+    },
+    {
+      id: 'sounds',
+      title: 'Space Sounds',
+      description: 'Experience authentic cosmic audio from space missions - radio emissions, plasma waves, and more.',
+      icon: Volume2,
+      href: '/sounds',
+      stats: 'Authentic Audio'
     }
   ];
 
