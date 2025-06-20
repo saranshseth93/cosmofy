@@ -49,12 +49,14 @@ export default function SpaceMissions() {
     document.title = "Space Missions - Cosmofy | Current & Upcoming Missions";
   }, []);
 
-  const { data: missions, isLoading } = useQuery<SpaceMission[]>({
+  const { data: missions, isLoading, error } = useQuery<SpaceMission[]>({
     queryKey: ['/api/missions'],
     queryFn: async () => {
       const response = await fetch('/api/missions');
       if (!response.ok) throw new Error('Failed to fetch missions');
-      return response.json();
+      const data = await response.json();
+      console.log('Missions data received:', data);
+      return data;
     },
   });
 

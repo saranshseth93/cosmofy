@@ -38,15 +38,6 @@ export function HeroSection() {
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </Link>
-          
-          <Button 
-            variant="outline" 
-            size="lg"
-            className="border-neutral-600 text-neutral-300 hover:bg-neutral-800 hover:text-white px-8 py-3 text-base font-medium transition-all duration-300"
-          >
-            <Play className="mr-2 h-5 w-5" />
-            Watch Demo
-          </Button>
         </div>
 
         {/* Live Stats */}

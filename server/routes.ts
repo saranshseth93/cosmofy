@@ -400,7 +400,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Space Missions Routes
-  app.get("/api/missions/active", async (req, res) => {
+  app.get("/api/missions", async (req, res) => {
     try {
       let missions = await storage.getActiveMissions();
       
@@ -575,6 +575,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         missions = await storage.getActiveMissions();
       }
       
+      console.log("Sending missions data:", missions.length, "missions");
       res.json(missions);
     } catch (error) {
       console.error("Error fetching active missions:", error);
