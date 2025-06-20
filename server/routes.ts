@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { nasaApi } from "./services/nasa-api";
 import { geolocationService } from "./services/geolocation";
+import { spaceNewsService } from "./services/space-news";
 import { insertApodImageSchema, insertAsteroidSchema, insertIssPositionSchema, insertIssPassSchema, insertIssCrewSchema, insertAuroraForecastSchema, insertSpaceMissionSchema } from "@shared/schema";
 
 // Background refresh function
@@ -875,6 +876,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error('Error initializing gallery data:', error);
     }
   };
+
+  // Space News Routes
+  app.get("/api/news", async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 10;
+      const offset = parseInt(req.query.offset as string) || 0;
+      const news = await spaceNewsService.getLatestNews(limit, offset);
+      res.json(news);
+    } catch (error) {
+      console.error('Error fetching space news:', error);
+      res.status(500).json({ error: "Failed to fetch space news" });
+    }
+  });
+
+  app.get("/api/news/featured", async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 5;
+      const news = await spaceNewsService.getFeaturedNews(limit);
+      res.json(news);
+    } catch (error) {
+      console.error('Error fetching featured space news:', error);
+      res.status(500).json({ error: "Failed to fetch featured space news" });
+    }
+  });
+
+  app.get("/api/news/search", async (req, res) => {
+    try {
+      const query = req.query.q as string;
+      if (!query) {
+        return res.status(400).json({ error: "Search query is required" });
+      }
+      const limit = parseInt(req.query.limit as string) || 10;
+      const news = await spaceNewsService.searchNews(query, limit);
+      res.json(news);
+    } catch (error) {
+      console.error('Error searching space news:', error);
+      res.status(500).json({ error: "Failed to search space news" });
+    }
+  });
 
   // Initialize gallery data on server start
   initializeGalleryData();
