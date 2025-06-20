@@ -157,7 +157,31 @@ export default function ISSTracker() {
 
   const getLocationDisplay = () => {
     if (!activeCoordinates) return "Location required";
-    return `${activeCoordinates.latitude.toFixed(3)}°, ${activeCoordinates.longitude.toFixed(3)}°`;
+    
+    // Simple location name approximation based on coordinates
+    const lat = activeCoordinates.latitude;
+    const lon = activeCoordinates.longitude;
+    
+    // Major cities and regions approximation
+    if (lat >= 40.7 && lat <= 40.8 && lon >= -74.0 && lon <= -73.9) return 'New York, USA';
+    if (lat >= 34.0 && lat <= 34.1 && lon >= -118.3 && lon <= -118.2) return 'Los Angeles, USA';
+    if (lat >= 41.8 && lat <= 41.9 && lon >= -87.7 && lon <= -87.6) return 'Chicago, USA';
+    if (lat >= 51.5 && lat <= 51.6 && lon >= -0.2 && lon <= 0.0) return 'London, UK';
+    if (lat >= 48.8 && lat <= 48.9 && lon >= 2.3 && lon <= 2.4) return 'Paris, France';
+    if (lat >= 35.6 && lat <= 35.7 && lon >= 139.6 && lon <= 139.8) return 'Tokyo, Japan';
+    if (lat >= -33.9 && lat <= -33.8 && lon >= 151.2 && lon <= 151.3) return 'Sydney, Australia';
+    if (lat >= -37.9 && lat <= -37.7 && lon >= 144.9 && lon <= 145.0) return 'Melbourne, Australia';
+    if (lat >= 55.7 && lat <= 55.8 && lon >= 37.6 && lon <= 37.7) return 'Moscow, Russia';
+    if (lat >= 39.9 && lat <= 40.0 && lon >= 116.3 && lon <= 116.5) return 'Beijing, China';
+    
+    // Regional approximations
+    if (lat >= 25 && lat <= 49 && lon >= -125 && lon <= -66) return 'United States';
+    if (lat >= 49 && lat <= 60 && lon >= -141 && lon <= -52) return 'Canada';
+    if (lat >= 35 && lat <= 71 && lon >= -10 && lon <= 40) return 'Europe';
+    if (lat >= -44 && lat <= -10 && lon >= 113 && lon <= 154) return 'Australia';
+    if (lat >= 20 && lat <= 54 && lon >= 73 && lon <= 135) return 'Asia';
+    
+    return `${lat.toFixed(3)}°, ${lon.toFixed(3)}°`;
   };
 
   const getCrewInitials = (name: string) => {

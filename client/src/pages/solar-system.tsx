@@ -220,28 +220,35 @@ export default function SolarSystem() {
     window.addEventListener('resize', resizeCanvas);
 
     let time = 0;
-    const centerX = canvas.offsetWidth / 2;
-    const centerY = canvas.offsetHeight / 2;
 
     const animate = () => {
+      const centerX = canvas.offsetWidth / 2;
+      const centerY = canvas.offsetHeight / 2;
+      const maxRadius = Math.min(centerX, centerY) - 30; // Ensure everything fits
+      
       ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
       
-      // Draw Sun
-      const sunRadius = 20;
+      // Draw Sun with improved styling
+      const sunRadius = Math.min(15, maxRadius * 0.08);
+      const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, sunRadius);
+      gradient.addColorStop(0, '#FFD700');
+      gradient.addColorStop(0.5, '#FFA500');
+      gradient.addColorStop(1, '#FF6347');
+      
       ctx.beginPath();
       ctx.arc(centerX, centerY, sunRadius, 0, 2 * Math.PI);
-      ctx.fillStyle = planets[0].color;
+      ctx.fillStyle = gradient;
       ctx.fill();
       
-      // Add glow effect for Sun
-      ctx.shadowColor = planets[0].color;
+      // Add glow effect
+      ctx.shadowColor = '#FFA500';
       ctx.shadowBlur = 20;
       ctx.fill();
       ctx.shadowBlur = 0;
 
-      // Draw planets
+      // Draw planets with adaptive spacing
       planets.slice(1).forEach((planet, index) => {
-        const orbitRadius = 50 + (index * 35);
+        const orbitRadius = (maxRadius / 8) * (index + 1.5);
         const angle = (time * 0.01) / Math.sqrt(planet.distance);
         const x = centerX + Math.cos(angle) * orbitRadius;
         const y = centerY + Math.sin(angle) * orbitRadius;
@@ -253,11 +260,15 @@ export default function SolarSystem() {
         ctx.lineWidth = 1;
         ctx.stroke();
         
-        // Draw planet
-        const planetRadius = Math.max(3, Math.log(planet.radius + 1) * 4);
+        // Draw planet with better sizing and gradients
+        const planetRadius = Math.max(2, Math.min(12, Math.log(planet.radius + 1) * 3));
+        const planetGradient = ctx.createRadialGradient(x - 2, y - 2, 0, x, y, planetRadius);
+        planetGradient.addColorStop(0, planet.color);
+        planetGradient.addColorStop(1, '#000000');
+        
         ctx.beginPath();
         ctx.arc(x, y, planetRadius, 0, 2 * Math.PI);
-        ctx.fillStyle = planet.color;
+        ctx.fillStyle = planetGradient;
         ctx.fill();
         
         // Highlight selected planet
@@ -265,6 +276,12 @@ export default function SolarSystem() {
           ctx.strokeStyle = '#60A5FA';
           ctx.lineWidth = 2;
           ctx.stroke();
+          
+          // Add planet name label
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = '12px Inter, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(planet.name, x, y + planetRadius + 15);
         }
       });
 
