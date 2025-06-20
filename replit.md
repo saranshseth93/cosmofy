@@ -120,6 +120,7 @@ Changelog:
   * Enhanced Aurora forecast page with detailed photography tips for phones and DSLRs
   * Added comprehensive aurora education including types, colors, and scientific explanations
   * Implemented detailed forecast information with Kp index explanations and viewing conditions
+  * Added animated asteroid background effect to asteroids page with realistic physics
   * Implemented space weather notifications schema and storage layer (in progress)
 ```
 

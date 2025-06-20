@@ -4,6 +4,7 @@ import { ArrowLeft, AlertTriangle, Calendar, Zap, Globe } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { AnimatedAsteroids } from '@/components/animated-asteroids';
 
 const nearEarthAsteroids = [
   {
@@ -117,7 +118,9 @@ export default function Asteroids() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-neutral-900 via-neutral-800 to-black text-white">
+    <div className="min-h-screen bg-gradient-to-b from-neutral-900 via-neutral-800 to-black text-white relative overflow-hidden">
+      {/* Animated Asteroids Background */}
+      <AnimatedAsteroids />
       {/* Navigation */}
       <nav className="border-b border-neutral-800 bg-neutral-900/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -132,7 +135,7 @@ export default function Asteroids() {
         </div>
       </nav>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">Near-Earth Asteroids</h1>
