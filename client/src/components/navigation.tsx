@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-import { Menu, X, Home, Camera, Satellite, Zap, Circle, Rocket } from 'lucide-react';
+import { Menu, X, Home, Camera, Satellite, Zap, Circle, Rocket, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function Navigation() {
