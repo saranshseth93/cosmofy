@@ -7,6 +7,8 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { SatelliteOrbit } from '@/components/lottie-loader';
 import { useGeolocation } from '@/hooks/use-geolocation';
+import { ISSLiveMap } from '@/components/iss-live-map';
+import { CrewAvatar } from '@/components/crew-avatar';
 import { 
   Satellite, 
   MapPin, 
@@ -140,6 +142,22 @@ export default function ISSTracker() {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}m ${remainingSeconds}s`;
+  };
+
+  const formatPassDate = (date: Date) => {
+    return new Intl.DateTimeFormat(navigator.language || 'en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZoneName: 'short'
+    }).format(new Date(date));
+  };
+
+  const getLocationDisplay = () => {
+    if (!activeCoordinates) return "Location required";
+    return `${activeCoordinates.latitude.toFixed(3)}°, ${activeCoordinates.longitude.toFixed(3)}°`;
   };
 
   const getCrewInitials = (name: string) => {
@@ -277,14 +295,13 @@ export default function ISSTracker() {
                     </div>
                   </div>
 
-                  {/* 3D Visualization */}
-                  <div className="relative bg-gradient-to-br from-blue-900/30 to-purple-900/30 rounded-xl p-4 flex items-center justify-center border border-gray-700/30">
-                    <SatelliteOrbit size={120} />
-                    <div className="absolute bottom-2 left-2 right-2">
-                      <div className="text-xs text-gray-400 text-center">
-                        Real-time 3D Position
-                      </div>
-                    </div>
+                  {/* Live Map */}
+                  <div className="relative bg-gradient-to-br from-blue-900/30 to-purple-900/30 rounded-xl overflow-hidden border border-gray-700/30 h-64">
+                    <ISSLiveMap 
+                      position={position} 
+                      userLocation={activeCoordinates || undefined} 
+                      className="w-full h-full"
+                    />
                   </div>
                 </div>
               </CardContent>
