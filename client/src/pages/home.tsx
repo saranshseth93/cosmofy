@@ -10,7 +10,7 @@ import { Footer } from '@/components/footer';
 
 export default function Home() {
   useEffect(() => {
-    document.title = "Cosmofy - Explore the Cosmos | Real-time Space Data & NASA APIs";
+    document.title = "Space Explorer - Explore the Cosmos | Real-time Space Data & NASA APIs";
     
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {

@@ -1,5 +1,6 @@
 import { Rocket } from 'lucide-react';
 import { FaTwitter, FaInstagram, FaYoutube, FaGithub } from 'react-icons/fa';
+import logoImage from '@assets/Cosmo - 1_1750298158776.png';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -55,8 +56,8 @@ export function Footer() {
           <div className="md:col-span-1">
             <div className="flex items-center space-x-2 mb-6">
               <img 
-                src="/attached_assets/Cosmo - 1_1750298158776.png" 
-                alt="Cosmofy" 
+                src={logoImage}
+                alt="Space Explorer Logo" 
                 className="h-8 w-auto"
               />
             </div>
