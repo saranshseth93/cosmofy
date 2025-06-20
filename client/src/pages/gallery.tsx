@@ -39,9 +39,9 @@ export default function Gallery() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-[hsl(222,47%,8%)] via-[hsl(217,91%,29%)] to-[hsl(222,47%,8%)]">
         <Navigation />
-        <div className="container mx-auto px-6 pt-32">
+        <div className="container mx-auto px-4 sm:px-6 pt-24 sm:pt-32">
           <div className="text-center">
-            <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
               Astronomy Gallery
             </h1>
             <p className="text-red-400">Failed to load images. Please try again later.</p>
@@ -55,29 +55,29 @@ export default function Gallery() {
     <div className="min-h-screen">
       <Navigation />
       
-      {/* Hero Section */}
-      <section className="pt-32 pb-16 relative overflow-hidden">
+      {/* Hero Section - Mobile Optimized */}
+      <section className="pt-24 sm:pt-32 pb-12 sm:pb-16 relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="stars" />
           <div className="twinkling" />
         </div>
         
-        <div className="container mx-auto px-6 relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <Badge className="mb-6 bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/30 text-purple-300">
+            <Badge className="mb-4 sm:mb-6 bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/30 text-purple-300 text-xs sm:text-sm">
               NASA's Daily Collection
             </Badge>
             
-            <h1 className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-cyan-200 to-purple-300 bg-clip-text text-transparent leading-tight">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-white via-cyan-200 to-purple-300 bg-clip-text text-transparent leading-tight">
               Astronomy Gallery
             </h1>
             
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-300 max-w-2xl mx-auto mb-6 sm:mb-8 px-4 sm:px-0">
               Discover the cosmos through NASA's daily featured astronomical images, carefully curated and explained by professional astronomers.
             </p>
 
-            {/* Filter Controls */}
-            <div className="flex flex-wrap justify-center gap-3 mb-8">
+            {/* Filter Controls - Mobile Responsive */}
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 px-4 sm:px-0">
               {filters.map((filter) => {
                 const Icon = filter.icon;
                 return (
@@ -85,14 +85,16 @@ export default function Gallery() {
                     key={filter.id}
                     variant={selectedFilter === filter.id ? "default" : "outline"}
                     onClick={() => setSelectedFilter(filter.id)}
-                    className={`glass-morphism transition-all duration-300 ${
+                    size="sm"
+                    className={`glass-morphism transition-all duration-300 text-xs sm:text-sm ${
                       selectedFilter === filter.id
                         ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white'
                         : 'border-white/20 text-white hover:bg-white/10'
                     }`}
                   >
-                    <Icon className="mr-2 h-4 w-4" />
-                    {filter.label}
+                    <Icon className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+                    <span className="hidden sm:inline">{filter.label}</span>
+                    <span className="sm:hidden">{filter.label.split(' ')[0]}</span>
                   </Button>
                 );
               })}
