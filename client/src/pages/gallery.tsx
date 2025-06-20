@@ -122,6 +122,36 @@ export default function Gallery() {
             <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 px-4 sm:px-0">
               {filters.map((filter) => {
                 const Icon = filter.icon;
+                const filterCount = allImages?.filter(image => {
+                  switch (filter.id) {
+                    case 'latest':
+                      return true;
+                    case 'popular':
+                      return image.title.toLowerCase().includes('nebula') || 
+                             image.title.toLowerCase().includes('galaxy') ||
+                             image.title.toLowerCase().includes('hubble') ||
+                             image.title.toLowerCase().includes('mars') ||
+                             image.title.toLowerCase().includes('jupiter');
+                    case 'missions':
+                      return image.title.toLowerCase().includes('mission') ||
+                             image.title.toLowerCase().includes('rover') ||
+                             image.title.toLowerCase().includes('spacecraft') ||
+                             image.title.toLowerCase().includes('apollo') ||
+                             image.title.toLowerCase().includes('artemis') ||
+                             image.title.toLowerCase().includes('parker') ||
+                             image.title.toLowerCase().includes('juno') ||
+                             image.title.toLowerCase().includes('cassini');
+                    case 'earth':
+                      return image.title.toLowerCase().includes('earth') ||
+                             image.title.toLowerCase().includes('aurora') ||
+                             image.title.toLowerCase().includes('lightning') ||
+                             image.title.toLowerCase().includes('atmosphere') ||
+                             image.title.toLowerCase().includes('satellite');
+                    default:
+                      return true;
+                  }
+                })?.length || 0;
+                
                 return (
                   <Button
                     key={filter.id}
@@ -137,6 +167,9 @@ export default function Gallery() {
                     <Icon className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                     <span className="hidden sm:inline">{filter.label}</span>
                     <span className="sm:hidden">{filter.label.split(' ')[0]}</span>
+                    <Badge variant="secondary" className="ml-1 sm:ml-2 bg-white/20 text-white text-xs">
+                      {filterCount}
+                    </Badge>
                   </Button>
                 );
               })}

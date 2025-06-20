@@ -94,6 +94,10 @@ Changelog:
   * Implemented NASA API integration with fallback systems
   * Added real-time ISS tracking with pass predictions
   * Created manual coordinate input for location-based features
+  * Fixed astronomy gallery filtering functionality with smart categorization
+  * Replaced all "Cosmofy" branding with logo image throughout application
+  * Added filter result counts and proper pagination for filtered content
+  * Enhanced mobile responsiveness across all components
 ```
 
 ## User Preferences
