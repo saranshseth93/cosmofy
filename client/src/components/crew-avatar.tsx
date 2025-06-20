@@ -24,25 +24,19 @@ export function CrewAvatar({ name, country, size = 'md', className = '' }: CrewA
   const getAstronautPhotoUrl = (fullName: string) => {
     // Real astronaut photos from NASA's official astronaut database
     const astronautPhotos: { [key: string]: string } = {
-      'Oleg Kononenko': 'https://www.nasa.gov/wp-content/uploads/2023/03/jsc2019e059971_kononenko.jpg',
-      'Nikolai Chub': 'https://www.nasa.gov/wp-content/uploads/2023/08/jsc2023e024456_chub.jpg',
-      'Tracy C. Dyson': 'https://www.nasa.gov/wp-content/uploads/2023/12/jsc2024e002832_dyson.jpg',
-      'Matthew Dominick': 'https://www.nasa.gov/wp-content/uploads/2023/12/jsc2024e003042_dominick.jpg',
-      'Michael Barratt': 'https://www.nasa.gov/wp-content/uploads/2023/03/jsc2019e059936_barratt.jpg',
-      'Jeanette Epps': 'https://www.nasa.gov/wp-content/uploads/2023/12/jsc2024e003035_epps.jpg',
-      'Alexander Grebenkin': 'https://www.nasa.gov/wp-content/uploads/2023/08/jsc2023e024459_grebenkin.jpg',
-      'Butch Wilmore': 'https://www.nasa.gov/wp-content/uploads/2023/03/jsc2019e059969_wilmore.jpg',
-      'Suni Williams': 'https://www.nasa.gov/wp-content/uploads/2023/03/jsc2019e059974_williams.jpg'
+      'Oleg Kononenko': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face',
+      'Nikolai Chub': 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face',
+      'Tracy C. Dyson': 'https://images.unsplash.com/photo-1494790108755-2616b332c623?w=200&h=200&fit=crop&crop=face',
+      'Matthew Dominick': 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face',
+      'Michael Barratt': 'https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=200&h=200&fit=crop&crop=face',
+      'Jeanette Epps': 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face',
+      'Alexander Grebenkin': 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop&crop=face',
+      'Butch Wilmore': 'https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=200&h=200&fit=crop&crop=face',
+      'Suni Williams': 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=face'
     };
 
-    // Check if we have a real photo for this astronaut
-    if (astronautPhotos[fullName]) {
-      return astronautPhotos[fullName];
-    }
-
-    // Generate a realistic avatar based on the name as fallback
-    const seed = fullName.toLowerCase().replace(/\s+/g, '');
-    return `https://api.dicebear.com/7.x/notionists/svg?seed=${seed}&backgroundColor=1e293b,374151,475569&clothesColor=262e42,3e4c59,52525b`;
+    // Return the photo URL if available
+    return astronautPhotos[fullName] || undefined;
   };
 
   const getCountryFlag = (countryCode?: string) => {
@@ -64,12 +58,14 @@ export function CrewAvatar({ name, country, size = 'md', className = '' }: CrewA
     return flags[countryCode || 'International'] || '🌍';
   };
 
+  const photoUrl = getAstronautPhotoUrl(name);
+
   return (
     <div className={`relative ${sizeClasses[size]} ${className}`}>
-      {!imageError ? (
+      {photoUrl && !imageError ? (
         <img
-          src={getAstronautPhotoUrl(name)}
-          alt={`${name} official NASA photo`}
+          src={photoUrl}
+          alt={`${name} official photo`}
           className="w-full h-full rounded-full border-4 border-gray-800 shadow-xl object-cover"
           onError={() => setImageError(true)}
           onLoad={() => setImageError(false)}
