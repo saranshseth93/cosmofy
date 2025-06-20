@@ -103,27 +103,27 @@ export default function Gallery() {
         </div>
       </section>
 
-      {/* Gallery Grid */}
-      <section className="pb-20">
-        <div className="container mx-auto px-6">
+      {/* Gallery Grid - Mobile Optimized */}
+      <section className="pb-16 sm:pb-20">
+        <div className="container mx-auto px-4 sm:px-6">
           {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-20">
-              <LottieLoader size={120} className="mb-6" />
-              <p className="text-lg opacity-70 mb-8">Loading cosmic imagery...</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="flex flex-col items-center justify-center py-12 sm:py-20">
+              <LottieLoader size={80} className="mb-4 sm:mb-6" />
+              <p className="text-base sm:text-lg opacity-70 mb-6 sm:mb-8">Loading cosmic imagery...</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                 {Array.from({ length: 12 }).map((_, index) => (
                   <Card key={index} className="glass-morphism">
-                    <div className="w-full h-64 bg-gray-800/50 rounded-t-lg animate-pulse" />
-                    <CardContent className="p-6">
-                      <div className="h-4 bg-gray-700/50 rounded mb-2 animate-pulse" />
-                      <div className="h-3 bg-gray-700/50 rounded w-2/3 animate-pulse" />
+                    <div className="w-full h-48 sm:h-64 bg-gray-800/50 rounded-t-lg animate-pulse" />
+                    <CardContent className="p-4 sm:p-6">
+                      <div className="h-3 sm:h-4 bg-gray-700/50 rounded mb-2 animate-pulse" />
+                      <div className="h-2 sm:h-3 bg-gray-700/50 rounded w-2/3 animate-pulse" />
                     </CardContent>
                   </Card>
                 ))}
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
               {images?.map((image, index) => (
                 <Card 
                   key={image.id} 

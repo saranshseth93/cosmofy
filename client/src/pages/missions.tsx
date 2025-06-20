@@ -88,24 +88,24 @@ export default function Missions() {
     <div className="min-h-screen">
       <Navigation />
       
-      {/* Hero Section */}
-      <section className="pt-32 pb-16 relative overflow-hidden">
+      {/* Hero Section - Mobile Optimized */}
+      <section className="pt-24 sm:pt-32 pb-12 sm:pb-16 relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="stars" />
           <div className="twinkling" />
         </div>
         
-        <div className="container mx-auto px-6 relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <Badge className="mb-6 bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 text-blue-300">
+            <Badge className="mb-4 sm:mb-6 bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 text-blue-300 text-xs sm:text-sm">
               Space Exploration Missions
             </Badge>
             
-            <h1 className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-blue-200 to-purple-300 bg-clip-text text-transparent leading-tight">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-white via-blue-200 to-purple-300 bg-clip-text text-transparent leading-tight">
               Space Missions
             </h1>
             
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-300 max-w-2xl mx-auto mb-6 sm:mb-8 px-4 sm:px-0">
               Explore humanity's greatest space adventures. Track active missions, discover upcoming launches, and learn about groundbreaking discoveries.
             </p>
 
