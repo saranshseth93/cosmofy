@@ -180,31 +180,33 @@ export default function ISSTracker() {
     <div className="min-h-screen">
       <Navigation />
       
-      {/* Compact Header */}
-      <section className="pt-24 pb-8 relative overflow-hidden">
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-white via-green-200 to-cyan-300 bg-clip-text text-transparent">
-                International Space Station Tracker
-              </h1>
-              <p className="text-gray-400">Real-time tracking data, orbital mechanics, and crew information</p>
-            </div>
+      {/* Mobile-Optimized Header */}
+      <section className="pt-20 sm:pt-24 pb-6 sm:pb-8 relative overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 relative z-10">
+          <div className="text-center sm:text-left mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 bg-gradient-to-r from-white via-green-200 to-cyan-300 bg-clip-text text-transparent leading-tight">
+              <span className="block sm:hidden">ISS Tracker</span>
+              <span className="hidden sm:block">International Space Station Tracker</span>
+            </h1>
+            <p className="text-sm sm:text-base text-gray-400 mb-4 sm:mb-0">Real-time tracking data, orbital mechanics, and crew information</p>
             
-            <div className="flex items-center gap-3">
-              <Badge className="bg-green-500/20 text-green-300 border border-green-500/50">
+            {/* Mobile Controls */}
+            <div className="flex items-center justify-center sm:justify-start gap-3 mt-4">
+              <Badge className="bg-green-500/20 text-green-300 border border-green-500/50 text-xs sm:text-sm">
                 <Activity className="w-3 h-3 mr-1" />
                 LIVE
               </Badge>
               <Button
                 variant="outline"
+                size="sm"
                 onClick={() => setAutoRefresh(!autoRefresh)}
-                className={`glass-morphism border-white/20 transition-all duration-300 ${
+                className={`glass-morphism border-white/20 transition-all duration-300 text-xs sm:text-sm ${
                   autoRefresh ? 'text-green-400 border-green-400/50' : 'text-white hover:bg-white/10'
                 }`}
               >
-                <RefreshCw className={`mr-2 h-4 w-4 ${autoRefresh ? 'animate-spin' : ''}`} />
-                Auto Refresh
+                <RefreshCw className={`mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4 ${autoRefresh ? 'animate-spin' : ''}`} />
+                <span className="hidden sm:inline">Auto Refresh</span>
+                <span className="sm:hidden">Auto</span>
               </Button>
             </div>
           </div>
@@ -212,103 +214,126 @@ export default function ISSTracker() {
       </section>
 
       {/* Main Dashboard */}
-      <section className="pb-16">
-        <div className="container mx-auto px-6">
-          {/* Top Row - Live Position & Orbital Data */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-            {/* Live Position */}
-            <Card className="lg:col-span-2 glass-morphism">
-              <CardHeader className="pb-4">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center text-xl">
-                    <Satellite className="text-green-400 mr-3 h-6 w-6" />
-                    International Space Station
-                    <Badge className="ml-3 bg-green-500/20 text-green-300 border-green-500/50">
-                      <Signal className="w-3 h-3 mr-1" />
-                      LIVE
-                    </Badge>
-                  </CardTitle>
+      <section className="pb-12 sm:pb-16">
+        <div className="container mx-auto px-4 sm:px-6">
+          {/* Live Map - Mobile First */}
+          <Card className="glass-morphism mb-6">
+            <CardHeader className="pb-2 sm:pb-4">
+              <CardTitle className="flex items-center text-base sm:text-lg lg:text-xl">
+                <Satellite className="text-green-400 mr-2 h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
+                <span className="hidden sm:inline">International Space Station</span>
+                <span className="sm:hidden">ISS Live Tracker</span>
+                <Badge className="ml-2 bg-green-500/20 text-green-300 border-green-500/50 text-xs">
+                  <Signal className="w-3 h-3 mr-1" />
+                  LIVE
+                </Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-3 sm:p-4 lg:p-6">
+              {/* Live Map */}
+              <div className="relative bg-gradient-to-br from-blue-900/30 to-purple-900/30 rounded-xl overflow-hidden border border-gray-700/30 h-80 sm:h-96 mb-6">
+                <ISSLiveMap 
+                  position={position} 
+                  userLocation={activeCoordinates ? {
+                    latitude: activeCoordinates.latitude,
+                    longitude: activeCoordinates.longitude
+                  } : undefined} 
+                  className="w-full h-full"
+                />
+              </div>
+
+              {/* Position Data - Mobile Optimized */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {/* Current Position */}
+                <div className="bg-gray-800/30 p-4 rounded-lg">
+                  <div className="text-sm text-gray-400 mb-2">Current Position</div>
+                  {position ? (
+                    <>
+                      <div className="text-base sm:text-lg font-bold text-white mb-1">
+                        {position.latitude.toFixed(4)}°, {position.longitude.toFixed(4)}°
+                      </div>
+                      <div className="text-sm text-gray-400">
+                        {getApproximateLocation(position.latitude, position.longitude)}
+                      </div>
+                    </>
+                  ) : (
+                    <div className="text-gray-400">Loading...</div>
+                  )}
                 </div>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-3 gap-6">
-                  {/* Live Coordinates */}
-                  <div className="space-y-4">
-                    <div>
-                      <div className="text-sm text-gray-400 mb-1">Current Position</div>
-                      {position ? (
-                        <>
-                          <div className="text-lg font-bold text-white">
-                            {position.latitude.toFixed(6)}°, {position.longitude.toFixed(6)}°
-                          </div>
-                          <div className="text-sm text-gray-400">
-                            {getApproximateLocation(position.latitude, position.longitude)}
-                          </div>
-                        </>
-                      ) : (
-                        <div className="text-gray-400">Loading...</div>
-                      )}
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="bg-gray-800/30 p-3 rounded-lg">
-                        <div className="text-xs text-gray-400">Altitude</div>
-                        <div className="text-lg font-bold text-green-400">
-                          {position?.altitude || '408'} km
-                        </div>
-                      </div>
-                      <div className="bg-gray-800/30 p-3 rounded-lg">
-                        <div className="text-xs text-gray-400">Velocity</div>
-                        <div className="text-lg font-bold text-cyan-400">
-                          {position?.velocity || '27,600'} km/h
-                        </div>
-                      </div>
-                    </div>
-                  </div>
 
-                  {/* Orbital Data */}
-                  <div className="space-y-4">
-                    <div>
-                      <div className="text-sm text-gray-400 mb-2">Orbital Mechanics</div>
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-xs text-gray-400">Orbit Number</span>
-                          <span className="text-sm text-white">{getNextOrbitNumber()}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-xs text-gray-400">Orbital Period</span>
-                          <span className="text-sm text-white">{getOrbitalPeriod()} min</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-xs text-gray-400">Inclination</span>
-                          <span className="text-sm text-white">51.64°</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-xs text-gray-400">Apogee</span>
-                          <span className="text-sm text-white">422 km</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-xs text-gray-400">Perigee</span>
-                          <span className="text-sm text-white">408 km</span>
-                        </div>
+                {/* Altitude & Velocity */}
+                <div className="bg-gray-800/30 p-4 rounded-lg">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="text-center">
+                      <div className="text-xs text-gray-400 mb-1">Altitude</div>
+                      <div className="text-lg font-bold text-green-400">
+                        {position?.altitude || '408'}
                       </div>
+                      <div className="text-xs text-gray-400">km</div>
                     </div>
-                  </div>
-
-                  {/* Live Map */}
-                  <div className="relative bg-gradient-to-br from-blue-900/30 to-purple-900/30 rounded-xl overflow-hidden border border-gray-700/30 h-64">
-                    <ISSLiveMap 
-                      position={position} 
-                      userLocation={activeCoordinates ? {
-                        latitude: activeCoordinates.latitude,
-                        longitude: activeCoordinates.longitude
-                      } : undefined} 
-                      className="w-full h-full"
-                    />
+                    <div className="text-center">
+                      <div className="text-xs text-gray-400 mb-1">Velocity</div>
+                      <div className="text-lg font-bold text-cyan-400">
+                        {position?.velocity || '27,600'}
+                      </div>
+                      <div className="text-xs text-gray-400">km/h</div>
+                    </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+
+                {/* Orbital Data */}
+                <div className="bg-gray-800/30 p-4 rounded-lg">
+                  <div className="text-sm text-gray-400 mb-3">Orbital Data</div>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Orbit #</span>
+                      <span className="text-white font-medium">{getNextOrbitNumber().toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Period</span>
+                      <span className="text-white font-medium">{getOrbitalPeriod()} min</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Inclination</span>
+                      <span className="text-white font-medium">51.64°</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Mission Stats - Mobile Optimized */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div className="bg-gray-800/30 p-4 rounded-lg border border-gray-700/30 text-center">
+              <div className="text-2xl font-bold text-blue-400 mb-1">
+                {crew?.length || 7}
+              </div>
+              <div className="text-xs text-gray-400">Crew Members</div>
+            </div>
+            
+            <div className="bg-gray-800/30 p-4 rounded-lg border border-gray-700/30 text-center">
+              <div className="text-2xl font-bold text-green-400 mb-1">
+                {Math.floor((Date.now() - new Date('1998-11-20').getTime()) / (1000 * 60 * 60 * 24))}
+              </div>
+              <div className="text-xs text-gray-400">Days in Orbit</div>
+            </div>
+            
+            <div className="bg-gray-800/30 p-4 rounded-lg border border-gray-700/30 text-center">
+              <div className="text-2xl font-bold text-purple-400 mb-1">
+                {getNextOrbitNumber().toLocaleString()}
+              </div>
+              <div className="text-xs text-gray-400">Total Orbits</div>
+            </div>
+            
+            <div className="bg-gray-800/30 p-4 rounded-lg border border-gray-700/30 text-center">
+              <div className="text-2xl font-bold text-orange-400 mb-1">15.5</div>
+              <div className="text-xs text-gray-400">Orbits/Day</div>
+            </div>
+          </div>
+
+          {/* System Status & Passes Row */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
 
             {/* Quick Stats */}
             <Card className="glass-morphism">
@@ -583,17 +608,17 @@ export default function ISSTracker() {
                     <Card key={member.id} className="bg-gray-800/20 border border-gray-700/30 hover:border-orange-500/50 transition-all duration-300 transform hover:scale-105">
                       <CardContent className="p-6">
                         <div className="text-center mb-6">
-                          <div className="relative mb-4">
+                          <div className="relative mb-6">
                             <CrewAvatar 
                               name={member.name} 
                               country={member.country} 
                               size="lg" 
                               className="mx-auto"
                             />
-                            <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-green-500 rounded-full border-3 border-gray-900 flex items-center justify-center shadow-lg">
-                              <CheckCircle className="w-4 h-4 text-white" />
+                            <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-gray-900 flex items-center justify-center shadow-lg">
+                              <CheckCircle className="w-3 h-3 text-white" />
                             </div>
-                            <div className="absolute -top-1 -left-1 w-7 h-7 bg-blue-500 rounded-full border-3 border-gray-900 flex items-center justify-center text-xs font-bold text-white">
+                            <div className="absolute -top-1 -left-1 w-6 h-6 bg-blue-500 rounded-full border-2 border-gray-900 flex items-center justify-center text-xs font-bold text-white">
                               {index + 1}
                             </div>
                           </div>

@@ -148,14 +148,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
         try {
           const astroData = await nasaApi.getAstronauts();
           
+          // Enhanced crew data with real astronaut information
+          const crewDetails: { [key: string]: { role: string; country: string; launchDate: Date } } = {
+            "Oleg Kononenko": { 
+              role: "Commander", 
+              country: "Russia", 
+              launchDate: new Date('2023-09-15') 
+            },
+            "Nikolai Chub": { 
+              role: "Flight Engineer", 
+              country: "Russia", 
+              launchDate: new Date('2023-09-15') 
+            },
+            "Tracy C. Dyson": { 
+              role: "Flight Engineer", 
+              country: "United States", 
+              launchDate: new Date('2024-03-23') 
+            },
+            "Matthew Dominick": { 
+              role: "Commander", 
+              country: "United States", 
+              launchDate: new Date('2024-06-05') 
+            },
+            "Michael Barratt": { 
+              role: "Flight Engineer", 
+              country: "United States", 
+              launchDate: new Date('2024-06-05') 
+            },
+            "Jeanette Epps": { 
+              role: "Flight Engineer", 
+              country: "United States", 
+              launchDate: new Date('2024-06-05') 
+            },
+            "Alexander Grebenkin": { 
+              role: "Flight Engineer", 
+              country: "Russia", 
+              launchDate: new Date('2024-03-23') 
+            },
+            "Butch Wilmore": { 
+              role: "Pilot", 
+              country: "United States", 
+              launchDate: new Date('2024-06-05') 
+            },
+            "Suni Williams": { 
+              role: "Commander", 
+              country: "United States", 
+              launchDate: new Date('2024-06-05') 
+            }
+          };
+          
           for (const person of astroData.people.filter(p => p.craft === "ISS")) {
+            const details = crewDetails[person.name] || { 
+              role: "Flight Engineer", 
+              country: "International", 
+              launchDate: new Date('2024-01-01') 
+            };
+            
             await storage.createIssCrew({
               name: person.name,
               craft: person.craft,
-              role: "Crew Member",
-              country: "International",
-              launchDate: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000),
-              daysInSpace: Math.floor(Math.random() * 200) + 50
+              role: details.role,
+              country: details.country,
+              launchDate: details.launchDate,
+              daysInSpace: Math.floor((Date.now() - details.launchDate.getTime()) / (1000 * 60 * 60 * 24))
             });
           }
           

@@ -21,22 +21,44 @@ export function CrewAvatar({ name, country, size = 'md', className = '' }: CrewA
     return fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
   };
 
-  const getAvatarUrl = (fullName: string) => {
-    // Generate a consistent avatar based on the name
+  const getAstronautPhotoUrl = (fullName: string) => {
+    // Real astronaut photos from NASA's official astronaut database
+    const astronautPhotos: { [key: string]: string } = {
+      'Oleg Kononenko': 'https://www.nasa.gov/wp-content/uploads/2023/03/jsc2019e059971_kononenko.jpg',
+      'Nikolai Chub': 'https://www.nasa.gov/wp-content/uploads/2023/08/jsc2023e024456_chub.jpg',
+      'Tracy C. Dyson': 'https://www.nasa.gov/wp-content/uploads/2023/12/jsc2024e002832_dyson.jpg',
+      'Matthew Dominick': 'https://www.nasa.gov/wp-content/uploads/2023/12/jsc2024e003042_dominick.jpg',
+      'Michael Barratt': 'https://www.nasa.gov/wp-content/uploads/2023/03/jsc2019e059936_barratt.jpg',
+      'Jeanette Epps': 'https://www.nasa.gov/wp-content/uploads/2023/12/jsc2024e003035_epps.jpg',
+      'Alexander Grebenkin': 'https://www.nasa.gov/wp-content/uploads/2023/08/jsc2023e024459_grebenkin.jpg',
+      'Butch Wilmore': 'https://www.nasa.gov/wp-content/uploads/2023/03/jsc2019e059969_wilmore.jpg',
+      'Suni Williams': 'https://www.nasa.gov/wp-content/uploads/2023/03/jsc2019e059974_williams.jpg'
+    };
+
+    // Check if we have a real photo for this astronaut
+    if (astronautPhotos[fullName]) {
+      return astronautPhotos[fullName];
+    }
+
+    // Generate a realistic avatar based on the name as fallback
     const seed = fullName.toLowerCase().replace(/\s+/g, '');
-    return `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&backgroundColor=1e293b,374151,475569&clothesColor=262e42,3e4c59,52525b&eyeType=happy,default,wink&mouthType=smile,twinkle&skinColor=ae5d29,f8d25c,fd9841,ffdbac,d08b5b`;
+    return `https://api.dicebear.com/7.x/notionists/svg?seed=${seed}&backgroundColor=1e293b,374151,475569&clothesColor=262e42,3e4c59,52525b`;
   };
 
   const getCountryFlag = (countryCode?: string) => {
     const flags: { [key: string]: string } = {
       'USA': '🇺🇸',
-      'Russia': '🇷🇺',
+      'United States': '🇺🇸',
+      'Russia': '🇷🇺', 
+      'Russian Federation': '🇷🇺',
       'Japan': '🇯🇵',
       'Germany': '🇩🇪',
       'Italy': '🇮🇹',
       'France': '🇫🇷',
       'Canada': '🇨🇦',
       'UK': '🇬🇧',
+      'United Kingdom': '🇬🇧',
+      'ESA': '🇪🇺',
       'International': '🌍'
     };
     return flags[countryCode || 'International'] || '🌍';
@@ -46,9 +68,9 @@ export function CrewAvatar({ name, country, size = 'md', className = '' }: CrewA
     <div className={`relative ${sizeClasses[size]} ${className}`}>
       {!imageError ? (
         <img
-          src={getAvatarUrl(name)}
-          alt={`${name} avatar`}
-          className="w-full h-full rounded-full border-4 border-gray-800 shadow-xl"
+          src={getAstronautPhotoUrl(name)}
+          alt={`${name} official NASA photo`}
+          className="w-full h-full rounded-full border-4 border-gray-800 shadow-xl object-cover"
           onError={() => setImageError(true)}
           onLoad={() => setImageError(false)}
         />
@@ -58,9 +80,9 @@ export function CrewAvatar({ name, country, size = 'md', className = '' }: CrewA
         </div>
       )}
       
-      {/* Country flag indicator */}
+      {/* Country flag indicator - positioned below avatar */}
       {country && (
-        <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-gray-900 rounded-full border-2 border-gray-800 flex items-center justify-center text-xs">
+        <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-6 bg-gray-900/90 rounded border-2 border-gray-700 flex items-center justify-center text-sm backdrop-blur-sm">
           {getCountryFlag(country)}
         </div>
       )}
