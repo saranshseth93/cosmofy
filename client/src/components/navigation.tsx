@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-import { Menu, X, Home, Camera, Satellite, Zap, Circle, Rocket, Globe } from 'lucide-react';
+import { Menu, X, Home, Camera, Satellite, Zap, Circle, Rocket, Globe, Newspaper } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import logoImage from '@assets/Cosmo - 1_1750298158776.png';
 
@@ -17,6 +17,7 @@ export function Navigation() {
     { href: '/aurora', label: 'Aurora', icon: Zap },
     { href: '/asteroids', label: 'Asteroids', icon: Circle },
     { href: '/missions', label: 'Missions', icon: Rocket },
+    { href: '/news', label: 'Space News', icon: Newspaper },
   ];
 
   useEffect(() => {

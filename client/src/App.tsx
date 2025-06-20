@@ -10,6 +10,7 @@ import SolarSystem from "@/pages/solar-system";
 import Aurora from "@/pages/aurora";
 import Asteroids from "@/pages/asteroids";
 import Missions from "@/pages/missions";
+import SpaceNews from "@/pages/space-news";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -22,6 +23,7 @@ function Router() {
       <Route path="/aurora" component={Aurora} />
       <Route path="/asteroids" component={Asteroids} />
       <Route path="/missions" component={Missions} />
+      <Route path="/news" component={SpaceNews} />
       <Route component={NotFound} />
     </Switch>
   );

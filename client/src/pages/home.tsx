@@ -5,7 +5,7 @@ import { HeroSection } from '@/components/hero-section';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Camera, Satellite, Zap, Circle, Rocket, ArrowRight, Globe } from 'lucide-react';
+import { Camera, Satellite, Zap, Circle, Rocket, ArrowRight, Globe, Newspaper } from 'lucide-react';
 import { Footer } from '@/components/footer';
 
 export default function Home() {
@@ -71,6 +71,14 @@ export default function Home() {
       icon: Rocket,
       href: '/missions',
       stats: '20+ Active'
+    },
+    {
+      id: 'news',
+      title: 'Space News',
+      description: 'Stay updated with the latest space exploration news and discoveries from around the world.',
+      icon: Newspaper,
+      href: '/news',
+      stats: 'Real-time'
     }
   ];
 
