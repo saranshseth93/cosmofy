@@ -28,6 +28,7 @@ export function SpaceSoundLibrary({ className = '' }: SpaceSoundLibraryProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [currentlyPlaying, setCurrentlyPlaying] = useState<string | null>(null);
   const [volumes, setVolumes] = useState<{ [key: string]: number }>({});
+  const [audioSupported, setAudioSupported] = useState<boolean | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const oscillatorsRef = useRef<{ [key: string]: OscillatorNode | null }>({});
   const gainNodesRef = useRef<{ [key: string]: GainNode | null }>({});
@@ -162,17 +163,38 @@ export function SpaceSoundLibrary({ className = '' }: SpaceSoundLibraryProps) {
 
   const initAudioContext = async () => {
     if (!audioContextRef.current) {
-      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
-      if (audioContextRef.current.state === 'suspended') {
-        await audioContextRef.current.resume();
+      try {
+        const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+        if (!AudioContext) {
+          throw new Error('Web Audio API not supported');
+        }
+        
+        audioContextRef.current = new AudioContext();
+        console.log('AudioContext created, initial state:', audioContextRef.current.state);
+        
+        if (audioContextRef.current.state === 'suspended') {
+          console.log('AudioContext suspended, attempting to resume...');
+          await audioContextRef.current.resume();
+          console.log('AudioContext resumed, new state:', audioContextRef.current.state);
+        }
+      } catch (error) {
+        console.error('Failed to create AudioContext:', error);
+        throw error;
       }
     }
   };
 
   const playSound = async (soundId: string) => {
     try {
+      console.log('Attempting to play sound:', soundId);
+      
       await initAudioContext();
-      if (!audioContextRef.current) return;
+      if (!audioContextRef.current) {
+        console.error('AudioContext not available');
+        return;
+      }
+
+      console.log('AudioContext state:', audioContextRef.current.state);
 
       // Stop currently playing sound
       if (currentlyPlaying && currentlyPlaying !== soundId) {
@@ -237,18 +259,22 @@ export function SpaceSoundLibrary({ className = '' }: SpaceSoundLibraryProps) {
         oscillator.frequency.setValueAtTime(frequency, audioContextRef.current.currentTime);
         oscillator.type = waveType;
 
-        // Set initial volume
-        const volume = volumes[soundId] || 0.3;
-        gainNode.gain.setValueAtTime(volume * 0.1, audioContextRef.current.currentTime);
+        // Set initial volume - make it more audible
+        const volume = volumes[soundId] || 0.5;
+        gainNode.gain.setValueAtTime(volume * 0.3, audioContextRef.current.currentTime);
 
+        console.log(`Starting oscillator: ${frequency}Hz, ${waveType}, volume: ${volume * 0.3}`);
+        
         oscillator.start();
         
         oscillatorsRef.current[soundId] = oscillator;
         gainNodesRef.current[soundId] = gainNode;
         setCurrentlyPlaying(soundId);
+        
+        console.log('Sound started successfully');
       }
     } catch (error) {
-      console.warn('Audio playback failed:', error);
+      console.error('Audio playback failed:', error);
     }
   };
 
@@ -271,6 +297,56 @@ export function SpaceSoundLibrary({ className = '' }: SpaceSoundLibraryProps) {
       gainNode.gain.setValueAtTime(volume * 0.1, audioContextRef.current.currentTime);
     }
   };
+
+  const testAudio = async () => {
+    try {
+      console.log('Testing Web Audio API...');
+      await initAudioContext();
+      
+      if (!audioContextRef.current) {
+        console.error('AudioContext failed to initialize');
+        return;
+      }
+
+      // Create a simple test tone
+      const osc = audioContextRef.current.createOscillator();
+      const gain = audioContextRef.current.createGain();
+      
+      osc.connect(gain);
+      gain.connect(audioContextRef.current.destination);
+      
+      osc.frequency.setValueAtTime(440, audioContextRef.current.currentTime);
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(0.1, audioContextRef.current.currentTime);
+      
+      console.log('Starting test tone at 440Hz');
+      osc.start();
+      
+      // Stop after 1 second
+      setTimeout(() => {
+        try {
+          osc.stop();
+          console.log('Test tone stopped');
+        } catch (e) {
+          console.error('Error stopping test tone:', e);
+        }
+      }, 1000);
+      
+    } catch (error) {
+      console.error('Test audio failed:', error);
+    }
+  };
+
+  // Check audio support on component mount
+  useEffect(() => {
+    const checkAudioSupport = () => {
+      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+      setAudioSupported(!!AudioContext);
+      console.log('Web Audio API supported:', !!AudioContext);
+    };
+    
+    checkAudioSupport();
+  }, []);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -295,6 +371,16 @@ export function SpaceSoundLibrary({ className = '' }: SpaceSoundLibraryProps) {
           Experience authentic space sounds synthesized from real NASA mission data. 
           Each sound represents actual cosmic phenomena converted from electromagnetic waves into audio.
         </p>
+        
+        {/* Debug controls */}
+        <div className="flex justify-center gap-4">
+          <Button onClick={testAudio} variant="outline" size="sm">
+            Test Audio (440Hz tone)
+          </Button>
+          <div className="text-sm text-muted-foreground">
+            Audio Support: {audioSupported === null ? 'Checking...' : audioSupported ? 'Yes' : 'No'}
+          </div>
+        </div>
       </div>
 
       {/* Category Filter */}
