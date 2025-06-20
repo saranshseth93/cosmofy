@@ -84,36 +84,72 @@ export interface NeoResponse {
 }
 
 export class NasaApiService {
-  private async fetchWithRetry(url: string, retries = 3): Promise<Response> {
+  private cache = new Map<string, { data: any; timestamp: number }>();
+  private readonly CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+  private readonly REQUEST_TIMEOUT = 8000; // 8 seconds
+
+  private async fetchWithRetry(url: string, retries = 2): Promise<Response> {
+    // Check cache first
+    const cacheKey = url;
+    const cached = this.cache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < this.CACHE_DURATION) {
+      return new Response(JSON.stringify(cached.data), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), this.REQUEST_TIMEOUT);
+
     for (let i = 0; i < retries; i++) {
       try {
-        const response = await fetch(url);
+        const response = await fetch(url, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        
         if (response.ok) {
-          return response;
+          const data = await response.json();
+          // Cache successful response
+          this.cache.set(cacheKey, { data, timestamp: Date.now() });
+          return new Response(JSON.stringify(data), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          });
         }
+        
         if (response.status === 429) {
           // Rate limited, wait and retry
           await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
           continue;
         }
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      } catch (error) {
+      } catch (error: any) {
+        clearTimeout(timeoutId);
+        if (error && typeof error === 'object' && 'name' in error && error.name === 'AbortError') {
+          throw new Error('Request timeout - please try again');
+        }
         if (i === retries - 1) throw error;
-        await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
+        await new Promise(resolve => setTimeout(resolve, 500));
       }
     }
     throw new Error("Max retries exceeded");
   }
 
   async getApod(date?: string): Promise<ApodResponse> {
-    const url = new URL(`${NASA_BASE_URL}/planetary/apod`);
-    url.searchParams.set("api_key", NASA_API_KEY);
-    if (date) {
-      url.searchParams.set("date", date);
-    }
+    try {
+      const url = new URL(`${NASA_BASE_URL}/planetary/apod`);
+      url.searchParams.set("api_key", NASA_API_KEY);
+      if (date) {
+        url.searchParams.set("date", date);
+      }
 
-    const response = await this.fetchWithRetry(url.toString());
-    return response.json();
+      const response = await this.fetchWithRetry(url.toString());
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('APOD API error:', error);
+      throw new Error('Failed to fetch APOD data');
+    }
   }
 
   async getApodRange(startDate: string, endDate: string): Promise<ApodResponse[]> {
