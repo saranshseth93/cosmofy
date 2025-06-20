@@ -17,66 +17,82 @@ export function SimpleWorldMap({ position, userLocation, className = "" }: Simpl
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set canvas size
-    const width = canvas.width = canvas.offsetWidth * 2;
-    const height = canvas.height = canvas.offsetHeight * 2;
-    ctx.scale(2, 2);
+    // Set proper canvas dimensions
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
 
-    const drawWidth = width / 2;
-    const drawHeight = height / 2;
+    const drawWidth = rect.width;
+    const drawHeight = rect.height;
 
     // Clear canvas with dark space background
-    ctx.fillStyle = '#0f1419';
+    ctx.fillStyle = '#0a0f1a';
     ctx.fillRect(0, 0, drawWidth, drawHeight);
 
-    // Draw world map outline (simplified continents)
-    ctx.strokeStyle = '#2a3441';
-    ctx.lineWidth = 1;
-    ctx.fillStyle = '#1a2332';
+    // Draw world map outline with better contrast
+    ctx.strokeStyle = '#374151';
+    ctx.lineWidth = 1.5;
+    ctx.fillStyle = '#1f2937';
 
-    // Draw simplified world map shapes
+    // Draw continents
     drawContinents(ctx, drawWidth, drawHeight);
 
     // Draw grid lines
-    ctx.strokeStyle = '#1a2332';
-    ctx.lineWidth = 0.5;
+    ctx.strokeStyle = '#374151';
+    ctx.lineWidth = 0.8;
+    ctx.setLineDash([2, 3]);
     drawGrid(ctx, drawWidth, drawHeight);
+    ctx.setLineDash([]);
 
     // Convert coordinates to canvas position
     const latToY = (lat: number) => ((90 - lat) / 180) * drawHeight;
     const lonToX = (lon: number) => ((lon + 180) / 360) * drawWidth;
 
-    // Draw ISS position
+    // Draw ISS orbital path
     if (position) {
       const x = lonToX(position.longitude);
       const y = latToY(position.latitude);
 
-      // Draw ISS orbit trail (simplified circle)
-      ctx.strokeStyle = '#00d4ff40';
+      // Draw orbital path
+      ctx.strokeStyle = '#22d3ee';
       ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
       ctx.beginPath();
-      ctx.arc(drawWidth / 2, y, drawWidth * 0.45, 0, Math.PI * 2);
+      ctx.arc(drawWidth / 2, drawHeight / 2, Math.min(drawWidth, drawHeight) * 0.35, 0, Math.PI * 2);
       ctx.stroke();
+      ctx.setLineDash([]);
 
-      // Draw ISS marker
-      ctx.fillStyle = '#00d4ff';
+      // Draw ISS marker with better visibility
+      const gradient = ctx.createRadialGradient(x, y, 0, x, y, 25);
+      gradient.addColorStop(0, '#22d3ee');
+      gradient.addColorStop(0.4, '#0891b2');
+      gradient.addColorStop(1, 'transparent');
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(x, y, 25, 0, Math.PI * 2);
+      ctx.fill();
+
+      // ISS icon
+      ctx.fillStyle = '#ffffff';
+      ctx.strokeStyle = '#0891b2';
+      ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.arc(x, y, 8, 0, Math.PI * 2);
       ctx.fill();
+      ctx.stroke();
 
-      // Draw ISS glow
-      const gradient = ctx.createRadialGradient(x, y, 0, x, y, 20);
-      gradient.addColorStop(0, '#00d4ff80');
-      gradient.addColorStop(1, '#00d4ff00');
-      ctx.fillStyle = gradient;
+      // ISS satellite arms
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.arc(x, y, 20, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Draw ISS icon (satellite shape)
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(x - 6, y - 2, 12, 4);
-      ctx.fillRect(x - 2, y - 6, 4, 12);
+      ctx.moveTo(x - 12, y);
+      ctx.lineTo(x + 12, y);
+      ctx.moveTo(x, y - 12);
+      ctx.lineTo(x, y + 12);
+      ctx.stroke();
     }
 
     // Draw user location
@@ -84,19 +100,22 @@ export function SimpleWorldMap({ position, userLocation, className = "" }: Simpl
       const x = lonToX(userLocation.longitude);
       const y = latToY(userLocation.latitude);
 
-      ctx.fillStyle = '#ff6b6b';
+      const gradient = ctx.createRadialGradient(x, y, 0, x, y, 20);
+      gradient.addColorStop(0, '#ef4444');
+      gradient.addColorStop(0.4, '#dc2626');
+      gradient.addColorStop(1, 'transparent');
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(x, y, 20, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.strokeStyle = '#dc2626';
+      ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.arc(x, y, 6, 0, Math.PI * 2);
       ctx.fill();
-
-      // Draw user location glow
-      const gradient = ctx.createRadialGradient(x, y, 0, x, y, 15);
-      gradient.addColorStop(0, '#ff6b6b80');
-      gradient.addColorStop(1, '#ff6b6b00');
-      ctx.fillStyle = gradient;
-      ctx.beginPath();
-      ctx.arc(x, y, 15, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.stroke();
     }
 
   }, [position, userLocation]);

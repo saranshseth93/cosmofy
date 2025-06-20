@@ -115,6 +115,8 @@ Changelog:
   * Replaced problematic Leaflet map with reliable canvas-based world map for ISS tracking
   * Removed duplicate Mission Stats sections from ISS tracker page
   * Updated crew member avatars with authentic photos instead of initials
+  * Enhanced location display with comprehensive city and region mapping for ISS position
+  * Improved map rendering with proper canvas scaling and visual elements
   * Implemented space weather notifications schema and storage layer (in progress)
 ```
 

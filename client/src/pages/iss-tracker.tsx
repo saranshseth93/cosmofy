@@ -112,12 +112,91 @@ export default function ISSTracker() {
 
   const getLocationDisplay = (position: any) => {
     // Use the location from the server response if available
-    if (position?.location) {
+    if (position?.location && position.location !== 'Unknown Location') {
       return position.location;
     }
     
-    // Fallback to coordinates if no location available
-    return `${position?.latitude?.toFixed(2)}°, ${position?.longitude?.toFixed(2)}°`;
+    // Enhanced location approximation based on coordinates
+    const lat = position?.latitude;
+    const lon = position?.longitude;
+    
+    if (!lat || !lon) return 'Loading location...';
+    
+    // Comprehensive location mapping
+    const locations = [
+      // North America
+      { name: 'Near New York City, USA', latMin: 40.5, latMax: 41.0, lonMin: -74.5, lonMax: -73.5 },
+      { name: 'Near Los Angeles, USA', latMin: 33.7, latMax: 34.3, lonMin: -118.7, lonMax: -117.9 },
+      { name: 'Near Chicago, USA', latMin: 41.6, latMax: 42.1, lonMin: -88.0, lonMax: -87.3 },
+      { name: 'Near Miami, USA', latMin: 25.5, latMax: 26.0, lonMin: -80.5, lonMax: -80.0 },
+      { name: 'Near San Francisco, USA', latMin: 37.5, latMax: 38.0, lonMin: -122.7, lonMax: -122.2 },
+      { name: 'Near Toronto, Canada', latMin: 43.4, latMax: 43.9, lonMin: -79.7, lonMax: -79.1 },
+      { name: 'Near Mexico City, Mexico', latMin: 19.2, latMax: 19.7, lonMin: -99.4, lonMax: -98.9 },
+      
+      // Europe
+      { name: 'Near London, UK', latMin: 51.3, latMax: 51.7, lonMin: -0.5, lonMax: 0.3 },
+      { name: 'Near Paris, France', latMin: 48.6, latMax: 49.1, lonMin: 2.0, lonMax: 2.7 },
+      { name: 'Near Berlin, Germany', latMin: 52.3, latMax: 52.7, lonMin: 13.1, lonMax: 13.7 },
+      { name: 'Near Rome, Italy', latMin: 41.7, latMax: 42.1, lonMin: 12.3, lonMax: 12.7 },
+      { name: 'Near Madrid, Spain', latMin: 40.2, latMax: 40.6, lonMin: -3.9, lonMax: -3.5 },
+      { name: 'Near Amsterdam, Netherlands', latMin: 52.2, latMax: 52.5, lonMin: 4.7, lonMax: 5.1 },
+      { name: 'Near Moscow, Russia', latMin: 55.5, latMax: 56.0, lonMin: 37.3, lonMax: 37.9 },
+      
+      // Asia
+      { name: 'Near Tokyo, Japan', latMin: 35.4, latMax: 35.9, lonMin: 139.4, lonMax: 139.9 },
+      { name: 'Near Beijing, China', latMin: 39.7, latMax: 40.2, lonMin: 116.1, lonMax: 116.7 },
+      { name: 'Near Shanghai, China', latMin: 31.0, latMax: 31.5, lonMin: 121.2, lonMax: 121.7 },
+      { name: 'Near Mumbai, India', latMin: 18.8, latMax: 19.3, lonMin: 72.6, lonMax: 73.2 },
+      { name: 'Near Delhi, India', latMin: 28.4, latMax: 28.9, lonMin: 76.9, lonMax: 77.5 },
+      { name: 'Near Seoul, South Korea', latMin: 37.3, latMax: 37.8, lonMin: 126.7, lonMax: 127.2 },
+      { name: 'Near Bangkok, Thailand', latMin: 13.5, latMax: 14.0, lonMin: 100.3, lonMax: 100.8 },
+      { name: 'Near Singapore', latMin: 1.2, latMax: 1.5, lonMin: 103.6, lonMax: 104.1 },
+      
+      // Australia & Oceania
+      { name: 'Near Sydney, Australia', latMin: -34.1, latMax: -33.6, lonMin: 150.9, lonMax: 151.5 },
+      { name: 'Near Melbourne, Australia', latMin: -38.1, latMax: -37.6, lonMin: 144.7, lonMax: 145.2 },
+      { name: 'Near Perth, Australia', latMin: -32.1, latMax: -31.6, lonMin: 115.6, lonMax: 116.1 },
+      { name: 'Near Auckland, New Zealand', latMin: -37.0, latMax: -36.6, lonMin: 174.5, lonMax: 175.0 },
+      
+      // South America
+      { name: 'Near São Paulo, Brazil', latMin: -23.8, latMax: -23.3, lonMin: -46.9, lonMax: -46.4 },
+      { name: 'Near Rio de Janeiro, Brazil', latMin: -23.0, latMax: -22.7, lonMin: -43.5, lonMax: -43.0 },
+      { name: 'Near Buenos Aires, Argentina', latMin: -34.8, latMax: -34.4, lonMin: -58.7, lonMax: -58.2 },
+      { name: 'Near Lima, Peru', latMin: -12.3, latMax: -11.8, lonMin: -77.3, lonMax: -76.8 },
+      
+      // Africa
+      { name: 'Near Cairo, Egypt', latMin: 29.8, latMax: 30.3, lonMin: 31.0, lonMax: 31.5 },
+      { name: 'Near Lagos, Nigeria', latMin: 6.3, latMax: 6.8, lonMin: 3.1, lonMax: 3.6 },
+      { name: 'Near Cape Town, South Africa', latMin: -34.1, latMax: -33.6, lonMin: 18.2, lonMax: 18.7 },
+      { name: 'Near Johannesburg, South Africa', latMin: -26.5, latMax: -26.0, lonMin: 27.8, lonMax: 28.3 },
+    ];
+    
+    // Find matching location
+    for (const location of locations) {
+      if (lat >= location.latMin && lat <= location.latMax && 
+          lon >= location.lonMin && lon <= location.lonMax) {
+        return location.name;
+      }
+    }
+    
+    // Regional fallbacks
+    if (lat >= 23.5 && lat <= 49 && lon >= -125 && lon <= -66) return 'Over United States';
+    if (lat >= 49 && lat <= 60 && lon >= -141 && lon <= -52) return 'Over Canada';
+    if (lat >= 35 && lat <= 71 && lon >= -10 && lon <= 40) return 'Over Europe';
+    if (lat >= -44 && lat <= -10 && lon >= 113 && lon <= 154) return 'Over Australia';
+    if (lat >= 20 && lat <= 54 && lon >= 73 && lon <= 135) return 'Over Asia';
+    if (lat >= -35 && lat <= 15 && lon >= -82 && lon <= -34) return 'Over South America';
+    if (lat >= -35 && lat <= 37 && lon >= -18 && lon <= 51) return 'Over Africa';
+    
+    // Ocean areas
+    if (lat >= 20 && lat <= 66 && lon >= -180 && lon <= -140) return 'Over North Pacific Ocean';
+    if (lat >= -60 && lat <= 20 && lon >= -180 && lon <= -70) return 'Over South Pacific Ocean';
+    if (lat >= 0 && lat <= 70 && lon >= -70 && lon <= 20) return 'Over Atlantic Ocean';
+    if (lat >= -60 && lat <= 30 && lon >= 20 && lon <= 147) return 'Over Indian Ocean';
+    if (lat >= 66) return 'Over Arctic Ocean';
+    if (lat <= -60) return 'Over Antarctic Ocean';
+    
+    return `Over coordinates ${lat.toFixed(2)}°, ${lon.toFixed(2)}°`;
   };
 
   const getUserLocationDisplay = () => {
