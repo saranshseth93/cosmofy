@@ -12,6 +12,7 @@ export function Navigation() {
     { href: '/', label: 'Home', icon: Home },
     { href: '/gallery', label: 'Gallery', icon: Camera },
     { href: '/iss-tracker', label: 'ISS Tracker', icon: Satellite },
+    { href: '/solar-system', label: 'Solar System', icon: Globe },
     { href: '/aurora', label: 'Aurora', icon: Zap },
     { href: '/asteroids', label: 'Asteroids', icon: Circle },
     { href: '/missions', label: 'Missions', icon: Rocket },

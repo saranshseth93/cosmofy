@@ -5,7 +5,7 @@ import { HeroSection } from '@/components/hero-section';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Camera, Satellite, Zap, Circle, Rocket, ArrowRight } from 'lucide-react';
+import { Camera, Satellite, Zap, Circle, Rocket, ArrowRight, Globe } from 'lucide-react';
 import { Footer } from '@/components/footer';
 
 export default function Home() {
@@ -39,6 +39,14 @@ export default function Home() {
       icon: Satellite,
       href: '/iss-tracker',
       stats: 'Live Position'
+    },
+    {
+      id: 'solar-system',
+      title: 'Solar System Explorer',
+      description: 'Interactive 3D visualization of our solar system with detailed planetary data and orbital mechanics.',
+      icon: Globe,
+      href: '/solar-system',
+      stats: '8 Planets'
     },
     {
       id: 'aurora',
