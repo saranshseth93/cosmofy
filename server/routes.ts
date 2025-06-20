@@ -5,47 +5,100 @@ import { nasaApi } from "./services/nasa-api";
 import { geolocationService } from "./services/geolocation";
 import { insertApodImageSchema, insertAsteroidSchema, insertIssPositionSchema, insertIssPassSchema, insertIssCrewSchema, insertAuroraForecastSchema, insertSpaceMissionSchema } from "@shared/schema";
 
+// Background refresh function
+async function refreshApodData() {
+  try {
+    const endDate = new Date().toISOString().split('T')[0];
+    const startDate = new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+    
+    const nasaImages = await nasaApi.getApodRange(startDate, endDate);
+    
+    for (const nasaImage of nasaImages.slice(0, 10)) {
+      const existing = await storage.getApodImageByDate(nasaImage.date);
+      if (!existing) {
+        await storage.createApodImage({
+          date: nasaImage.date,
+          title: nasaImage.title,
+          explanation: nasaImage.explanation,
+          url: nasaImage.url,
+          hdurl: nasaImage.hdurl,
+          mediaType: nasaImage.media_type,
+          copyright: nasaImage.copyright
+        });
+      }
+    }
+  } catch (error) {
+    console.error('Background APOD refresh failed:', error);
+  }
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
-  // APOD Routes
+  // APOD Routes with timeout protection
   app.get("/api/apod", async (req, res) => {
+    const timeout = setTimeout(() => {
+      if (!res.headersSent) {
+        res.status(408).json({ error: "Request timeout" });
+      }
+    }, 10000); // 10 second timeout
+
     try {
       const { page = "1", limit = "20" } = req.query;
       const offset = (parseInt(page as string) - 1) * parseInt(limit as string);
       
       const images = await storage.getApodImages(parseInt(limit as string), offset);
       
-      // If we don't have recent images, fetch from NASA API
-      if (images.length < parseInt(limit as string)) {
-        try {
-          const endDate = new Date().toISOString().split('T')[0];
-          const startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-          
-          const nasaImages = await nasaApi.getApodRange(startDate, endDate);
-          
-          for (const nasaImage of nasaImages) {
-            const existing = await storage.getApodImageByDate(nasaImage.date);
-            if (!existing) {
-              await storage.createApodImage({
-                date: nasaImage.date,
-                title: nasaImage.title,
-                explanation: nasaImage.explanation,
-                url: nasaImage.url,
-                hdurl: nasaImage.hdurl,
-                mediaType: nasaImage.media_type,
-                copyright: nasaImage.copyright
-              });
-            }
-          }
-          
-          // Fetch updated list 
-          const updatedImages = await storage.getApodImages(parseInt(limit as string), offset);
-          res.json(updatedImages);
-        } catch (error) {
-          console.error("Error fetching APOD from NASA:", error);
-          res.json(images);
-        }
-      } else {
+      // Return cached data immediately if available
+      if (images.length > 0) {
+        clearTimeout(timeout);
         res.json(images);
+        
+        // Background refresh if data is old
+        const isOld = images.some(img => {
+          const imgDate = new Date(img.date);
+          const daysDiff = (Date.now() - imgDate.getTime()) / (1000 * 60 * 60 * 24);
+          return daysDiff > 7;
+        });
+        
+        if (isOld) {
+          // Async background refresh - don't await
+          refreshApodData().catch((err: any) => console.error('Background refresh failed:', err));
+        }
+        return;
+      }
+      
+      // If no cached data, fetch fresh data with timeout protection
+      try {
+        const endDate = new Date().toISOString().split('T')[0];
+        const startDate = new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+        
+        const nasaImages = await Promise.race([
+          nasaApi.getApodRange(startDate, endDate),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('NASA API timeout')), 8000))
+        ]) as any[];
+        
+        for (const nasaImage of nasaImages.slice(0, 10)) { // Limit to 10 for speed
+          const existing = await storage.getApodImageByDate(nasaImage.date);
+          if (!existing) {
+            await storage.createApodImage({
+              date: nasaImage.date,
+              title: nasaImage.title,
+              explanation: nasaImage.explanation,
+              url: nasaImage.url,
+              hdurl: nasaImage.hdurl,
+              mediaType: nasaImage.media_type,
+              copyright: nasaImage.copyright
+            });
+          }
+        }
+        
+        const updatedImages = await storage.getApodImages(parseInt(limit as string), offset);
+        clearTimeout(timeout);
+        res.json(updatedImages);
+      } catch (error) {
+        console.error("Error fetching APOD from NASA:", error);
+        clearTimeout(timeout);
+        // Return empty array instead of error to prevent app crash
+        res.json([]);
       }
     } catch (error) {
       console.error("Error fetching APOD images:", error);
@@ -83,10 +136,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // ISS Routes
+  // ISS Routes with timeout protection
   app.get("/api/iss/position", async (req, res) => {
+    const timeout = setTimeout(() => {
+      if (!res.headersSent) {
+        res.status(408).json({ error: "Request timeout" });
+      }
+    }, 8000); // 8 second timeout
+
     try {
-      const issData = await nasaApi.getIssPosition();
+      // Check for recent cached position first
+      const recentPosition = await storage.getCurrentIssPosition();
+      if (recentPosition) {
+        const age = Date.now() - new Date(recentPosition.timestamp).getTime();
+        if (age < 60000) { // If less than 1 minute old, return cached
+          clearTimeout(timeout);
+          res.json(recentPosition);
+          return;
+        }
+      }
+
+      const issData = await Promise.race([
+        nasaApi.getIssPosition(),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('ISS API timeout')), 6000))
+      ]) as any;
       
       const position = await storage.createIssPosition({
         latitude: parseFloat(issData.iss_position.latitude),
@@ -96,10 +169,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         timestamp: new Date(issData.timestamp * 1000)
       });
       
+      clearTimeout(timeout);
       res.json(position);
     } catch (error) {
+      clearTimeout(timeout);
       console.error("Error fetching ISS position:", error);
-      res.status(500).json({ error: "Failed to fetch ISS position" });
+      
+      // Return cached position if available on error
+      const fallbackPosition = await storage.getCurrentIssPosition();
+      if (fallbackPosition && !res.headersSent) {
+        res.json(fallbackPosition);
+      } else if (!res.headersSent) {
+        res.status(500).json({ error: "Failed to fetch ISS position" });
+      }
     }
   });
 
@@ -227,19 +309,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Aurora Routes
+  // Aurora Routes with timeout protection
   app.get("/api/aurora/forecast", async (req, res) => {
+    const timeout = setTimeout(() => {
+      if (!res.headersSent) {
+        res.status(408).json({ error: "Request timeout" });
+      }
+    }, 8000);
+
     try {
       const { lat, lon } = req.query;
       
       if (!lat || !lon) {
+        clearTimeout(timeout);
         return res.status(400).json({ error: "Latitude and longitude are required" });
       }
       
       const latitude = parseFloat(lat as string);
       const longitude = parseFloat(lon as string);
       
-      const auroraData = await geolocationService.getAuroraForecast(latitude, longitude);
+      const auroraData = await Promise.race([
+        geolocationService.getAuroraForecast(latitude, longitude),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Aurora API timeout')), 6000))
+      ]) as any;
       
       const forecast = await storage.createAuroraForecast({
         kpIndex: auroraData.kpIndex,
@@ -250,10 +342,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         visibility: auroraData.visibility
       });
       
+      clearTimeout(timeout);
       res.json(forecast);
     } catch (error) {
+      clearTimeout(timeout);
       console.error("Error fetching aurora forecast:", error);
-      res.status(500).json({ error: "Failed to fetch aurora forecast" });
+      if (!res.headersSent) {
+        res.status(500).json({ error: "Failed to fetch aurora forecast" });
+      }
     }
   });
 
