@@ -2,7 +2,8 @@ import {
   ApodImage, InsertApodImage, IssPosition, InsertIssPosition, 
   IssPass, InsertIssPass, IssCrew, InsertIssCrew,
   AuroraForecast, InsertAuroraForecast, Asteroid, InsertAsteroid,
-  SpaceMission, InsertSpaceMission
+  SpaceMission, InsertSpaceMission, SpaceWeatherAlert, InsertSpaceWeatherAlert,
+  SpaceWeatherData, InsertSpaceWeatherData
 } from "@shared/schema";
 
 export interface IStorage {
@@ -30,6 +31,14 @@ export interface IStorage {
   // Space Mission methods
   getActiveMissions(): Promise<SpaceMission[]>;
   createSpaceMission(mission: InsertSpaceMission): Promise<SpaceMission>;
+  
+  // Space Weather methods
+  getActiveSpaceWeatherAlerts(): Promise<SpaceWeatherAlert[]>;
+  createSpaceWeatherAlert(alert: InsertSpaceWeatherAlert): Promise<SpaceWeatherAlert>;
+  updateSpaceWeatherAlert(id: number, alert: Partial<SpaceWeatherAlert>): Promise<SpaceWeatherAlert>;
+  getCurrentSpaceWeatherData(): Promise<SpaceWeatherData | undefined>;
+  createSpaceWeatherData(data: InsertSpaceWeatherData): Promise<SpaceWeatherData>;
+  getSpaceWeatherHistory(hours: number): Promise<SpaceWeatherData[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -40,6 +49,8 @@ export class MemStorage implements IStorage {
   private auroraForecasts: Map<number, AuroraForecast> = new Map();
   private asteroids: Map<number, Asteroid> = new Map();
   private spaceMissions: Map<number, SpaceMission> = new Map();
+  private spaceWeatherAlerts: Map<number, SpaceWeatherAlert> = new Map();
+  private spaceWeatherData: Map<number, SpaceWeatherData> = new Map();
   private currentId: number = 1;
 
   // APOD methods
@@ -149,6 +160,60 @@ export class MemStorage implements IStorage {
     const mission: SpaceMission = { ...insertMission, id };
     this.spaceMissions.set(id, mission);
     return mission;
+  }
+
+  // Space Weather Alert methods
+  async getActiveSpaceWeatherAlerts(): Promise<SpaceWeatherAlert[]> {
+    const activeAlerts = Array.from(this.spaceWeatherAlerts.values())
+      .filter(alert => alert.isActive && (alert.endTime ? new Date(alert.endTime) > new Date() : true))
+      .sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
+    return activeAlerts;
+  }
+
+  async createSpaceWeatherAlert(insertAlert: InsertSpaceWeatherAlert): Promise<SpaceWeatherAlert> {
+    const id = this.currentId++;
+    const alert: SpaceWeatherAlert = { 
+      ...insertAlert, 
+      id,
+      createdAt: new Date()
+    };
+    this.spaceWeatherAlerts.set(id, alert);
+    return alert;
+  }
+
+  async updateSpaceWeatherAlert(id: number, updates: Partial<SpaceWeatherAlert>): Promise<SpaceWeatherAlert> {
+    const existingAlert = this.spaceWeatherAlerts.get(id);
+    if (!existingAlert) {
+      throw new Error(`Space weather alert with id ${id} not found`);
+    }
+    const updatedAlert = { ...existingAlert, ...updates };
+    this.spaceWeatherAlerts.set(id, updatedAlert);
+    return updatedAlert;
+  }
+
+  // Space Weather Data methods
+  async getCurrentSpaceWeatherData(): Promise<SpaceWeatherData | undefined> {
+    const allData = Array.from(this.spaceWeatherData.values())
+      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    return allData[0];
+  }
+
+  async createSpaceWeatherData(insertData: InsertSpaceWeatherData): Promise<SpaceWeatherData> {
+    const id = this.currentId++;
+    const data: SpaceWeatherData = { 
+      ...insertData, 
+      id,
+      createdAt: new Date()
+    };
+    this.spaceWeatherData.set(id, data);
+    return data;
+  }
+
+  async getSpaceWeatherHistory(hours: number): Promise<SpaceWeatherData[]> {
+    const cutoffTime = new Date(Date.now() - hours * 60 * 60 * 1000);
+    return Array.from(this.spaceWeatherData.values())
+      .filter(data => new Date(data.timestamp) >= cutoffTime)
+      .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
   }
 }
 
