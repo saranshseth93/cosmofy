@@ -18,10 +18,10 @@ export function APODGallery({ id = "gallery" }: APODGalleryProps) {
   const [selectedFilter, setSelectedFilter] = useState('latest');
   const sectionRef = useGSAP();
 
-  const { data: images, isLoading, error } = useQuery<ApodImage[]>({
-    queryKey: ['/api/apod', currentPage],
+  const { data: allImages, isLoading, error } = useQuery<ApodImage[]>({
+    queryKey: ['/api/apod'],
     queryFn: async () => {
-      const response = await fetch(`/api/apod?page=${currentPage}&limit=6`);
+      const response = await fetch('/api/apod');
       if (!response.ok) {
         throw new Error('Failed to fetch APOD images');
       }
@@ -35,6 +35,68 @@ export function APODGallery({ id = "gallery" }: APODGalleryProps) {
     { id: 'missions', label: 'Space Missions', icon: Rocket },
     { id: 'earth', label: 'Earth Views', icon: Globe },
   ];
+
+  // Filter and sort all images based on selected filter
+  const getFilteredImages = (images: ApodImage[]) => {
+    if (!images) return [];
+    
+    let filtered = [...images];
+    
+    switch (selectedFilter) {
+      case 'latest':
+        filtered = filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        break;
+      case 'popular':
+        filtered = filtered.filter(img => 
+          img.title.toLowerCase().includes('nebula') ||
+          img.title.toLowerCase().includes('galaxy') ||
+          img.title.toLowerCase().includes('planet') ||
+          img.title.toLowerCase().includes('star')
+        ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        break;
+      case 'missions':
+        filtered = filtered.filter(img => 
+          img.title.toLowerCase().includes('mission') ||
+          img.title.toLowerCase().includes('spacecraft') ||
+          img.title.toLowerCase().includes('rover') ||
+          img.title.toLowerCase().includes('satellite') ||
+          img.title.toLowerCase().includes('probe') ||
+          img.title.toLowerCase().includes('telescope') ||
+          img.title.toLowerCase().includes('hubble') ||
+          img.title.toLowerCase().includes('james webb') ||
+          img.title.toLowerCase().includes('perseverance') ||
+          img.title.toLowerCase().includes('curiosity')
+        ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        break;
+      case 'earth':
+        filtered = filtered.filter(img => 
+          img.title.toLowerCase().includes('earth') ||
+          img.title.toLowerCase().includes('aurora') ||
+          img.title.toLowerCase().includes('northern lights') ||
+          img.title.toLowerCase().includes('southern lights') ||
+          img.title.toLowerCase().includes('atmosphere') ||
+          img.title.toLowerCase().includes('blue marble')
+        ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        break;
+      default:
+        filtered = filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    }
+    
+    return filtered;
+  };
+
+  const filteredImages = getFilteredImages(allImages || []);
+  const itemsPerPage = 12;
+  const totalPages = Math.ceil(filteredImages.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentImages = filteredImages.slice(startIndex, endIndex);
+
+  // Reset to page 1 when filter changes
+  const handleFilterChange = (filterId: string) => {
+    setSelectedFilter(filterId);
+    setCurrentPage(1);
+  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -88,11 +150,14 @@ export function APODGallery({ id = "gallery" }: APODGalleryProps) {
                 <Button
                   key={filter.id}
                   variant={selectedFilter === filter.id ? "default" : "secondary"}
-                  onClick={() => setSelectedFilter(filter.id)}
+                  onClick={() => handleFilterChange(filter.id)}
                   className="glass-effect hover:bg-[hsl(158,76%,36%)] hover:bg-opacity-20 transition-all duration-300"
                 >
                   <Icon className="mr-2 h-4 w-4" />
                   {filter.label}
+                  <Badge className="ml-2 text-xs" variant="secondary">
+                    {getFilteredImages(allImages || []).length}
+                  </Badge>
                 </Button>
               );
             })}
@@ -121,7 +186,7 @@ export function APODGallery({ id = "gallery" }: APODGalleryProps) {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {images?.map((image) => (
+              {currentImages?.map((image) => (
                 <Card 
                   key={image.id}
                   className="glass-effect rounded-2xl overflow-hidden hover:scale-105 transform transition-all duration-500 group"

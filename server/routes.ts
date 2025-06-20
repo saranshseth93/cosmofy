@@ -42,10 +42,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }, 10000); // 10 second timeout
 
     try {
-      const { page = "1", limit = "20" } = req.query;
-      const offset = (parseInt(page as string) - 1) * parseInt(limit as string);
-      
-      const images = await storage.getApodImages(parseInt(limit as string), offset);
+      const images = await storage.getApodImages(1000, 0); // Get all available images
       
       // Return cached data immediately if available
       if (images.length > 0) {
@@ -69,14 +66,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // If no cached data, fetch fresh data with timeout protection
       try {
         const endDate = new Date().toISOString().split('T')[0];
-        const startDate = new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+        const startDate = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]; // 60 days
         
         const nasaImages = await Promise.race([
           nasaApi.getApodRange(startDate, endDate),
           new Promise((_, reject) => setTimeout(() => reject(new Error('NASA API timeout')), 8000))
         ]) as any[];
         
-        for (const nasaImage of nasaImages.slice(0, 10)) { // Limit to 10 for speed
+        // Process all images, no artificial limits
+        for (const nasaImage of nasaImages) {
           const existing = await storage.getApodImageByDate(nasaImage.date);
           if (!existing) {
             await storage.createApodImage({
@@ -91,7 +89,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
         }
         
-        const updatedImages = await storage.getApodImages(parseInt(limit as string), offset);
+        const updatedImages = await storage.getApodImages(1000, 0); // Get all available images
         clearTimeout(timeout);
         res.json(updatedImages);
       } catch (error) {
