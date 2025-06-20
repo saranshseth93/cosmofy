@@ -313,9 +313,9 @@ export default function SolarSystem() {
       <nav className="border-b border-neutral-800 bg-neutral-900/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center space-x-2">
+            <Link href="/" className="flex items-center space-x-2 hover:text-blue-400 transition-colors">
               <ArrowLeft className="w-5 h-5" />
-              <span className="text-neutral-400 hover:text-white transition-colors">Back to Home</span>
+              <span>Back to Home</span>
             </Link>
             <h1 className="text-xl font-bold">Solar System Explorer</h1>
             <div className="w-20"></div>

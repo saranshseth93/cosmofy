@@ -52,7 +52,7 @@ export default function ISSTracker() {
     : coordinates;
 
   useEffect(() => {
-    document.title = "ISS Live Tracker - Cosmofy | International Space Station Real-time Position";
+    document.title = "ISS Live Tracker - Space Exploration Platform | International Space Station Real-time Position";
   }, []);
 
   // Enhanced orbital calculations

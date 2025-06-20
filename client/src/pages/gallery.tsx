@@ -14,19 +14,61 @@ export default function Gallery() {
   const [selectedImage, setSelectedImage] = useState<ApodImage | null>(null);
 
   useEffect(() => {
-    document.title = "Astronomy Gallery - Cosmofy | NASA's Picture of the Day Collection";
+    document.title = "Astronomy Gallery - Space Exploration Platform | NASA's Picture of the Day Collection";
   }, []);
 
-  const { data: images, isLoading, error } = useQuery<ApodImage[]>({
-    queryKey: ['/api/apod', currentPage],
+  const { data: allImages, isLoading, error } = useQuery<ApodImage[]>({
+    queryKey: ['/api/apod'],
     queryFn: async () => {
-      const response = await fetch(`/api/apod?page=${currentPage}&limit=12`);
+      const response = await fetch('/api/apod?limit=50');
       if (!response.ok) {
         throw new Error('Failed to fetch APOD images');
       }
       return response.json();
     },
   });
+
+  // Filter images based on selected filter
+  const filteredImages = allImages?.filter(image => {
+    switch (selectedFilter) {
+      case 'latest':
+        return true; // Show all for latest
+      case 'popular':
+        return image.title.toLowerCase().includes('nebula') || 
+               image.title.toLowerCase().includes('galaxy') ||
+               image.title.toLowerCase().includes('hubble') ||
+               image.title.toLowerCase().includes('mars') ||
+               image.title.toLowerCase().includes('jupiter');
+      case 'missions':
+        return image.title.toLowerCase().includes('mission') ||
+               image.title.toLowerCase().includes('rover') ||
+               image.title.toLowerCase().includes('spacecraft') ||
+               image.title.toLowerCase().includes('apollo') ||
+               image.title.toLowerCase().includes('artemis') ||
+               image.title.toLowerCase().includes('parker') ||
+               image.title.toLowerCase().includes('juno') ||
+               image.title.toLowerCase().includes('cassini');
+      case 'earth':
+        return image.title.toLowerCase().includes('earth') ||
+               image.title.toLowerCase().includes('aurora') ||
+               image.title.toLowerCase().includes('lightning') ||
+               image.title.toLowerCase().includes('atmosphere') ||
+               image.title.toLowerCase().includes('satellite');
+      default:
+        return true;
+    }
+  }) || [];
+
+  // Paginate filtered results
+  const itemsPerPage = 12;
+  const totalPages = Math.ceil(filteredImages.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const images = filteredImages.slice(startIndex, startIndex + itemsPerPage);
+
+  // Reset to page 1 when filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedFilter]);
 
   const filters = [
     { id: 'latest', label: 'Latest', icon: Calendar },
@@ -193,8 +235,9 @@ export default function Gallery() {
               </Button>
               
               <div className="flex items-center space-x-2">
-                {Array.from({ length: Math.min(5, 10) }, (_, i) => {
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                   const pageNum = Math.max(1, currentPage - 2) + i;
+                  if (pageNum > totalPages) return null;
                   return (
                     <Button
                       key={pageNum}
@@ -214,7 +257,8 @@ export default function Gallery() {
               
               <Button
                 variant="outline"
-                onClick={() => setCurrentPage(currentPage + 1)}
+                onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                disabled={currentPage >= totalPages}
                 className="glass-morphism border-white/20 text-white hover:bg-white/10"
               >
                 Next

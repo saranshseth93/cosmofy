@@ -73,7 +73,7 @@ export default function Asteroids() {
   const [showOnlyHazardous, setShowOnlyHazardous] = useState(false);
 
   useEffect(() => {
-    document.title = "Near-Earth Asteroids - Cosmofy | Asteroid Tracking & Monitoring";
+    document.title = "Near-Earth Asteroids - Space Exploration Platform | Asteroid Tracking & Monitoring";
   }, []);
 
   const filteredAsteroids = nearEarthAsteroids

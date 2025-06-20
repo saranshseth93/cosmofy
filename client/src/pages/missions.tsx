@@ -74,7 +74,7 @@ export default function Missions() {
   const [filter, setFilter] = useState<'all' | 'active' | 'planned' | 'completed'>('all');
 
   useEffect(() => {
-    document.title = "Space Missions - Cosmofy | Current & Upcoming Space Exploration Missions";
+    document.title = "Space Missions - Space Exploration Platform | Current & Upcoming Space Exploration Missions";
   }, []);
 
   const filteredMissions = spaceMissions.filter(mission => {
