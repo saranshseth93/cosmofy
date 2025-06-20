@@ -117,6 +117,9 @@ Changelog:
   * Updated crew member avatars with authentic photos instead of initials
   * Enhanced location display with comprehensive city and region mapping for ISS position
   * Improved map rendering with proper canvas scaling and visual elements
+  * Enhanced Aurora forecast page with detailed photography tips for phones and DSLRs
+  * Added comprehensive aurora education including types, colors, and scientific explanations
+  * Implemented detailed forecast information with Kp index explanations and viewing conditions
   * Implemented space weather notifications schema and storage layer (in progress)
 ```
 

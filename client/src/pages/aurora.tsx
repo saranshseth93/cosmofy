@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CosmicPulse } from '@/components/lottie-loader';
 import { useGeolocation } from '@/hooks/use-geolocation';
-import { Zap, MapPin, Clock, Camera, Globe, AlertTriangle, TrendingUp } from 'lucide-react';
+import { Zap, MapPin, Clock, Camera, Globe, AlertTriangle, TrendingUp, Smartphone, Monitor, BookOpen, Info, Star, Sun, Moon, Settings, Lightbulb, Eye, Thermometer } from 'lucide-react';
 import { AuroraForecast } from '@/types/space';
 
 export default function Aurora() {
@@ -315,6 +315,410 @@ export default function Aurora() {
               </CardContent>
             </Card>
           )}
+
+          {/* Photography Tips Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            {/* Phone Photography Tips */}
+            <Card className="glass-morphism">
+              <CardContent className="p-8">
+                <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
+                  <Smartphone className="text-green-400 mr-3 h-8 w-8" />
+                  Phone Photography Tips
+                </h2>
+                
+                <div className="space-y-6">
+                  <div className="p-4 bg-gradient-to-r from-green-900/30 to-emerald-900/30 rounded-lg border border-green-500/30">
+                    <h3 className="text-lg font-semibold text-green-300 mb-3 flex items-center">
+                      <Settings className="mr-2 h-5 w-5" />
+                      Essential Settings
+                    </h3>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex justify-between items-center p-2 bg-black/20 rounded">
+                        <span className="text-gray-300">Camera Mode</span>
+                        <span className="text-green-300 font-medium">Manual/Pro Mode</span>
+                      </div>
+                      <div className="flex justify-between items-center p-2 bg-black/20 rounded">
+                        <span className="text-gray-300">ISO</span>
+                        <span className="text-green-300 font-medium">1600-6400</span>
+                      </div>
+                      <div className="flex justify-between items-center p-2 bg-black/20 rounded">
+                        <span className="text-gray-300">Shutter Speed</span>
+                        <span className="text-green-300 font-medium">15-30 seconds</span>
+                      </div>
+                      <div className="flex justify-between items-center p-2 bg-black/20 rounded">
+                        <span className="text-gray-300">Focus</span>
+                        <span className="text-green-300 font-medium">Manual to Infinity</span>
+                      </div>
+                      <div className="flex justify-between items-center p-2 bg-black/20 rounded">
+                        <span className="text-gray-300">Flash</span>
+                        <span className="text-green-300 font-medium">OFF</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-white flex items-center">
+                      <Lightbulb className="mr-2 h-5 w-5 text-yellow-400" />
+                      Pro Tips for Phones
+                    </h3>
+                    <ul className="space-y-2 text-sm text-gray-300">
+                      <li className="flex items-start">
+                        <span className="text-green-400 mr-2">•</span>
+                        Use a tripod or stable surface - even slight movement ruins long exposures
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-green-400 mr-2">•</span>
+                        Enable timer mode (2-10 seconds) to avoid camera shake when pressing shutter
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-green-400 mr-2">•</span>
+                        Shoot in RAW format if your phone supports it for better editing flexibility
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-green-400 mr-2">•</span>
+                        Keep your phone warm - cold weather drains batteries faster
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-green-400 mr-2">•</span>
+                        Start with ISO 3200, 20-second exposure, then adjust based on aurora brightness
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-green-400 mr-2">•</span>
+                        Include foreground elements like trees or buildings for composition
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-500/30">
+                    <h4 className="text-md font-semibold text-blue-300 mb-2">Recommended Apps</h4>
+                    <div className="text-sm text-gray-300 space-y-1">
+                      <div>• <strong>iPhone:</strong> Camera+ 2, ProCamera, NightCap</div>
+                      <div>• <strong>Android:</strong> Camera FV-5, Open Camera, Adobe Lightroom</div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* DSLR/Camera Tips */}
+            <Card className="glass-morphism">
+              <CardContent className="p-8">
+                <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
+                  <Camera className="text-blue-400 mr-3 h-8 w-8" />
+                  DSLR & Camera Tips
+                </h2>
+                
+                <div className="space-y-6">
+                  <div className="p-4 bg-gradient-to-r from-blue-900/30 to-indigo-900/30 rounded-lg border border-blue-500/30">
+                    <h3 className="text-lg font-semibold text-blue-300 mb-3 flex items-center">
+                      <Settings className="mr-2 h-5 w-5" />
+                      Camera Settings
+                    </h3>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex justify-between items-center p-2 bg-black/20 rounded">
+                        <span className="text-gray-300">Shooting Mode</span>
+                        <span className="text-blue-300 font-medium">Manual (M)</span>
+                      </div>
+                      <div className="flex justify-between items-center p-2 bg-black/20 rounded">
+                        <span className="text-gray-300">Aperture</span>
+                        <span className="text-blue-300 font-medium">f/1.4 - f/2.8</span>
+                      </div>
+                      <div className="flex justify-between items-center p-2 bg-black/20 rounded">
+                        <span className="text-gray-300">ISO</span>
+                        <span className="text-blue-300 font-medium">800-3200</span>
+                      </div>
+                      <div className="flex justify-between items-center p-2 bg-black/20 rounded">
+                        <span className="text-gray-300">Shutter Speed</span>
+                        <span className="text-blue-300 font-medium">10-25 seconds</span>
+                      </div>
+                      <div className="flex justify-between items-center p-2 bg-black/20 rounded">
+                        <span className="text-gray-300">Focus Mode</span>
+                        <span className="text-blue-300 font-medium">Manual Focus</span>
+                      </div>
+                      <div className="flex justify-between items-center p-2 bg-black/20 rounded">
+                        <span className="text-gray-300">White Balance</span>
+                        <span className="text-blue-300 font-medium">3200K-4000K</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-white flex items-center">
+                      <Monitor className="mr-2 h-5 w-5 text-purple-400" />
+                      Advanced Techniques
+                    </h3>
+                    <ul className="space-y-2 text-sm text-gray-300">
+                      <li className="flex items-start">
+                        <span className="text-blue-400 mr-2">•</span>
+                        Use a sturdy tripod with a remote shutter release or intervalometer
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-blue-400 mr-2">•</span>
+                        Enable mirror lock-up to reduce vibration during exposure
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-blue-400 mr-2">•</span>
+                        Focus on a bright star or distant light using live view magnification
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-blue-400 mr-2">•</span>
+                        Shoot in RAW format for maximum post-processing flexibility
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-blue-400 mr-2">•</span>
+                        Use the 500 rule: 500 ÷ focal length = max shutter speed (seconds)
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-blue-400 mr-2">•</span>
+                        Consider focus stacking for sharp foreground and aurora
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="p-4 bg-purple-900/20 rounded-lg border border-purple-500/30">
+                    <h4 className="text-md font-semibold text-purple-300 mb-2">Lens Recommendations</h4>
+                    <div className="text-sm text-gray-300 space-y-1">
+                      <div>• <strong>Wide-angle:</strong> 14-24mm f/2.8 for expansive sky views</div>
+                      <div>• <strong>Ultra-wide:</strong> 10-18mm for dramatic foreground inclusion</div>
+                      <div>• <strong>Fast primes:</strong> 20mm f/1.4, 24mm f/1.4 for low light</div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Aurora Education Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            {/* What Are Auroras */}
+            <Card className="glass-morphism">
+              <CardContent className="p-8">
+                <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
+                  <BookOpen className="text-cyan-400 mr-3 h-8 w-8" />
+                  Understanding Auroras
+                </h2>
+                
+                <div className="space-y-6">
+                  <div className="p-4 bg-gradient-to-r from-cyan-900/30 to-teal-900/30 rounded-lg border border-cyan-500/30">
+                    <h3 className="text-lg font-semibold text-cyan-300 mb-3 flex items-center">
+                      <Sun className="mr-2 h-5 w-5" />
+                      The Science Behind Auroras
+                    </h3>
+                    <p className="text-sm text-gray-300 leading-relaxed">
+                      Auroras occur when charged particles from the Sun interact with Earth's magnetic field and atmosphere. 
+                      Solar wind carries these particles toward Earth, where they're guided by magnetic field lines toward 
+                      the polar regions. When these particles collide with oxygen and nitrogen atoms in the upper atmosphere 
+                      (80-300 km altitude), they emit light in various colors.
+                    </p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-white flex items-center">
+                      <Star className="mr-2 h-5 w-5 text-yellow-400" />
+                      Aurora Colors & Altitude
+                    </h3>
+                    <div className="space-y-3">
+                      <div className="flex items-center p-3 bg-green-900/20 rounded border-l-4 border-green-400">
+                        <div className="w-4 h-4 bg-green-400 rounded-full mr-3"></div>
+                        <div>
+                          <div className="font-medium text-green-300">Green (557.7 nm)</div>
+                          <div className="text-sm text-gray-400">Oxygen at 100-300 km - Most common aurora color</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center p-3 bg-red-900/20 rounded border-l-4 border-red-400">
+                        <div className="w-4 h-4 bg-red-400 rounded-full mr-3"></div>
+                        <div>
+                          <div className="font-medium text-red-300">Red (630.0 nm)</div>
+                          <div className="text-sm text-gray-400">Oxygen at 300+ km - Rare, high-altitude auroras</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center p-3 bg-blue-900/20 rounded border-l-4 border-blue-400">
+                        <div className="w-4 h-4 bg-blue-400 rounded-full mr-3"></div>
+                        <div>
+                          <div className="font-medium text-blue-300">Blue/Purple</div>
+                          <div className="text-sm text-gray-400">Nitrogen at 80-100 km - Lower edge of auroras</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center p-3 bg-pink-900/20 rounded border-l-4 border-pink-400">
+                        <div className="w-4 h-4 bg-pink-400 rounded-full mr-3"></div>
+                        <div>
+                          <div className="font-medium text-pink-300">Pink/Magenta</div>
+                          <div className="text-sm text-gray-400">Mix of red oxygen and blue nitrogen</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Aurora Types & Patterns */}
+            <Card className="glass-morphism">
+              <CardContent className="p-8">
+                <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
+                  <Eye className="text-purple-400 mr-3 h-8 w-8" />
+                  Aurora Types & Patterns
+                </h2>
+                
+                <div className="space-y-6">
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-white flex items-center">
+                      <Zap className="mr-2 h-5 w-5 text-yellow-400" />
+                      Common Aurora Forms
+                    </h3>
+                    <div className="space-y-3">
+                      <div className="p-3 bg-gray-800/30 rounded border border-gray-600/30">
+                        <div className="font-medium text-purple-300 mb-1">Arc</div>
+                        <div className="text-sm text-gray-400">
+                          Smooth, curved band of light stretching across the horizon - the most basic aurora form
+                        </div>
+                      </div>
+                      <div className="p-3 bg-gray-800/30 rounded border border-gray-600/30">
+                        <div className="font-medium text-purple-300 mb-1">Band</div>
+                        <div className="text-sm text-gray-400">
+                          Like an arc but with visible internal structure and varying brightness
+                        </div>
+                      </div>
+                      <div className="p-3 bg-gray-800/30 rounded border border-gray-600/30">
+                        <div className="font-medium text-purple-300 mb-1">Corona</div>
+                        <div className="text-sm text-gray-400">
+                          Dramatic overhead display when aurora appears directly above the observer
+                        </div>
+                      </div>
+                      <div className="p-3 bg-gray-800/30 rounded border border-gray-600/30">
+                        <div className="font-medium text-purple-300 mb-1">Curtains/Rays</div>
+                        <div className="text-sm text-gray-400">
+                          Vertical structures that appear to hang down like curtains from the sky
+                        </div>
+                      </div>
+                      <div className="p-3 bg-gray-800/30 rounded border border-gray-600/30">
+                        <div className="font-medium text-purple-300 mb-1">Pulsating Aurora</div>
+                        <div className="text-sm text-gray-400">
+                          Patches of light that brighten and dim rhythmically, often post-midnight
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-gradient-to-r from-purple-900/30 to-pink-900/30 rounded-lg border border-purple-500/30">
+                    <h3 className="text-lg font-semibold text-purple-300 mb-3 flex items-center">
+                      <Moon className="mr-2 h-5 w-5" />
+                      Aurora Borealis vs Australis
+                    </h3>
+                    <div className="space-y-3 text-sm text-gray-300">
+                      <div>
+                        <strong className="text-purple-300">Aurora Borealis (Northern Lights):</strong> Visible in the Northern Hemisphere, 
+                        best seen from northern Canada, Alaska, Greenland, Iceland, and northern Scandinavia.
+                      </div>
+                      <div>
+                        <strong className="text-purple-300">Aurora Australis (Southern Lights):</strong> Visible in the Southern Hemisphere, 
+                        best seen from Antarctica, southern Chile, Argentina, New Zealand, and southern Australia.
+                      </div>
+                      <div className="pt-2 border-t border-purple-500/30">
+                        <strong>Fun Fact:</strong> Both auroras occur simultaneously and are mirror images of each other, 
+                        connected by Earth's magnetic field lines!
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Enhanced Forecast Information */}
+          <Card className="glass-morphism mb-12">
+            <CardContent className="p-8">
+              <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
+                <Info className="text-orange-400 mr-3 h-8 w-8" />
+                Understanding Aurora Forecasts
+              </h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-orange-300 flex items-center">
+                    <Thermometer className="mr-2 h-5 w-5" />
+                    Kp Index Explained
+                  </h3>
+                  <div className="space-y-2">
+                    <div className="p-2 bg-green-900/20 rounded border border-green-500/30">
+                      <div className="font-medium text-green-300">Kp 0-2: Quiet</div>
+                      <div className="text-sm text-gray-400">Aurora visible only at magnetic latitudes above 67°</div>
+                    </div>
+                    <div className="p-2 bg-yellow-900/20 rounded border border-yellow-500/30">
+                      <div className="font-medium text-yellow-300">Kp 3-4: Active</div>
+                      <div className="text-sm text-gray-400">Aurora visible at magnetic latitudes above 62°</div>
+                    </div>
+                    <div className="p-2 bg-orange-900/20 rounded border border-orange-500/30">
+                      <div className="font-medium text-orange-300">Kp 5-6: Storm</div>
+                      <div className="text-sm text-gray-400">Aurora visible at magnetic latitudes above 58°</div>
+                    </div>
+                    <div className="p-2 bg-red-900/20 rounded border border-red-500/30">
+                      <div className="font-medium text-red-300">Kp 7-9: Severe Storm</div>
+                      <div className="text-sm text-gray-400">Aurora visible at magnetic latitudes above 50°</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-blue-300 flex items-center">
+                    <Clock className="mr-2 h-5 w-5" />
+                    Best Viewing Conditions
+                  </h3>
+                  <ul className="space-y-2 text-sm text-gray-300">
+                    <li className="flex items-start">
+                      <span className="text-blue-400 mr-2">•</span>
+                      <strong>Time:</strong> 10 PM - 2 AM local time (magnetic midnight ±3 hours)
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-400 mr-2">•</span>
+                      <strong>Season:</strong> Equinoxes (March/September) are most active
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-400 mr-2">•</span>
+                      <strong>Moon:</strong> New moon provides darkest skies, but full moon illuminates landscape
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-400 mr-2">•</span>
+                      <strong>Weather:</strong> Clear skies essential - even thin clouds block aurora
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-400 mr-2">•</span>
+                      <strong>Location:</strong> Away from city lights, with unobstructed northern view
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-purple-300 flex items-center">
+                    <AlertTriangle className="mr-2 h-5 w-5" />
+                    What Affects Visibility
+                  </h3>
+                  <ul className="space-y-2 text-sm text-gray-300">
+                    <li className="flex items-start">
+                      <span className="text-purple-400 mr-2">•</span>
+                      <strong>Solar Activity:</strong> Coronal mass ejections and solar flares increase aurora activity
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-purple-400 mr-2">•</span>
+                      <strong>Earth's Magnetosphere:</strong> Magnetic field strength affects aurora intensity
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-purple-400 mr-2">•</span>
+                      <strong>Interplanetary Magnetic Field:</strong> Southward IMF enhances geomagnetic activity
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-purple-400 mr-2">•</span>
+                      <strong>Solar Wind Speed:</strong> Faster solar wind creates more intense auroras
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-purple-400 mr-2">•</span>
+                      <strong>Atmospheric Conditions:</strong> Upper atmosphere density affects collision frequency
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
     </div>
