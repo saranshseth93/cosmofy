@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
 import { Menu, X, Home, Camera, Satellite, Zap, Circle, Rocket, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import logoImage from '@assets/Cosmo - 1_1750298158776.png';
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,8 +38,8 @@ export function Navigation() {
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center">
             <img 
-              src="/attached_assets/Cosmo - 1_1750298158776.png" 
-              alt="Cosmofy" 
+              src={logoImage}
+              alt="Space Explorer Logo" 
               className="h-8 w-auto"
             />
           </Link>

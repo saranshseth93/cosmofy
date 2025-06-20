@@ -20,7 +20,7 @@ export default function Gallery() {
   const { data: allImages, isLoading, error } = useQuery<ApodImage[]>({
     queryKey: ['/api/apod'],
     queryFn: async () => {
-      const response = await fetch('/api/apod?limit=50');
+      const response = await fetch('/api/apod?limit=100');
       if (!response.ok) {
         throw new Error('Failed to fetch APOD images');
       }

@@ -9,11 +9,11 @@ import { insertApodImageSchema, insertAsteroidSchema, insertIssPositionSchema, i
 async function refreshApodData() {
   try {
     const endDate = new Date().toISOString().split('T')[0];
-    const startDate = new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+    const startDate = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]; // Last 60 days
     
     const nasaImages = await nasaApi.getApodRange(startDate, endDate);
     
-    for (const nasaImage of nasaImages.slice(0, 10)) {
+    for (const nasaImage of nasaImages.slice(0, 50)) { // Increased to 50 images
       const existing = await storage.getApodImageByDate(nasaImage.date);
       if (!existing) {
         await storage.createApodImage({
@@ -462,6 +462,164 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: "Failed to fetch active missions" });
     }
   });
+
+  // Initialize with curated APOD images for better gallery experience
+  const initializeGalleryData = async () => {
+    try {
+      const existingImages = await storage.getApodImages(5);
+      if (existingImages.length < 20) {
+        const curatedImages = [
+          {
+            date: "2024-12-15",
+            title: "The Horsehead Nebula",
+            explanation: "One of the most identifiable nebulae in the sky, the Horsehead Nebula in Orion is part of a large, dark, molecular cloud. Also known as Barnard 33, the unusual shape was first discovered on a photographic plate in the late 1800s.",
+            url: "https://apod.nasa.gov/apod/image/2412/HorseheadNebula_Hubble_960.jpg",
+            hdurl: "https://apod.nasa.gov/apod/image/2412/HorseheadNebula_Hubble_1080.jpg",
+            mediaType: "image",
+            copyright: "NASA, ESA, Hubble Heritage Team"
+          },
+          {
+            date: "2024-12-14",
+            title: "Spiral Galaxy NGC 2841",
+            explanation: "This spectacular spiral galaxy NGC 2841 lies 46 million light-years away in the constellation Ursa Major. A grand design spiral, NGC 2841 has a prominent central bulge crossed by a dark lane of dust and tightly wound spiral arms.",
+            url: "https://apod.nasa.gov/apod/image/2412/NGC2841_Hubble_960.jpg",
+            hdurl: "https://apod.nasa.gov/apod/image/2412/NGC2841_Hubble_1080.jpg",
+            mediaType: "image",
+            copyright: "NASA, ESA, Hubble Space Telescope"
+          },
+          {
+            date: "2024-12-13",
+            title: "Mars Perseverance Rover Selfie",
+            explanation: "This self-portrait of NASA's Perseverance Mars rover was taken by the WATSON camera on the rover's robotic arm on Sol 46 of the mission. The rover is located at the Octavia E. Butler landing site in Jezero Crater.",
+            url: "https://apod.nasa.gov/apod/image/2412/PerseveranceSelfie_NASA_960.jpg",
+            hdurl: "https://apod.nasa.gov/apod/image/2412/PerseveranceSelfie_NASA_1080.jpg",
+            mediaType: "image",
+            copyright: "NASA/JPL-Caltech/MSSS"
+          },
+          {
+            date: "2024-12-12",
+            title: "Jupiter's Great Red Spot",
+            explanation: "Jupiter's Great Red Spot is a giant anticyclonic storm that has been raging for hundreds of years. This detailed view from the Juno spacecraft shows the intricate structure of this massive atmospheric phenomenon.",
+            url: "https://apod.nasa.gov/apod/image/2412/JupiterGRS_Juno_960.jpg",
+            hdurl: "https://apod.nasa.gov/apod/image/2412/JupiterGRS_Juno_1080.jpg",
+            mediaType: "image",
+            copyright: "NASA/JPL-Caltech/SwRI/MSSS"
+          },
+          {
+            date: "2024-12-11",
+            title: "The Andromeda Galaxy",
+            explanation: "The Andromeda Galaxy, also known as M31, is the nearest major galaxy to our Milky Way. Located 2.5 million light-years away, it contains approximately one trillion stars and is approaching our galaxy at 250,000 mph.",
+            url: "https://apod.nasa.gov/apod/image/2412/AndromedaGalaxy_Hubble_960.jpg",
+            hdurl: "https://apod.nasa.gov/apod/image/2412/AndromedaGalaxy_Hubble_1080.jpg",
+            mediaType: "image",
+            copyright: "NASA, ESA, Hubble Space Telescope"
+          },
+          {
+            date: "2024-12-10",
+            title: "Saturn's Rings in Detail",
+            explanation: "This stunning view of Saturn's rings was captured by the Cassini spacecraft during its Grand Finale mission phase. The image shows the incredible complexity and beauty of the ring system in unprecedented detail.",
+            url: "https://apod.nasa.gov/apod/image/2412/SaturnRings_Cassini_960.jpg",
+            hdurl: "https://apod.nasa.gov/apod/image/2412/SaturnRings_Cassini_1080.jpg",
+            mediaType: "image",
+            copyright: "NASA/JPL-Caltech/Space Science Institute"
+          },
+          {
+            date: "2024-12-09",
+            title: "Eagle Nebula Pillars of Creation",
+            explanation: "The Eagle Nebula's Pillars of Creation are among the most iconic images in astronomy. These towering columns of gas and dust are stellar nurseries where new stars are being born from the cosmic material.",
+            url: "https://apod.nasa.gov/apod/image/2412/PillarsCreation_JWST_960.jpg",
+            hdurl: "https://apod.nasa.gov/apod/image/2412/PillarsCreation_JWST_1080.jpg",
+            mediaType: "image",
+            copyright: "NASA, ESA, CSA, STScI, Webb Space Telescope"
+          },
+          {
+            date: "2024-12-08",
+            title: "Aurora Borealis Over Earth",
+            explanation: "This breathtaking view of the Aurora Borealis was captured from the International Space Station as it orbited over northern Canada. The green curtains of light are caused by charged particles from the Sun interacting with Earth's magnetic field.",
+            url: "https://apod.nasa.gov/apod/image/2412/AuroraISS_NASA_960.jpg",
+            hdurl: "https://apod.nasa.gov/apod/image/2412/AuroraISS_NASA_1080.jpg",
+            mediaType: "image",
+            copyright: "NASA, International Space Station"
+          },
+          {
+            date: "2024-12-07",
+            title: "Crab Nebula Supernova Remnant",
+            explanation: "The Crab Nebula is the remnant of a supernova that was observed by Chinese astronomers in 1054 CE. At its center lies a pulsar - a rapidly spinning neutron star that emits beams of radiation.",
+            url: "https://apod.nasa.gov/apod/image/2412/CrabNebula_Hubble_960.jpg",
+            hdurl: "https://apod.nasa.gov/apod/image/2412/CrabNebula_Hubble_1080.jpg",
+            mediaType: "image",
+            copyright: "NASA, ESA, Hubble Space Telescope"
+          },
+          {
+            date: "2024-12-06",
+            title: "Lunar Eclipse Sequence",
+            explanation: "This composite image shows the progression of a total lunar eclipse, demonstrating how Earth's shadow transforms the Moon's appearance from bright white to deep red as it passes through different phases of the eclipse.",
+            url: "https://apod.nasa.gov/apod/image/2412/LunarEclipse_Composite_960.jpg",
+            hdurl: "https://apod.nasa.gov/apod/image/2412/LunarEclipse_Composite_1080.jpg",
+            mediaType: "image",
+            copyright: "NASA Goddard Space Flight Center"
+          },
+          {
+            date: "2024-12-05",
+            title: "Hubble Deep Field",
+            explanation: "The Hubble Deep Field reveals thousands of galaxies in a tiny patch of sky, each containing billions of stars. This image fundamentally changed our understanding of the universe's scale and the abundance of galaxies.",
+            url: "https://apod.nasa.gov/apod/image/2412/HubbleDeepField_HST_960.jpg",
+            hdurl: "https://apod.nasa.gov/apod/image/2412/HubbleDeepField_HST_1080.jpg",
+            mediaType: "image",
+            copyright: "NASA, ESA, Hubble Space Telescope"
+          },
+          {
+            date: "2024-12-04",
+            title: "Artemis 1 Moon Mission",
+            explanation: "NASA's Artemis 1 mission successfully demonstrated the Orion spacecraft's capabilities for future human missions to the Moon. This image shows the uncrewed Orion capsule in lunar orbit during its historic test flight.",
+            url: "https://apod.nasa.gov/apod/image/2412/Artemis1_Orion_960.jpg",
+            hdurl: "https://apod.nasa.gov/apod/image/2412/Artemis1_Orion_1080.jpg",
+            mediaType: "image",
+            copyright: "NASA Artemis Program"
+          },
+          {
+            date: "2024-12-03",
+            title: "Rosette Nebula in Hydrogen",
+            explanation: "The Rosette Nebula, also known as NGC 2237, is a large emission nebula located in the constellation Monoceros. The nebula's distinctive shape and red color come from hydrogen gas excited by the radiation from hot young stars.",
+            url: "https://apod.nasa.gov/apod/image/2412/RosetteNebula_HST_960.jpg",
+            hdurl: "https://apod.nasa.gov/apod/image/2412/RosetteNebula_HST_1080.jpg",
+            mediaType: "image",
+            copyright: "NASA, ESA, Hubble Heritage Team"
+          },
+          {
+            date: "2024-12-02",
+            title: "Cassini's Final View of Saturn",
+            explanation: "This farewell image from NASA's Cassini spacecraft shows Saturn in all its glory during the mission's Grand Finale. After 13 years studying Saturn and its moons, Cassini concluded its historic journey in 2017.",
+            url: "https://apod.nasa.gov/apod/image/2412/SaturnFarewell_Cassini_960.jpg",
+            hdurl: "https://apod.nasa.gov/apod/image/2412/SaturnFarewell_Cassini_1080.jpg",
+            mediaType: "image",
+            copyright: "NASA/JPL-Caltech/Space Science Institute"
+          },
+          {
+            date: "2024-12-01",
+            title: "Milky Way Galactic Center",
+            explanation: "This infrared image reveals the crowded center of our Milky Way galaxy, where millions of stars orbit around the supermassive black hole Sagittarius A*. The image pierces through the dust that normally obscures this region.",
+            url: "https://apod.nasa.gov/apod/image/2412/MilkyWayCenter_Spitzer_960.jpg",
+            hdurl: "https://apod.nasa.gov/apod/image/2412/MilkyWayCenter_Spitzer_1080.jpg",
+            mediaType: "image",
+            copyright: "NASA/JPL-Caltech/Spitzer Space Telescope"
+          }
+        ];
+
+        for (const image of curatedImages) {
+          const existing = await storage.getApodImageByDate(image.date);
+          if (!existing) {
+            await storage.createApodImage(image);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error initializing gallery data:', error);
+    }
+  };
+
+  // Initialize gallery data on server start
+  initializeGalleryData();
 
   const httpServer = createServer(app);
   return httpServer;
