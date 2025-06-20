@@ -1,82 +1,77 @@
-import { useEffect, useRef } from 'react';
-import { Rocket, Satellite, Zap, Orbit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useGSAP, useFloatingAnimation } from '@/hooks/use-gsap';
+import { Badge } from '@/components/ui/badge';
+import { ArrowRight, Play } from 'lucide-react';
+import { Link } from 'wouter';
 
 export function HeroSection() {
-  const heroRef = useGSAP();
-  const particlesRef = useRef<HTMLDivElement>(null);
-  const satellite1Ref = useFloatingAnimation(0);
-  const satellite2Ref = useFloatingAnimation(2);
-  const satellite3Ref = useFloatingAnimation(4);
-
-  useEffect(() => {
-    const particlesContainer = particlesRef.current;
-    if (!particlesContainer) return;
-
-    const numParticles = 50;
-    
-    for (let i = 0; i < numParticles; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'particle';
-      particle.style.left = Math.random() * 100 + '%';
-      particle.style.top = Math.random() * 100 + '%';
-      particle.style.width = Math.random() * 4 + 1 + 'px';
-      particle.style.height = particle.style.width;
-      particle.style.animationDelay = Math.random() * 6 + 's';
-      particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-      particlesContainer.appendChild(particle);
-    }
-  }, []);
-
-  const scrollToGallery = () => {
-    const gallery = document.querySelector('#gallery');
-    if (gallery) {
-      gallery.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
   return (
-    <section 
-      ref={heroRef}
-      className="min-h-screen flex items-center justify-center relative overflow-hidden cosmic-gradient section-reveal"
-    >
-      <div ref={particlesRef} className="particles" />
-      
-      <div className="container mx-auto px-6 text-center relative z-10">
-        <h1 className="text-6xl md:text-8xl font-orbitron font-black mb-6 text-gradient">
-          EXPLORE THE COSMOS
+    <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto text-center">
+        {/* Badge */}
+        <Badge className="mb-8 bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 transition-all duration-300 px-4 py-2">
+          Real-time Space Data Platform
+        </Badge>
+        
+        {/* Main Heading */}
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight tracking-tight">
+          THE
+          <br />
+          <span className="gradient-text">
+            COSMOS
+          </span>
         </h1>
-        <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto opacity-80">
-          Journey through space with real-time NASA data, track the ISS, discover celestial wonders, and witness the universe unfold before your eyes.
+        
+        {/* Description */}
+        <p className="text-lg md:text-xl text-neutral-400 max-w-2xl mx-auto mb-12 leading-relaxed">
+          Journey through space with real-time NASA data, track the ISS, discover 
+          celestial wonders, and witness the universe unfold before your eyes.
         </p>
-        <Button 
-          onClick={scrollToGallery}
-          className="bg-gradient-to-r from-[hsl(158,76%,36%)] to-[hsl(330,81%,60%)] hover:scale-105 transform transition-all duration-300 animate-glow px-8 py-4 text-lg font-semibold"
-        >
-          <Rocket className="mr-2 h-5 w-5" />
-          Launch Exploration
-        </Button>
-      </div>
-      
-      {/* Floating Cosmic Elements */}
-      <div 
-        ref={satellite1Ref}
-        className="absolute top-20 left-10 opacity-30"
-      >
-        <Satellite className="h-12 w-12 text-[hsl(158,76%,36%)]" />
-      </div>
-      <div 
-        ref={satellite2Ref}
-        className="absolute bottom-20 right-10 opacity-30"
-      >
-        <Zap className="h-10 w-10 text-[hsl(43,96%,56%)]" />
-      </div>
-      <div 
-        ref={satellite3Ref}
-        className="absolute top-1/3 right-20 opacity-30"
-      >
-        <Orbit className="h-8 w-8 text-[hsl(330,81%,60%)]" />
+
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+          <Link href="/gallery">
+            <Button 
+              size="lg" 
+              className="accent-gradient hover:opacity-90 text-white px-8 py-3 text-base font-medium transition-all duration-300 shadow-lg"
+            >
+              Launch Exploration
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </Link>
+          
+          <Button 
+            variant="outline" 
+            size="lg"
+            className="border-neutral-600 text-neutral-300 hover:bg-neutral-800 hover:text-white px-8 py-3 text-base font-medium transition-all duration-300"
+          >
+            <Play className="mr-2 h-5 w-5" />
+            Watch Demo
+          </Button>
+        </div>
+
+        {/* Live Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+          <div className="glass-morphism rounded-lg p-6 hover:bg-white/[0.04] transition-all duration-300">
+            <div className="flex items-center justify-center mb-3">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-2"></div>
+              <span className="text-green-400 text-sm font-medium">Live</span>
+            </div>
+            <div className="text-neutral-400 text-sm mb-1">ISS Tracking</div>
+            <div className="text-xl font-semibold text-white">Real-time</div>
+          </div>
+          
+          <div className="glass-morphism rounded-lg p-6 hover:bg-white/[0.04] transition-all duration-300">
+            <div className="text-neutral-400 text-sm mb-1">Cosmic Images</div>
+            <div className="text-xl font-semibold text-white">10k+</div>
+            <div className="text-xs text-neutral-500 mt-1">NASA APOD Gallery</div>
+          </div>
+          
+          <div className="glass-morphism rounded-lg p-6 hover:bg-white/[0.04] transition-all duration-300">
+            <div className="text-neutral-400 text-sm mb-1">Asteroids Tracked</div>
+            <div className="text-xl font-semibold text-white">500+</div>
+            <div className="text-xs text-neutral-500 mt-1">Near-Earth Objects</div>
+          </div>
+        </div>
       </div>
     </section>
   );

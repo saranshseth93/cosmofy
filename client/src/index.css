@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
 
 @tailwind base;
@@ -6,60 +6,66 @@
 @tailwind utilities;
 
 :root {
-  --background: hsl(222, 47%, 8%);
-  --foreground: hsl(0, 0%, 100%);
-  --muted: hsl(225, 25%, 15%);
-  --muted-foreground: hsl(215, 16%, 60%);
-  --popover: hsl(222, 47%, 8%);
-  --popover-foreground: hsl(0, 0%, 100%);
-  --card: hsl(222, 47%, 8%);
-  --card-foreground: hsl(0, 0%, 100%);
-  --border: hsl(215, 28%, 25%);
-  --input: hsl(215, 28%, 25%);
-  --primary: hsl(158, 76%, 36%);
-  --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsl(215, 28%, 25%);
-  --secondary-foreground: hsl(0, 0%, 100%);
-  --accent: hsl(215, 28%, 25%);
-  --accent-foreground: hsl(0, 0%, 100%);
+  --background: hsl(223, 39%, 7%);
+  --foreground: hsl(215, 25%, 95%);
+  --muted: hsl(215, 15%, 15%);
+  --muted-foreground: hsl(215, 15%, 60%);
+  --popover: hsl(224, 36%, 9%);
+  --popover-foreground: hsl(215, 25%, 95%);
+  --card: hsl(224, 36%, 9%);
+  --card-foreground: hsl(215, 25%, 95%);
+  --border: hsl(215, 15%, 20%);
+  --input: hsl(215, 15%, 15%);
+  --primary: hsl(193, 76%, 56%);
+  --primary-foreground: hsl(223, 39%, 7%);
+  --secondary: hsl(215, 15%, 20%);
+  --secondary-foreground: hsl(215, 25%, 95%);
+  --accent: hsl(262, 52%, 47%);
+  --accent-foreground: hsl(215, 25%, 95%);
   --destructive: hsl(0, 84%, 60%);
-  --destructive-foreground: hsl(0, 0%, 100%);
-  --ring: hsl(158, 76%, 36%);
+  --destructive-foreground: hsl(215, 25%, 95%);
+  --ring: hsl(193, 76%, 56%);
   --radius: 0.5rem;
   
-  /* Cosmic Color Palette */
-  --space-deep: hsl(222, 47%, 8%);
-  --space-blue: hsl(217, 91%, 29%);
-  --space-purple: hsl(261, 57%, 29%);
-  --space-indigo: hsl(244, 62%, 26%);
-  --space-gray: hsl(220, 13%, 18%);
+  /* Modern Color Palette */
+  --neutral-900: hsl(223, 39%, 7%);
+  --neutral-800: hsl(224, 36%, 9%);
+  --neutral-700: hsl(215, 15%, 15%);
+  --neutral-600: hsl(215, 15%, 20%);
+  --neutral-500: hsl(215, 15%, 40%);
+  --neutral-400: hsl(215, 15%, 60%);
+  --neutral-300: hsl(215, 15%, 75%);
+  --neutral-200: hsl(215, 15%, 85%);
+  --neutral-100: hsl(215, 25%, 95%);
   
-  --cosmic-white: hsl(0, 0%, 100%);
-  --cosmic-green: hsl(158, 76%, 36%);
-  --cosmic-orange: hsl(43, 96%, 56%);
-  --cosmic-pink: hsl(330, 81%, 60%);
+  --blue-500: hsl(193, 76%, 56%);
+  --blue-600: hsl(193, 76%, 46%);
+  --purple-500: hsl(262, 52%, 47%);
+  --green-500: hsl(142, 71%, 45%);
+  --orange-500: hsl(35, 91%, 52%);
+  --red-500: hsl(346, 87%, 43%);
 }
 
 .dark {
-  --background: hsl(222, 47%, 8%);
-  --foreground: hsl(0, 0%, 100%);
-  --muted: hsl(225, 25%, 15%);
-  --muted-foreground: hsl(215, 16%, 60%);
-  --popover: hsl(222, 47%, 8%);
-  --popover-foreground: hsl(0, 0%, 100%);
-  --card: hsl(222, 47%, 8%);
-  --card-foreground: hsl(0, 0%, 100%);
-  --border: hsl(215, 28%, 25%);
-  --input: hsl(215, 28%, 25%);
-  --primary: hsl(158, 76%, 36%);
-  --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsl(215, 28%, 25%);
-  --secondary-foreground: hsl(0, 0%, 100%);
-  --accent: hsl(215, 28%, 25%);
-  --accent-foreground: hsl(0, 0%, 100%);
+  --background: hsl(223, 39%, 7%);
+  --foreground: hsl(215, 25%, 95%);
+  --muted: hsl(215, 15%, 15%);
+  --muted-foreground: hsl(215, 15%, 60%);
+  --popover: hsl(224, 36%, 9%);
+  --popover-foreground: hsl(215, 25%, 95%);
+  --card: hsl(224, 36%, 9%);
+  --card-foreground: hsl(215, 25%, 95%);
+  --border: hsl(215, 15%, 20%);
+  --input: hsl(215, 15%, 15%);
+  --primary: hsl(193, 76%, 56%);
+  --primary-foreground: hsl(223, 39%, 7%);
+  --secondary: hsl(215, 15%, 20%);
+  --secondary-foreground: hsl(215, 25%, 95%);
+  --accent: hsl(262, 52%, 47%);
+  --accent-foreground: hsl(215, 25%, 95%);
   --destructive: hsl(0, 84%, 60%);
-  --destructive-foreground: hsl(0, 0%, 100%);
-  --ring: hsl(158, 76%, 36%);
+  --destructive-foreground: hsl(215, 25%, 95%);
+  --ring: hsl(193, 76%, 56%);
 }
 
 @layer base {
@@ -76,19 +82,20 @@
   body {
     @apply text-foreground font-sans antialiased;
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, var(--space-deep) 0%, var(--space-blue) 50%, var(--space-purple) 100%);
-    background-repeat: no-repeat;
-    background-attachment: scroll; /* Fixed attachment causes issues on mobile */
-    background-size: cover;
+    background: var(--neutral-900);
+    background-image: 
+      radial-gradient(at 20% 50%, hsla(262, 52%, 47%, 0.03) 0px, transparent 50%),
+      radial-gradient(at 80% 20%, hsla(193, 76%, 56%, 0.03) 0px, transparent 50%),
+      radial-gradient(at 40% 80%, hsla(142, 71%, 45%, 0.03) 0px, transparent 50%);
     min-height: 100vh;
-    min-height: 100dvh; /* Dynamic viewport height for mobile */
+    min-height: 100dvh;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
     position: relative;
   }
 
-  /* Ensure background covers entire viewport on mobile */
+  /* Clean background for mobile */
   body::before {
     content: '';
     position: fixed;
@@ -97,7 +104,11 @@
     width: 100%;
     height: 100%;
     height: 100dvh;
-    background: linear-gradient(135deg, var(--space-deep) 0%, var(--space-blue) 50%, var(--space-purple) 100%);
+    background: var(--neutral-900);
+    background-image: 
+      radial-gradient(at 20% 50%, hsla(262, 52%, 47%, 0.03) 0px, transparent 50%),
+      radial-gradient(at 80% 20%, hsla(193, 76%, 56%, 0.03) 0px, transparent 50%),
+      radial-gradient(at 40% 80%, hsla(142, 71%, 45%, 0.03) 0px, transparent 50%);
     z-index: -1;
     pointer-events: none;
   }
@@ -110,36 +121,32 @@
     z-index: 1;
   }
   
-  .font-orbitron {
-    font-family: 'Orbitron', monospace;
-  }
-  
   .font-inter {
     font-family: 'Inter', sans-serif;
   }
 }
 
 @layer components {
-  .cosmic-gradient {
-    background: linear-gradient(135deg, var(--space-deep) 0%, var(--space-blue) 50%, var(--space-purple) 100%);
+  .glass-morphism {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
   
-  .nebula-gradient {
-    background: linear-gradient(45deg, var(--space-purple), var(--cosmic-pink), var(--cosmic-green));
-  }
-  
-  .text-gradient {
-    background: linear-gradient(135deg, var(--cosmic-white) 0%, var(--cosmic-green) 50%, var(--cosmic-pink) 100%);
+  .gradient-text {
+    background: linear-gradient(135deg, var(--blue-500) 0%, var(--purple-500) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     color: transparent;
   }
   
-  .glass-effect {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+  .accent-gradient {
+    background: linear-gradient(135deg, var(--blue-500) 0%, var(--purple-500) 100%);
   }
   
   .section-reveal {
