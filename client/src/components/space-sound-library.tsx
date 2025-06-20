@@ -32,6 +32,7 @@ export function SpaceSoundLibrary({ className = '' }: SpaceSoundLibraryProps) {
   const audioContextRef = useRef<AudioContext | null>(null);
   const oscillatorsRef = useRef<{ [key: string]: OscillatorNode | null }>({});
   const gainNodesRef = useRef<{ [key: string]: GainNode | null }>({});
+  const audioElementsRef = useRef<{ [key: string]: HTMLAudioElement | null }>({});
 
   const cosmicSounds: CosmicSound[] = [
     {
@@ -184,17 +185,69 @@ export function SpaceSoundLibrary({ className = '' }: SpaceSoundLibraryProps) {
     }
   };
 
+  // Generate audio data URL for a specific frequency and waveform
+  const generateAudioDataUrl = (frequency: number, waveType: string = 'sine', duration: number = 5) => {
+    const sampleRate = 44100;
+    const samples = sampleRate * duration;
+    const buffer = new ArrayBuffer(44 + samples * 2);
+    const view = new DataView(buffer);
+    
+    // WAV header
+    const writeString = (offset: number, string: string) => {
+      for (let i = 0; i < string.length; i++) {
+        view.setUint8(offset + i, string.charCodeAt(i));
+      }
+    };
+    
+    writeString(0, 'RIFF');
+    view.setUint32(4, 36 + samples * 2, true);
+    writeString(8, 'WAVE');
+    writeString(12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, 1, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * 2, true);
+    view.setUint16(32, 2, true);
+    view.setUint16(34, 16, true);
+    writeString(36, 'data');
+    view.setUint32(40, samples * 2, true);
+    
+    // Generate audio samples
+    for (let i = 0; i < samples; i++) {
+      const t = i / sampleRate;
+      let sample = 0;
+      
+      switch(waveType) {
+        case 'sine':
+          sample = Math.sin(2 * Math.PI * frequency * t);
+          break;
+        case 'sawtooth':
+          sample = 2 * (t * frequency - Math.floor(t * frequency + 0.5));
+          break;
+        case 'triangle':
+          sample = 2 * Math.abs(2 * (t * frequency - Math.floor(t * frequency + 0.5))) - 1;
+          break;
+        case 'square':
+          sample = Math.sin(2 * Math.PI * frequency * t) > 0 ? 1 : -1;
+          break;
+      }
+      
+      // Apply envelope to avoid clicks
+      const envelope = Math.min(1, t * 10) * Math.min(1, (duration - t) * 10);
+      sample *= envelope * 0.3;
+      
+      const intSample = Math.max(-32767, Math.min(32767, sample * 32767));
+      view.setInt16(44 + i * 2, intSample, true);
+    }
+    
+    const blob = new Blob([buffer], { type: 'audio/wav' });
+    return URL.createObjectURL(blob);
+  };
+
   const playSound = async (soundId: string) => {
     try {
       console.log('Attempting to play sound:', soundId);
-      
-      await initAudioContext();
-      if (!audioContextRef.current) {
-        console.error('AudioContext not available');
-        return;
-      }
-
-      console.log('AudioContext state:', audioContextRef.current.state);
 
       // Stop currently playing sound
       if (currentlyPlaying && currentlyPlaying !== soundId) {
@@ -208,77 +261,115 @@ export function SpaceSoundLibrary({ className = '' }: SpaceSoundLibraryProps) {
         return;
       }
 
-      // Create oscillator for new sound
+      // Get sound configuration
+      const sound = cosmicSounds.find(s => s.id === soundId);
+      if (!sound) return;
+
+      let frequency = 220;
+      let waveType = 'sine';
+
+      switch(soundId) {
+        case 'saturn-radio':
+          frequency = 177;
+          waveType = 'sawtooth';
+          break;
+        case 'jupiter-storms':
+          frequency = 150;
+          waveType = 'triangle';
+          break;
+        case 'earth-magnetosphere':
+          frequency = 400;
+          waveType = 'sine';
+          break;
+        case 'pulsar-b1919':
+          frequency = 800;
+          waveType = 'square';
+          break;
+        case 'voyager-interstellar':
+          frequency = 120;
+          waveType = 'sine';
+          break;
+        case 'solar-wind':
+          frequency = 200;
+          waveType = 'sawtooth';
+          break;
+        case 'io-volcanoes':
+          frequency = 180;
+          waveType = 'triangle';
+          break;
+        case 'heliosphere-bow-shock':
+          frequency = 250;
+          waveType = 'sine';
+          break;
+      }
+
+      // Create HTML5 Audio element with generated WAV data
+      const audioUrl = generateAudioDataUrl(frequency, waveType, 10);
+      const audio = new Audio(audioUrl);
+      audio.loop = true;
+      
+      const volume = volumes[soundId] || 0.5;
+      audio.volume = volume;
+      
+      console.log(`Playing ${soundId}: ${frequency}Hz, ${waveType}, volume: ${volume}`);
+      
+      try {
+        await audio.play();
+        audioElementsRef.current[soundId] = audio;
+        setCurrentlyPlaying(soundId);
+        console.log('Sound started successfully using HTML5 Audio');
+      } catch (playError) {
+        console.error('HTML5 Audio play failed:', playError);
+        
+        // Fallback to Web Audio API
+        await playWithWebAudio(soundId, frequency, waveType);
+      }
+      
+    } catch (error) {
+      console.error('Audio playback failed:', error);
+    }
+  };
+
+  const playWithWebAudio = async (soundId: string, frequency: number, waveType: string) => {
+    try {
+      await initAudioContext();
+      if (!audioContextRef.current) return;
+
       const oscillator = audioContextRef.current.createOscillator();
       const gainNode = audioContextRef.current.createGain();
 
       oscillator.connect(gainNode);
       gainNode.connect(audioContextRef.current.destination);
 
-      // Set frequency and type based on sound
-      const sound = cosmicSounds.find(s => s.id === soundId);
-      if (sound) {
-        let frequency = 220;
-        let waveType: OscillatorType = 'sine';
+      oscillator.frequency.setValueAtTime(frequency, audioContextRef.current.currentTime);
+      oscillator.type = waveType as OscillatorType;
 
-        switch(soundId) {
-          case 'saturn-radio':
-            frequency = 177;
-            waveType = 'sawtooth';
-            break;
-          case 'jupiter-storms':
-            frequency = 150;
-            waveType = 'triangle';
-            break;
-          case 'earth-magnetosphere':
-            frequency = 400;
-            waveType = 'sine';
-            break;
-          case 'pulsar-b1919':
-            frequency = 800;
-            waveType = 'square';
-            break;
-          case 'voyager-interstellar':
-            frequency = 120;
-            waveType = 'sine';
-            break;
-          case 'solar-wind':
-            frequency = 200;
-            waveType = 'sawtooth';
-            break;
-          case 'io-volcanoes':
-            frequency = 180;
-            waveType = 'triangle';
-            break;
-          case 'heliosphere-bow-shock':
-            frequency = 250;
-            waveType = 'sine';
-            break;
-        }
+      const volume = volumes[soundId] || 0.5;
+      gainNode.gain.setValueAtTime(volume * 0.5, audioContextRef.current.currentTime);
 
-        oscillator.frequency.setValueAtTime(frequency, audioContextRef.current.currentTime);
-        oscillator.type = waveType;
-
-        // Set initial volume - make it more audible
-        const volume = volumes[soundId] || 0.5;
-        gainNode.gain.setValueAtTime(volume * 0.3, audioContextRef.current.currentTime);
-
-        console.log(`Starting oscillator: ${frequency}Hz, ${waveType}, volume: ${volume * 0.3}`);
-        
-        oscillator.start();
-        
-        oscillatorsRef.current[soundId] = oscillator;
-        gainNodesRef.current[soundId] = gainNode;
-        setCurrentlyPlaying(soundId);
-        
-        console.log('Sound started successfully');
-      }
+      oscillator.start();
+      
+      oscillatorsRef.current[soundId] = oscillator;
+      gainNodesRef.current[soundId] = gainNode;
+      setCurrentlyPlaying(soundId);
+      
+      console.log('Sound started successfully using Web Audio API');
     } catch (error) {
-      console.error('Audio playback failed:', error);
+      console.error('Web Audio API fallback failed:', error);
     }
   };
 
   const stopSound = (soundId: string) => {
+    // Stop HTML5 Audio
+    const audioElement = audioElementsRef.current[soundId];
+    if (audioElement) {
+      audioElement.pause();
+      audioElement.currentTime = 0;
+      URL.revokeObjectURL(audioElement.src);
+      audioElementsRef.current[soundId] = null;
+    }
+
+    // Stop Web Audio API oscillator
     const oscillator = oscillatorsRef.current[soundId];
     if (oscillator) {
       try {
@@ -292,45 +383,73 @@ export function SpaceSoundLibrary({ className = '' }: SpaceSoundLibraryProps) {
   const updateVolume = (soundId: string, volume: number) => {
     setVolumes(prev => ({ ...prev, [soundId]: volume }));
     
+    // Update HTML5 Audio volume
+    const audioElement = audioElementsRef.current[soundId];
+    if (audioElement) {
+      audioElement.volume = volume;
+    }
+    
+    // Update Web Audio API volume
     const gainNode = gainNodesRef.current[soundId];
     if (gainNode && audioContextRef.current) {
-      gainNode.gain.setValueAtTime(volume * 0.1, audioContextRef.current.currentTime);
+      gainNode.gain.setValueAtTime(volume * 0.5, audioContextRef.current.currentTime);
     }
   };
 
   const testAudio = async () => {
     try {
-      console.log('Testing Web Audio API...');
-      await initAudioContext();
+      console.log('Testing audio with HTML5 Audio + generated WAV...');
       
-      if (!audioContextRef.current) {
-        console.error('AudioContext failed to initialize');
-        return;
-      }
-
-      // Create a simple test tone
-      const osc = audioContextRef.current.createOscillator();
-      const gain = audioContextRef.current.createGain();
+      // Generate a test tone using the same method as the space sounds
+      const audioUrl = generateAudioDataUrl(440, 'sine', 3);
+      const audio = new Audio(audioUrl);
+      audio.volume = 0.7;
       
-      osc.connect(gain);
-      gain.connect(audioContextRef.current.destination);
+      console.log('Playing test tone at 440Hz for 3 seconds');
       
-      osc.frequency.setValueAtTime(440, audioContextRef.current.currentTime);
-      osc.type = 'sine';
-      gain.gain.setValueAtTime(0.1, audioContextRef.current.currentTime);
-      
-      console.log('Starting test tone at 440Hz');
-      osc.start();
-      
-      // Stop after 1 second
-      setTimeout(() => {
-        try {
-          osc.stop();
+      try {
+        await audio.play();
+        console.log('HTML5 Audio test successful');
+        
+        setTimeout(() => {
+          audio.pause();
+          URL.revokeObjectURL(audioUrl);
           console.log('Test tone stopped');
-        } catch (e) {
-          console.error('Error stopping test tone:', e);
+        }, 3000);
+        
+      } catch (playError) {
+        console.error('HTML5 Audio test failed:', playError);
+        console.log('Falling back to Web Audio API test...');
+        
+        // Fallback to Web Audio API
+        await initAudioContext();
+        if (!audioContextRef.current) {
+          console.error('AudioContext failed to initialize');
+          return;
         }
-      }, 1000);
+
+        const osc = audioContextRef.current.createOscillator();
+        const gain = audioContextRef.current.createGain();
+        
+        osc.connect(gain);
+        gain.connect(audioContextRef.current.destination);
+        
+        osc.frequency.setValueAtTime(440, audioContextRef.current.currentTime);
+        osc.type = 'sine';
+        gain.gain.setValueAtTime(0.5, audioContextRef.current.currentTime);
+        
+        console.log('Starting Web Audio API test tone');
+        osc.start();
+        
+        setTimeout(() => {
+          try {
+            osc.stop();
+            console.log('Web Audio API test tone stopped');
+          } catch (e) {
+            console.error('Error stopping Web Audio test:', e);
+          }
+        }, 3000);
+      }
       
     } catch (error) {
       console.error('Test audio failed:', error);
@@ -351,9 +470,23 @@ export function SpaceSoundLibrary({ className = '' }: SpaceSoundLibraryProps) {
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      Object.keys(oscillatorsRef.current).forEach(soundId => {
-        stopSound(soundId);
+      // Stop all HTML5 Audio elements
+      Object.keys(audioElementsRef.current).forEach(soundId => {
+        const audio = audioElementsRef.current[soundId];
+        if (audio) {
+          audio.pause();
+          URL.revokeObjectURL(audio.src);
+        }
       });
+      
+      // Stop all Web Audio oscillators
+      Object.keys(oscillatorsRef.current).forEach(soundId => {
+        const osc = oscillatorsRef.current[soundId];
+        if (osc) {
+          try { osc.stop(); } catch (e) {}
+        }
+      });
+      
       if (audioContextRef.current) {
         audioContextRef.current.close();
       }
