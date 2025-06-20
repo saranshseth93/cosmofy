@@ -309,34 +309,7 @@ export default function ISSTracker() {
             </CardContent>
           </Card>
 
-          {/* Mission Stats - Mobile Optimized */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="bg-gray-800/30 p-4 rounded-lg border border-gray-700/30 text-center">
-              <div className="text-2xl font-bold text-blue-400 mb-1">
-                {crew?.length || 7}
-              </div>
-              <div className="text-xs text-gray-400">Crew Members</div>
-            </div>
-            
-            <div className="bg-gray-800/30 p-4 rounded-lg border border-gray-700/30 text-center">
-              <div className="text-2xl font-bold text-green-400 mb-1">
-                {Math.floor((Date.now() - new Date('1998-11-20').getTime()) / (1000 * 60 * 60 * 24))}
-              </div>
-              <div className="text-xs text-gray-400">Days in Orbit</div>
-            </div>
-            
-            <div className="bg-gray-800/30 p-4 rounded-lg border border-gray-700/30 text-center">
-              <div className="text-2xl font-bold text-purple-400 mb-1">
-                {getNextOrbitNumber().toLocaleString()}
-              </div>
-              <div className="text-xs text-gray-400">Total Orbits</div>
-            </div>
-            
-            <div className="bg-gray-800/30 p-4 rounded-lg border border-gray-700/30 text-center">
-              <div className="text-2xl font-bold text-orange-400 mb-1">15.5</div>
-              <div className="text-xs text-gray-400">Orbits/Day</div>
-            </div>
-          </div>
+
 
           {/* System Status & Passes Row */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
