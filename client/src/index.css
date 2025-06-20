@@ -144,6 +144,37 @@
     background-clip: text;
     color: transparent;
   }
+
+  .animated-gradient-text {
+    background: linear-gradient(
+      -45deg,
+      #ee7752,
+      #e73c7e,
+      #23a6d5,
+      #23d5ab,
+      #7c3aed,
+      #f59e0b,
+      #ef4444
+    );
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    animation: gradient-shift 4s ease-in-out infinite;
+  }
+
+  @keyframes gradient-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
   
   .accent-gradient {
     background: linear-gradient(135deg, var(--blue-500) 0%, var(--purple-500) 100%);

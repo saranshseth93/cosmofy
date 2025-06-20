@@ -16,7 +16,7 @@ export function HeroSection() {
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight tracking-tight">
           THE
           <br />
-          <span className="gradient-text">
+          <span className="animated-gradient-text">
             COSMOS
           </span>
         </h1>
