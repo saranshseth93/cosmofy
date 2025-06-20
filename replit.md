@@ -124,9 +124,10 @@ Changelog:
   * Fixed asteroids page navigation to use global header instead of back button
   * Implemented dynamic cosmic cursor with trailing star dust effects across entire application
   * Added space-themed particle system that follows mouse movement with colorful star animations
-  * Integrated real-time space news with Spaceflight News API
-  * Created comprehensive space news page with search, filtering, and real-time updates
+  * Integrated real-time space news using authentic Spaceflight News API v4
+  * Created comprehensive space news page with latest, featured, and search functionality
   * Added space news navigation to main menu and home page feature cards
+  * Fixed API field mapping to properly display authentic news data from multiple space agencies
   * Implemented space weather notifications schema and storage layer (in progress)
 ```
 

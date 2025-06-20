@@ -12,11 +12,11 @@ interface SpaceNewsArticle {
   id: number;
   title: string;
   url: string;
-  imageUrl: string;
-  newsSite: string;
+  image_url: string; // API uses snake_case
+  news_site: string; // API uses snake_case
   summary: string;
-  publishedAt: string;
-  updatedAt: string;
+  published_at: string; // API uses snake_case
+  updated_at: string; // API uses snake_case
   featured: boolean;
   launches: Array<{
     id: string;
@@ -198,7 +198,7 @@ export default function SpaceNews() {
               >
                 <div className="relative">
                   <img 
-                    src={article.imageUrl} 
+                    src={article.image_url} 
                     alt={article.title}
                     className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                     onError={(e) => {
@@ -217,11 +217,11 @@ export default function SpaceNews() {
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-2">
                     <Badge variant="outline" className="text-blue-400 border-blue-400">
-                      {article.newsSite}
+                      {article.news_site}
                     </Badge>
                     <div className="flex items-center text-neutral-400 text-sm">
                       <Clock className="w-4 h-4 mr-1" />
-                      {formatTimeAgo(article.publishedAt)}
+                      {formatTimeAgo(article.published_at)}
                     </div>
                   </div>
                   
