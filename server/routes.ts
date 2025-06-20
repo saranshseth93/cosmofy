@@ -916,6 +916,375 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Space Weather API endpoints
+  app.get("/api/space-weather", async (_req, res) => {
+    try {
+      const spaceWeatherData = {
+        solarWind: {
+          speed: 420 + Math.random() * 200,
+          density: 5 + Math.random() * 10,
+          temperature: 100000 + Math.random() * 100000
+        },
+        geomagneticActivity: {
+          kpIndex: Math.floor(Math.random() * 9),
+          activity: ['Quiet', 'Unsettled', 'Active', 'Storm'][Math.floor(Math.random() * 4)],
+          forecast: '24h forecast: Quiet to unsettled conditions expected'
+        },
+        solarFlares: Math.random() > 0.7 ? [{
+          class: ['C1.2', 'C3.4', 'M1.1', 'M2.3'][Math.floor(Math.random() * 4)],
+          region: 'AR3234',
+          time: new Date(Date.now() - Math.random() * 86400000).toISOString(),
+          intensity: Math.random()
+        }] : [],
+        auroraForecast: {
+          visibility: Math.floor(Math.random() * 100),
+          activity: ['Low', 'Moderate', 'High'][Math.floor(Math.random() * 3)],
+          viewingTime: '10 PM - 2 AM local time'
+        },
+        alerts: []
+      };
+      res.json(spaceWeatherData);
+    } catch (error) {
+      console.error("Space weather error:", error);
+      res.status(500).json({ error: "Failed to fetch space weather data" });
+    }
+  });
+
+  // Virtual Telescope API endpoints
+  app.get("/api/telescope/observations", async (req, res) => {
+    try {
+      const observations = [
+        {
+          id: '1',
+          telescope: 'Hubble',
+          target: 'NGC 1365 - Barred Spiral Galaxy',
+          type: 'Deep Field Imaging',
+          startTime: new Date(Date.now() + 3600000).toISOString(),
+          duration: 180,
+          instruments: ['WFC3', 'ACS'],
+          description: 'Multi-wavelength observations of the Great Barred Spiral Galaxy to study star formation regions.',
+          status: 'scheduled' as const,
+          coordinates: { ra: '03h 33m 36s', dec: '-36° 08\' 25"' },
+          imageUrl: 'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=400'
+        },
+        {
+          id: '2',
+          telescope: 'James Webb',
+          target: 'WASP-96b Exoplanet',
+          type: 'Atmospheric Spectroscopy',
+          startTime: new Date(Date.now() + 7200000).toISOString(),
+          duration: 240,
+          instruments: ['NIRSpec', 'NIRISS'],
+          description: 'Transmission spectroscopy to analyze the atmospheric composition of this hot gas giant.',
+          status: 'scheduled' as const,
+          coordinates: { ra: '20h 28m 18s', dec: '+03° 25\' 46"' },
+          imageUrl: 'https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?w=400'
+        }
+      ];
+      res.json(observations);
+    } catch (error) {
+      console.error("Telescope observations error:", error);
+      res.status(500).json({ error: "Failed to fetch telescope observations" });
+    }
+  });
+
+  app.get("/api/telescope/status", async (_req, res) => {
+    try {
+      const telescopes = [
+        {
+          name: 'Hubble Space Telescope',
+          status: 'operational' as const,
+          currentTarget: 'NGC 1365 Galaxy',
+          nextObservation: 'Today at 14:30 UTC',
+          location: 'Low Earth Orbit',
+          instruments: ['WFC3', 'ACS', 'COS', 'STIS', 'FGS'],
+          description: 'Premier optical space telescope'
+        },
+        {
+          name: 'James Webb Space Telescope',
+          status: 'operational' as const,
+          currentTarget: 'WASP-96b Exoplanet',
+          nextObservation: 'Today at 16:45 UTC',
+          location: 'L2 Lagrange Point',
+          instruments: ['NIRCam', 'NIRSpec', 'MIRI', 'NIRISS'],
+          description: 'Most powerful infrared space telescope'
+        }
+      ];
+      res.json(telescopes);
+    } catch (error) {
+      console.error("Telescope status error:", error);
+      res.status(500).json({ error: "Failed to fetch telescope status" });
+    }
+  });
+
+  // Cosmic Events API endpoints
+  app.get("/api/cosmic-events", async (_req, res) => {
+    try {
+      const events = [
+        {
+          id: '1',
+          title: 'Geminids Meteor Shower Peak',
+          type: 'meteor_shower' as const,
+          date: '2025-12-14',
+          time: '02:00 UTC',
+          duration: '6 hours',
+          visibility: {
+            global: true,
+            regions: ['Northern Hemisphere', 'Southern Hemisphere'],
+            bestTime: '2 AM - 6 AM local time'
+          },
+          description: 'Annual meteor shower producing up to 120 meteors per hour at peak.',
+          significance: 'One of the most reliable and prolific meteor showers of the year.',
+          viewingTips: ['Find a dark location away from city lights', 'Look northeast after 10 PM'],
+          countdown: Math.floor((new Date('2025-12-14').getTime() - Date.now()) / 1000),
+          status: 'upcoming' as const,
+          images: ['https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=400']
+        }
+      ];
+      res.json(events);
+    } catch (error) {
+      console.error("Cosmic events error:", error);
+      res.status(500).json({ error: "Failed to fetch cosmic events" });
+    }
+  });
+
+  app.get("/api/rocket-launches", async (_req, res) => {
+    try {
+      const launches = [
+        {
+          id: '1',
+          mission: 'Artemis III Lunar Landing',
+          agency: 'NASA',
+          vehicle: 'Space Launch System',
+          launchSite: 'Kennedy Space Center, FL',
+          date: '2025-09-01',
+          time: '14:30 UTC',
+          description: 'First crewed lunar landing since Apollo 17, targeting the lunar south pole.',
+          objectives: ['Land first woman and next man on the Moon', 'Establish sustainable lunar presence'],
+          countdown: Math.floor((new Date('2025-09-01').getTime() - Date.now()) / 1000),
+          status: 'scheduled' as const,
+          livestreamUrl: 'https://www.nasa.gov/live'
+        }
+      ];
+      res.json(launches);
+    } catch (error) {
+      console.error("Rocket launches error:", error);
+      res.status(500).json({ error: "Failed to fetch rocket launches" });
+    }
+  });
+
+  // Mars Rover API endpoints
+  app.get("/api/mars/photos", async (req, res) => {
+    try {
+      const rover = req.query.rover as string;
+      const photos = [
+        {
+          id: 1,
+          sol: 1000,
+          camera: {
+            id: 1,
+            name: 'FHAZ',
+            rover_id: 5,
+            full_name: 'Front Hazard Avoidance Camera'
+          },
+          img_src: 'https://images.unsplash.com/photo-1614728263952-84ea256f9679?w=400',
+          earth_date: new Date().toISOString().split('T')[0],
+          rover: {
+            id: 5,
+            name: 'Perseverance',
+            landing_date: '2021-02-18',
+            launch_date: '2020-07-30',
+            status: 'active'
+          }
+        }
+      ];
+      res.json(photos);
+    } catch (error) {
+      console.error("Mars photos error:", error);
+      res.status(500).json({ error: "Failed to fetch Mars rover photos" });
+    }
+  });
+
+  app.get("/api/mars/rovers", async (_req, res) => {
+    try {
+      const rovers = [
+        {
+          name: 'Perseverance',
+          status: 'active' as const,
+          sol: 1000,
+          earthDate: new Date().toISOString(),
+          landingDate: '2021-02-18',
+          launchDate: '2020-07-30',
+          totalPhotos: 250000,
+          maxSol: 1000,
+          maxDate: new Date().toISOString(),
+          location: {
+            latitude: 18.4447,
+            longitude: 77.4505,
+            site: 'Jezero Crater'
+          },
+          cameras: [
+            { name: 'FHAZ', full_name: 'Front Hazard Avoidance Camera', photos: 5000 },
+            { name: 'MAST', full_name: 'Mast Camera', photos: 8000 }
+          ],
+          weather: {
+            temperature: { high: -20, low: -80 },
+            pressure: 750,
+            season: 'Northern Winter'
+          }
+        }
+      ];
+      res.json(rovers);
+    } catch (error) {
+      console.error("Mars rovers error:", error);
+      res.status(500).json({ error: "Failed to fetch Mars rover data" });
+    }
+  });
+
+  // Constellation API endpoints
+  app.get("/api/constellations", async (_req, res) => {
+    try {
+      const constellations = [
+        {
+          id: 'orion',
+          name: 'Orion',
+          latinName: 'Orion',
+          abbreviation: 'Ori',
+          mythology: {
+            culture: 'Greek',
+            story: 'Orion was a great hunter who boasted he could kill any creature on Earth. Gaia, the Earth goddess, sent a scorpion to kill him. Zeus placed both in the sky, but on opposite sides so they would never fight again.',
+            meaning: 'The Hunter',
+            characters: ['Orion', 'Artemis', 'Gaia', 'Zeus']
+          },
+          astronomy: {
+            brightestStar: 'Rigel',
+            starCount: 81,
+            area: 594,
+            visibility: {
+              hemisphere: 'both' as const,
+              bestMonth: 'January',
+              declination: 5
+            }
+          },
+          coordinates: { ra: 5.5, dec: 5 },
+          stars: [
+            { name: 'Betelgeuse', magnitude: 0.5, type: 'Red Supergiant', distance: 640 },
+            { name: 'Rigel', magnitude: 0.1, type: 'Blue Supergiant', distance: 860 }
+          ],
+          deepSkyObjects: [
+            { name: 'Orion Nebula', type: 'Emission Nebula', magnitude: 4.0, description: 'Stellar nursery visible to naked eye' }
+          ],
+          imageUrl: 'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400',
+          starMapUrl: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=400'
+        }
+      ];
+      res.json(constellations);
+    } catch (error) {
+      console.error("Constellations error:", error);
+      res.status(500).json({ error: "Failed to fetch constellation data" });
+    }
+  });
+
+  app.get("/api/sky-conditions", async (req, res) => {
+    try {
+      const lat = parseFloat(req.query.lat as string);
+      const lon = parseFloat(req.query.lon as string);
+      
+      const skyConditions = {
+        visibleConstellations: ['orion', 'cassiopeia', 'ursa-major'],
+        moonPhase: 'Waxing Crescent',
+        moonIllumination: 25,
+        bestViewingTime: '9 PM - 5 AM',
+        conditions: 'Clear skies expected'
+      };
+      res.json(skyConditions);
+    } catch (error) {
+      console.error("Sky conditions error:", error);
+      res.status(500).json({ error: "Failed to fetch sky conditions" });
+    }
+  });
+
+  // Satellite Tracker API endpoints
+  app.get("/api/satellites", async (req, res) => {
+    try {
+      const category = req.query.category as string;
+      const lat = parseFloat(req.query.lat as string);
+      const lon = parseFloat(req.query.lon as string);
+      
+      const satellites = [
+        {
+          id: 'iss',
+          name: 'International Space Station',
+          noradId: 25544,
+          type: 'space_station' as const,
+          position: {
+            latitude: -25.4 + Math.random() * 50,
+            longitude: -180 + Math.random() * 360,
+            altitude: 408
+          },
+          velocity: { speed: 7.66, direction: 45 },
+          orbit: { period: 92.68, inclination: 51.6, apogee: 421, perigee: 408 },
+          nextPass: {
+            aos: new Date(Date.now() + 7200000).toISOString(),
+            los: new Date(Date.now() + 7800000).toISOString(),
+            maxElevation: 45,
+            direction: 'NW',
+            magnitude: -3.5
+          },
+          status: 'active' as const,
+          launchDate: '1998-11-20',
+          country: 'International',
+          description: 'Largest human-made object in space, serving as a microgravity research laboratory'
+        }
+      ];
+      res.json(satellites);
+    } catch (error) {
+      console.error("Satellites error:", error);
+      res.status(500).json({ error: "Failed to fetch satellite data" });
+    }
+  });
+
+  app.get("/api/satellites/flyovers", async (req, res) => {
+    try {
+      const lat = parseFloat(req.query.lat as string);
+      const lon = parseFloat(req.query.lon as string);
+      
+      const flyovers = [
+        {
+          satelliteId: 'iss',
+          satelliteName: 'International Space Station',
+          startTime: new Date(Date.now() + 7200000).toISOString(),
+          duration: 360,
+          maxElevation: 45,
+          direction: 'NW to SE',
+          magnitude: -3.5,
+          timeUntil: 7200
+        }
+      ];
+      res.json(flyovers);
+    } catch (error) {
+      console.error("Satellite flyovers error:", error);
+      res.status(500).json({ error: "Failed to fetch satellite flyovers" });
+    }
+  });
+
+  // Location service endpoint
+  app.get("/api/location", async (req, res) => {
+    try {
+      const lat = parseFloat(req.query.lat as string);
+      const lon = parseFloat(req.query.lon as string);
+      
+      const locationData = {
+        city: 'Unknown Location',
+        timezone: 'UTC'
+      };
+      res.json(locationData);
+    } catch (error) {
+      console.error("Location error:", error);
+      res.status(500).json({ error: "Failed to fetch location data" });
+    }
+  });
+
   // Initialize gallery data on server start
   initializeGalleryData();
 
