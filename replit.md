@@ -98,6 +98,12 @@ Changelog:
   * Replaced all "Cosmofy" branding with logo image throughout application
   * Added filter result counts and proper pagination for filtered content
   * Enhanced mobile responsiveness across all components
+  * Fixed Aurora forecast page with realistic forecast data and 6-hour intervals
+  * Enhanced space missions with comprehensive details, crew info, and detailed modals
+  * Fixed navigation inconsistencies across all pages to use global header
+  * Added animated gradient text effect to "COSMOS" banner with smooth color transitions
+  * Removed support section from footer and updated layout to 3-column grid
+  * Implemented space weather notifications schema and storage layer (in progress)
 ```
 
 ## User Preferences

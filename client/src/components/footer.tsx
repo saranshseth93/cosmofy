@@ -51,7 +51,7 @@ export function Footer() {
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {/* Brand Section */}
           <div className="md:col-span-1">
             <div className="flex items-center space-x-2 mb-6">
@@ -120,24 +120,7 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Support Section */}
-          <div>
-            <h4 className="font-orbitron font-bold mb-4 text-[hsl(43,96%,56%)]">Support</h4>
-            <ul className="space-y-2">
-              {footerLinks.support.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    target={link.external ? '_blank' : '_self'}
-                    rel={link.external ? 'noopener noreferrer' : undefined}
-                    className="text-sm opacity-70 hover:text-[hsl(43,96%,56%)] hover:opacity-100 transition-all duration-300"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+
         </div>
 
         {/* Bottom Section */}
