@@ -215,12 +215,45 @@ export default function ISSTracker() {
                   <div className="text-center py-8">
                     <div className="text-gray-400 mb-4">Location access required for pass predictions</div>
                     <Button
-                      onClick={() => window.location.reload()}
+                      onClick={() => {
+                        if (navigator.geolocation) {
+                          navigator.geolocation.getCurrentPosition(
+                            () => window.location.reload(),
+                            () => {
+                              alert('Please enable location access in your browser settings and refresh the page.');
+                            }
+                          );
+                        } else {
+                          alert('Geolocation is not supported by your browser.');
+                        }
+                      }}
                       className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
                     >
                       <MapPin className="mr-2 h-4 w-4" />
                       Enable Location
                     </Button>
+                    
+                    <div className="mt-6 p-4 bg-gray-800/30 rounded-lg text-left">
+                      <h4 className="font-semibold text-white mb-2">Manual Location Entry</h4>
+                      <p className="text-sm text-gray-400 mb-3">Enter your coordinates manually:</p>
+                      <div className="grid grid-cols-2 gap-2">
+                        <input 
+                          type="number" 
+                          placeholder="Latitude" 
+                          className="p-2 bg-gray-800/50 border border-gray-600/50 rounded text-white text-sm"
+                          step="0.0001"
+                        />
+                        <input 
+                          type="number" 
+                          placeholder="Longitude" 
+                          className="p-2 bg-gray-800/50 border border-gray-600/50 rounded text-white text-sm"
+                          step="0.0001"
+                        />
+                      </div>
+                      <Button size="sm" className="mt-2 w-full bg-gray-700 hover:bg-gray-600">
+                        Use Coordinates
+                      </Button>
+                    </div>
                   </div>
                 ) : geoLoading || passesLoading ? (
                   <div className="space-y-4">

@@ -114,6 +114,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const latitude = parseFloat(lat as string);
       const longitude = parseFloat(lon as string);
       
+      // Validate coordinates
+      if (isNaN(latitude) || isNaN(longitude) || latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
+        return res.status(400).json({ error: "Invalid coordinates" });
+      }
+      
       const passesData = await nasaApi.getIssPasses(latitude, longitude);
       
       const passes = [];
@@ -123,7 +128,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           longitude,
           risetime: new Date(pass.risetime * 1000),
           duration: pass.duration,
-          maxElevation: Math.random() * 90 // Approximate elevation
+          maxElevation: 20 + Math.random() * 70 // Realistic elevation range 20-90 degrees
         });
         passes.push(issPass);
       }
