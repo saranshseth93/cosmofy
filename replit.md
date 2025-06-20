@@ -112,7 +112,7 @@ Changelog:
   * Enhanced gallery filtering with comprehensive pagination and proper data flow
   * Fixed inconsistent loading behavior - gallery now loads all available data consistently
   * Fixed gallery popup scrolling - entire modal card now scrolls properly instead of parent page
-  * Replaced problematic Leaflet map with reliable canvas-based world map for ISS tracking
+  * Replaced problematic Leaflet map with reliable SVG-based world map for ISS tracking
   * Removed duplicate Mission Stats sections from ISS tracker page
   * Updated crew member avatars with authentic photos instead of initials
   * Enhanced location display with comprehensive city and region mapping for ISS position
