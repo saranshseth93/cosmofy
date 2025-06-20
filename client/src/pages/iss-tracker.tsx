@@ -120,23 +120,6 @@ export default function ISSTracker() {
     return `${position?.latitude?.toFixed(2)}°, ${position?.longitude?.toFixed(2)}°`;
   };
 
-  const formatDuration = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}m ${remainingSeconds}s`;
-  };
-
-  const formatPassDate = (date: Date) => {
-    return new Intl.DateTimeFormat(navigator.language || 'en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZoneName: 'short'
-    }).format(new Date(date));
-  };
-
   const getUserLocationDisplay = () => {
     if (!activeCoordinates) return "Location required";
     
@@ -164,6 +147,23 @@ export default function ISSTracker() {
     if (lat >= 20 && lat <= 54 && lon >= 73 && lon <= 135) return 'Asia';
     
     return `${lat.toFixed(3)}°, ${lon.toFixed(3)}°`;
+  };
+
+  const formatDuration = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}m ${remainingSeconds}s`;
+  };
+
+  const formatPassDate = (date: Date) => {
+    return new Intl.DateTimeFormat(navigator.language || 'en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZoneName: 'short'
+    }).format(new Date(date));
   };
 
   const getCrewInitials = (name: string) => {
@@ -459,7 +459,7 @@ export default function ISSTracker() {
                   Next Visible Passes
                   {activeCoordinates && (
                     <Badge className="ml-3 bg-purple-500/20 text-purple-300 border-purple-500/50 text-xs">
-                      {getLocationDisplay()}
+                      {getUserLocationDisplay()}
                     </Badge>
                   )}
                 </CardTitle>
@@ -470,7 +470,7 @@ export default function ISSTracker() {
                     <div className="flex items-center text-sm">
                       <MapPin className="w-4 h-4 mr-2 text-purple-400" />
                       <span className="text-purple-300">Viewing location: </span>
-                      <span className="text-white font-medium ml-1">{getLocationDisplay()}</span>
+                      <span className="text-white font-medium ml-1">{getUserLocationDisplay()}</span>
                     </div>
                   </div>
                 )}
