@@ -27,11 +27,11 @@ export interface SpaceNewsResponse {
 
 export class SpaceNewsService {
   private cache = new Map<string, { data: any; timestamp: number }>();
-  private readonly CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
-  private readonly REQUEST_TIMEOUT = 8000; // 8 seconds
+  private readonly CACHE_DURATION = 15 * 60 * 1000; // 15 minutes
+  private readonly REQUEST_TIMEOUT = 10000; // 10 seconds
   private readonly BASE_URL = 'https://api.spaceflightnewsapi.net/v4';
 
-  private async fetchWithRetry(url: string, retries = 2): Promise<Response> {
+  private async fetchWithRetry(url: string, retries = 3): Promise<Response> {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.REQUEST_TIMEOUT);
 
@@ -39,7 +39,8 @@ export class SpaceNewsService {
       const response = await fetch(url, {
         signal: controller.signal,
         headers: {
-          'User-Agent': 'Cosmofy-Space-App/1.0'
+          'User-Agent': 'Cosmofy-Space-App/1.0',
+          'Accept': 'application/json'
         }
       });
       
@@ -48,10 +49,10 @@ export class SpaceNewsService {
       if (!response.ok) {
         if (retries > 0 && response.status >= 500) {
           console.log(`Space News API error ${response.status}, retrying...`);
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          await new Promise(resolve => setTimeout(resolve, 2000));
           return this.fetchWithRetry(url, retries - 1);
         }
-        throw new Error(`Space News API error: ${response.status}`);
+        throw new Error(`Space News API error: ${response.status} ${response.statusText}`);
       }
       
       return response;
@@ -59,7 +60,7 @@ export class SpaceNewsService {
       clearTimeout(timeoutId);
       if (retries > 0 && error instanceof Error && error.name !== 'AbortError') {
         console.log(`Space News API fetch error, retrying...`, error.message);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 2000));
         return this.fetchWithRetry(url, retries - 1);
       }
       throw error;
@@ -74,17 +75,12 @@ export class SpaceNewsService {
       return cached.data;
     }
 
-    try {
-      const url = `${this.BASE_URL}/articles/?limit=${limit}&offset=${offset}&ordering=-published_at`;
-      const response = await this.fetchWithRetry(url);
-      const data = await response.json();
-      
-      this.cache.set(cacheKey, { data, timestamp: Date.now() });
-      return data;
-    } catch (error) {
-      console.error('Failed to fetch space news:', error);
-      throw new Error('Unable to fetch space news at this time');
-    }
+    const url = `${this.BASE_URL}/articles/?limit=${limit}&offset=${offset}&ordering=-published_at`;
+    const response = await this.fetchWithRetry(url);
+    const data = await response.json();
+    
+    this.cache.set(cacheKey, { data, timestamp: Date.now() });
+    return data;
   }
 
   async getFeaturedNews(limit = 5): Promise<SpaceNewsResponse> {
@@ -95,17 +91,12 @@ export class SpaceNewsService {
       return cached.data;
     }
 
-    try {
-      const url = `${this.BASE_URL}/articles/?limit=${limit}&featured=true&ordering=-published_at`;
-      const response = await this.fetchWithRetry(url);
-      const data = await response.json();
-      
-      this.cache.set(cacheKey, { data, timestamp: Date.now() });
-      return data;
-    } catch (error) {
-      console.error('Failed to fetch featured space news:', error);
-      throw new Error('Unable to fetch featured space news at this time');
-    }
+    const url = `${this.BASE_URL}/articles/?limit=${limit}&featured=true&ordering=-published_at`;
+    const response = await this.fetchWithRetry(url);
+    const data = await response.json();
+    
+    this.cache.set(cacheKey, { data, timestamp: Date.now() });
+    return data;
   }
 
   async searchNews(query: string, limit = 10): Promise<SpaceNewsResponse> {
@@ -116,18 +107,13 @@ export class SpaceNewsService {
       return cached.data;
     }
 
-    try {
-      const encodedQuery = encodeURIComponent(query);
-      const url = `${this.BASE_URL}/articles/?search=${encodedQuery}&limit=${limit}&ordering=-published_at`;
-      const response = await this.fetchWithRetry(url);
-      const data = await response.json();
-      
-      this.cache.set(cacheKey, { data, timestamp: Date.now() });
-      return data;
-    } catch (error) {
-      console.error('Failed to search space news:', error);
-      throw new Error('Unable to search space news at this time');
-    }
+    const encodedQuery = encodeURIComponent(query);
+    const url = `${this.BASE_URL}/articles/?search=${encodedQuery}&limit=${limit}&ordering=-published_at`;
+    const response = await this.fetchWithRetry(url);
+    const data = await response.json();
+    
+    this.cache.set(cacheKey, { data, timestamp: Date.now() });
+    return data;
   }
 
   async getNewsByLaunch(launchId: string, limit = 5): Promise<SpaceNewsResponse> {
@@ -138,17 +124,12 @@ export class SpaceNewsService {
       return cached.data;
     }
 
-    try {
-      const url = `${this.BASE_URL}/articles/?launches=${launchId}&limit=${limit}&ordering=-published_at`;
-      const response = await this.fetchWithRetry(url);
-      const data = await response.json();
-      
-      this.cache.set(cacheKey, { data, timestamp: Date.now() });
-      return data;
-    } catch (error) {
-      console.error('Failed to fetch launch-related news:', error);
-      throw new Error('Unable to fetch launch-related news at this time');
-    }
+    const url = `${this.BASE_URL}/articles/?launches=${launchId}&limit=${limit}&ordering=-published_at`;
+    const response = await this.fetchWithRetry(url);
+    const data = await response.json();
+    
+    this.cache.set(cacheKey, { data, timestamp: Date.now() });
+    return data;
   }
 
   formatTimeAgo(dateString: string): string {
