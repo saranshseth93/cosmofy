@@ -30,13 +30,14 @@ export function HeroSection() {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
           <Link href="/gallery">
-            <Button 
-              size="lg" 
-              className="accent-gradient hover:opacity-90 text-white px-8 py-3 text-base font-medium transition-all duration-300 shadow-lg"
-            >
-              Launch Exploration
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            <button className="cosmic-cta group relative inline-flex items-center px-12 py-4 overflow-hidden text-lg font-bold text-white bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-400 rounded-full shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-cyan-500/25">
+              <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-400 rounded-full opacity-0 group-hover:opacity-100 animate-pulse transition-opacity duration-300"></span>
+              <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
+              <span className="relative z-10 flex items-center">
+                Launch Exploration
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+              </span>
+            </button>
           </Link>
         </div>
 

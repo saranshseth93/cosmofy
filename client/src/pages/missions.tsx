@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CosmicPulse } from '@/components/lottie-loader';
+import { PulseCTA, CosmicCTA } from '@/components/cosmic-cta';
 
 interface SpaceMission {
   id: number;
@@ -133,24 +134,21 @@ export default function SpaceMissions() {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="flex flex-wrap gap-2 justify-center mb-8">
             {uniqueStatuses.map((status) => (
-              <Button
+              <PulseCTA
                 key={status}
-                variant={selectedFilter === status ? "default" : "outline"}
-                size="sm"
                 onClick={() => setSelectedFilter(status)}
-                className={`${
-                  selectedFilter === status 
-                    ? 'bg-gradient-to-r from-blue-600 to-purple-600' 
-                    : 'glass-morphism hover:bg-white/10'
-                }`}
+                isActive={selectedFilter === status}
+                className="relative"
               >
-                {status}
-                {missions && (
-                  <Badge className="ml-2 text-xs" variant="secondary">
-                    {status === 'All' ? missions.length : missions.filter(m => m.status === status).length}
-                  </Badge>
-                )}
-              </Button>
+                <span className="flex items-center">
+                  {status}
+                  {missions && (
+                    <Badge className="ml-2 text-xs" variant="secondary">
+                      {status === 'All' ? missions.length : missions.filter(m => m.status === status).length}
+                    </Badge>
+                  )}
+                </span>
+              </PulseCTA>
             ))}
           </div>
         </div>
@@ -244,13 +242,13 @@ export default function SpaceMissions() {
                     : `No missions with status "${selectedFilter}" found.`
                   }
                 </p>
-                <Button 
-                  variant="outline" 
+                <CosmicCTA 
                   onClick={() => setSelectedFilter('All')}
-                  className="glass-morphism hover:bg-white/10"
+                  variant="secondary"
+                  size="sm"
                 >
                   Show All Missions
-                </Button>
+                </CosmicCTA>
               </div>
             </div>
           )}
