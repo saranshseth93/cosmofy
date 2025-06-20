@@ -36,9 +36,11 @@ export function Navigation() {
       <div className="container mx-auto px-4 sm:px-6 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center">
-            <div className="text-2xl font-bold text-white">
-              cosmofy
-            </div>
+            <img 
+              src="/attached_assets/Cosmo - 1_1750298158776.png" 
+              alt="Cosmofy" 
+              className="h-8 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}
