@@ -11,6 +11,7 @@ import Aurora from "@/pages/aurora";
 import Asteroids from "@/pages/asteroids";
 import Missions from "@/pages/missions";
 import SpaceNews from "@/pages/space-news";
+import SpaceSounds from "@/pages/space-sounds";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -24,6 +25,7 @@ function Router() {
       <Route path="/asteroids" component={Asteroids} />
       <Route path="/missions" component={Missions} />
       <Route path="/news" component={SpaceNews} />
+      <Route path="/sounds" component={SpaceSounds} />
       <Route component={NotFound} />
     </Switch>
   );

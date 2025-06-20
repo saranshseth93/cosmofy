@@ -105,7 +105,7 @@ export default function SpaceNews() {
     <div className="min-h-screen bg-gradient-to-b from-neutral-900 via-neutral-800 to-black text-white relative">
       <Navigation />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8 relative z-10">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">Space News</h1>
