@@ -122,6 +122,8 @@ Changelog:
   * Implemented detailed forecast information with Kp index explanations and viewing conditions
   * Added animated asteroid background effect to asteroids page with realistic physics
   * Fixed asteroids page navigation to use global header instead of back button
+  * Implemented dynamic cosmic cursor with trailing star dust effects across entire application
+  * Added space-themed particle system that follows mouse movement with colorful star animations
   * Implemented space weather notifications schema and storage layer (in progress)
 ```
 
