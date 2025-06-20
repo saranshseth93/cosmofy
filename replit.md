@@ -111,7 +111,7 @@ Changelog:
   * Expanded APOD curated content to 20+ authentic NASA images across all filter categories
   * Enhanced gallery filtering with comprehensive pagination and proper data flow
   * Fixed inconsistent loading behavior - gallery now loads all available data consistently
-  * Fixed gallery popup scrolling - content now scrolls properly instead of parent page
+  * Fixed gallery popup scrolling - entire modal card now scrolls properly instead of parent page
   * Implemented space weather notifications schema and storage layer (in progress)
 ```
 
