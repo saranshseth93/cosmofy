@@ -107,6 +107,10 @@ Changelog:
   * Implemented cosmic-themed CTA components with space-inspired animations
   * Added animated buttons with shimmer effects, pulse animations, and gradient backgrounds
   * Enhanced missions page with space-themed filter buttons and interactive elements
+  * Fixed gallery loading issues - removed artificial limits, now loads unlimited data
+  * Expanded APOD curated content to 20+ authentic NASA images across all filter categories
+  * Enhanced gallery filtering with comprehensive pagination and proper data flow
+  * Fixed inconsistent loading behavior - gallery now loads all available data consistently
   * Implemented space weather notifications schema and storage layer (in progress)
 ```
 

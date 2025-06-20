@@ -218,7 +218,7 @@ export function APODGallery({ id = "gallery" }: APODGalleryProps) {
         </div>
 
         {/* Pagination */}
-        {!isLoading && images && images.length > 0 && (
+        {!isLoading && filteredImages && filteredImages.length > 0 && totalPages > 1 && (
           <div className="flex justify-center items-center space-x-4">
             <Button
               variant="secondary"
@@ -230,21 +230,25 @@ export function APODGallery({ id = "gallery" }: APODGalleryProps) {
             </Button>
             
             <div className="flex space-x-2">
-              {[1, 2, 3].map((page) => (
-                <Button
-                  key={page}
-                  variant={currentPage === page ? "default" : "secondary"}
-                  onClick={() => setCurrentPage(page)}
-                  className={currentPage === page ? "bg-[hsl(158,76%,36%)]" : "glass-effect"}
-                >
-                  {page}
-                </Button>
-              ))}
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                const pageNum = Math.max(1, Math.min(totalPages, currentPage - 2 + i));
+                return (
+                  <Button
+                    key={pageNum}
+                    variant={currentPage === pageNum ? "default" : "secondary"}
+                    onClick={() => setCurrentPage(pageNum)}
+                    className={currentPage === pageNum ? "bg-[hsl(158,76%,36%)]" : "glass-effect"}
+                  >
+                    {pageNum}
+                  </Button>
+                );
+              })}
             </div>
             
             <Button
               variant="secondary"
-              onClick={() => setCurrentPage(prev => prev + 1)}
+              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+              disabled={currentPage === totalPages}
               className="glass-effect hover:bg-[hsl(158,76%,36%)] hover:bg-opacity-20"
             >
               <ChevronRight className="h-4 w-4" />

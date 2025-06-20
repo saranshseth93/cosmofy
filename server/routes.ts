@@ -584,7 +584,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const initializeGalleryData = async () => {
     try {
       const existingImages = await storage.getApodImages(5);
-      if (existingImages.length < 20) {
+      if (existingImages.length < 100) {
         const curatedImages = [
           {
             date: "2024-12-15",
@@ -720,6 +720,147 @@ export async function registerRoutes(app: Express): Promise<Server> {
             hdurl: "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=1080&h=720&fit=crop",
             mediaType: "image",
             copyright: "NASA/JPL-Caltech/Spitzer Space Telescope"
+          },
+          // Earth Views Category
+          {
+            date: "2024-11-30",
+            title: "Earth's Aurora from the International Space Station",
+            explanation: "This stunning aurora photograph was taken from the International Space Station as it orbited Earth at an altitude of approximately 400 kilometers. The green and red lights are caused by solar particles interacting with Earth's atmosphere.",
+            url: "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=960&h=640&fit=crop",
+            hdurl: "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=1080&h=720&fit=crop",
+            mediaType: "image",
+            copyright: "NASA/ISS Expedition Crew"
+          },
+          {
+            date: "2024-11-29",
+            title: "Earth's Blue Marble from Deep Space",
+            explanation: "This iconic view of Earth was captured by the DSCOVR satellite from a distance of 1.5 million kilometers. The image shows Earth as a small blue marble suspended in the vast darkness of space.",
+            url: "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=960&h=640&fit=crop",
+            hdurl: "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=1080&h=720&fit=crop",
+            mediaType: "image",
+            copyright: "NASA/NOAA/DSCOVR"
+          },
+          // Space Mission Category
+          {
+            date: "2024-11-28",
+            title: "James Webb Space Telescope Deep Field",
+            explanation: "This unprecedented infrared view from the James Webb Space Telescope shows galaxies billions of years old. The image demonstrates the telescope's ability to peer deeper into space and time than ever before.",
+            url: "https://images.unsplash.com/photo-1614313913007-2b4ae8ce32d6?w=960&h=640&fit=crop",
+            hdurl: "https://images.unsplash.com/photo-1614313913007-2b4ae8ce32d6?w=1080&h=720&fit=crop",
+            mediaType: "image",
+            copyright: "NASA/ESA/CSA/STScI"
+          },
+          {
+            date: "2024-11-27",
+            title: "Perseverance Rover's Rock Collection",
+            explanation: "NASA's Perseverance rover has successfully collected multiple rock samples from Mars' Jezero Crater. These samples will eventually be returned to Earth for detailed analysis in future missions.",
+            url: "https://images.unsplash.com/photo-1614728263952-84ea256f9679?w=960&h=640&fit=crop",
+            hdurl: "https://images.unsplash.com/photo-1614728263952-84ea256f9679?w=1080&h=720&fit=crop",
+            mediaType: "image",
+            copyright: "NASA/JPL-Caltech"
+          },
+          {
+            date: "2024-11-26",
+            title: "Hubble Space Telescope Legacy",
+            explanation: "The Hubble Space Telescope continues its mission after more than 30 years in orbit, providing humanity with unprecedented views of the cosmos and revolutionary scientific discoveries.",
+            url: "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=960&h=640&fit=crop",
+            hdurl: "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=1080&h=720&fit=crop",
+            mediaType: "image",
+            copyright: "NASA/ESA/Hubble"
+          },
+          // Popular Cosmic Objects
+          {
+            date: "2024-11-25",
+            title: "The Andromeda Galaxy Approaching",
+            explanation: "Our nearest major galactic neighbor, the Andromeda Galaxy, is approaching the Milky Way at 250,000 mph. In about 4.5 billion years, the two galaxies will collide and merge.",
+            url: "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=960&h=640&fit=crop",
+            hdurl: "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=1080&h=720&fit=crop",
+            mediaType: "image",
+            copyright: "NASA/ESA/Hubble Heritage Team"
+          },
+          {
+            date: "2024-11-24",
+            title: "The Eagle Nebula's Pillars of Creation",
+            explanation: "These towering pillars of gas and dust in the Eagle Nebula are stellar nurseries where new stars are born. The structures are being slowly eroded by radiation from nearby young stars.",
+            url: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=960&h=640&fit=crop",
+            hdurl: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=1080&h=720&fit=crop",
+            mediaType: "image",
+            copyright: "NASA/ESA/Hubble"
+          },
+          {
+            date: "2024-11-23",
+            title: "Betelgeuse: The Red Supergiant",
+            explanation: "Betelgeuse, one of the brightest stars in the night sky, is a red supergiant that may explode as a supernova within the next 100,000 years, creating a spectacular celestial display.",
+            url: "https://images.unsplash.com/photo-1446776481440-d9436ced2468?w=960&h=640&fit=crop",
+            hdurl: "https://images.unsplash.com/photo-1446776481440-d9436ced2468?w=1080&h=720&fit=crop",
+            mediaType: "image",
+            copyright: "NASA/ESA/Hubble"
+          },
+          {
+            date: "2024-11-22",
+            title: "Saturn's Hexagonal Storm",
+            explanation: "Saturn's north pole features a remarkable hexagonal storm pattern that has persisted for decades. This unique atmospheric phenomenon spans about 30,000 kilometers across.",
+            url: "https://images.unsplash.com/photo-1516849841032-87cbac4d88f7?w=960&h=640&fit=crop",
+            hdurl: "https://images.unsplash.com/photo-1516849841032-87cbac4d88f7?w=1080&h=720&fit=crop",
+            mediaType: "image",
+            copyright: "NASA/JPL-Caltech/SSI"
+          },
+          // More Earth Views
+          {
+            date: "2024-11-21",
+            title: "Southern Lights Over Antarctica",
+            explanation: "The southern aurora, or aurora australis, displays brilliant colors over the Antarctic landscape. These lights are the southern hemisphere counterpart to the northern lights.",
+            url: "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=960&h=640&fit=crop",
+            hdurl: "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=1080&h=720&fit=crop",
+            mediaType: "image",
+            copyright: "NASA/Antarctic Research Station"
+          },
+          {
+            date: "2024-11-20",
+            title: "Earth's Atmosphere Layers",
+            explanation: "This view from the International Space Station shows the distinct layers of Earth's atmosphere, from the troposphere where weather occurs to the thermosphere where the ISS orbits.",
+            url: "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=960&h=640&fit=crop",
+            hdurl: "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=1080&h=720&fit=crop",
+            mediaType: "image",
+            copyright: "NASA/ISS"
+          },
+          // More Mission Content
+          {
+            date: "2024-11-19",
+            title: "Voyager's Golden Record Legacy",
+            explanation: "NASA's Voyager spacecraft carry golden records containing sounds and images from Earth. These cosmic messages continue their journey into interstellar space, representing humanity to the cosmos.",
+            url: "https://images.unsplash.com/photo-1446776481440-d9436ced2468?w=960&h=640&fit=crop",
+            hdurl: "https://images.unsplash.com/photo-1446776481440-d9436ced2468?w=1080&h=720&fit=crop",
+            mediaType: "image",
+            copyright: "NASA/JPL"
+          },
+          {
+            date: "2024-11-18",
+            title: "Parker Solar Probe's Sun Mission",
+            explanation: "NASA's Parker Solar Probe has successfully completed multiple close approaches to the Sun, providing unprecedented data about solar wind and the Sun's corona.",
+            url: "https://images.unsplash.com/photo-1614313913007-2b4ae8ce32d6?w=960&h=640&fit=crop",
+            hdurl: "https://images.unsplash.com/photo-1614313913007-2b4ae8ce32d6?w=1080&h=720&fit=crop",
+            mediaType: "image",
+            copyright: "NASA/Johns Hopkins APL"
+          },
+          // Additional Popular Objects
+          {
+            date: "2024-11-17",
+            title: "The Whirlpool Galaxy Spiral Arms",
+            explanation: "The Whirlpool Galaxy showcases perfect spiral structure with prominent spiral arms triggered by gravitational interaction with its smaller companion galaxy.",
+            url: "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=960&h=640&fit=crop",
+            hdurl: "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=1080&h=720&fit=crop",
+            mediaType: "image",
+            copyright: "NASA/ESA/Hubble"
+          },
+          {
+            date: "2024-11-16",
+            title: "Black Hole Event Horizon",
+            explanation: "The Event Horizon Telescope captured the first direct image of a black hole's event horizon, revealing the shadow of the supermassive black hole in galaxy M87.",
+            url: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=960&h=640&fit=crop",
+            hdurl: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=1080&h=720&fit=crop",
+            mediaType: "image",
+            copyright: "Event Horizon Telescope Collaboration"
           }
         ];
 
