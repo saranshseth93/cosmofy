@@ -305,18 +305,18 @@ export default function Gallery() {
       {/* Image Modal */}
       {selectedImage && (
         <div 
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto"
           onClick={() => setSelectedImage(null)}
         >
           <div 
-            className="max-w-6xl max-h-[90vh] bg-gray-900/95 rounded-2xl overflow-hidden"
+            className="max-w-6xl w-full bg-gray-900/95 rounded-2xl overflow-hidden my-8 max-h-[calc(100vh-4rem)]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative">
               <img
                 src={selectedImage.hdurl || selectedImage.url}
                 alt={selectedImage.title}
-                className="w-full max-h-[70vh] object-contain"
+                className="w-full max-h-[60vh] object-contain"
               />
               <Button
                 variant="ghost"
@@ -328,7 +328,7 @@ export default function Gallery() {
               </Button>
             </div>
             
-            <div className="p-6">
+            <div className="p-6 overflow-y-auto max-h-[40vh]">
               <h2 className="text-2xl font-bold text-white mb-2">{selectedImage.title}</h2>
               <p className="text-gray-400 mb-4">
                 {new Date(selectedImage.date).toLocaleDateString('en-US', {
