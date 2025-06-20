@@ -57,7 +57,7 @@ export default function Missions() {
     }
   };
 
-  const formatDuration = (launchDate: Date, endDate: Date | null) => {
+  const formatDuration = (launchDate: Date, endDate: Date | null | undefined) => {
     const launch = new Date(launchDate);
     const end = endDate ? new Date(endDate) : new Date();
     const diffTime = Math.abs(end.getTime() - launch.getTime());
@@ -109,8 +109,8 @@ export default function Missions() {
               Explore humanity's greatest space adventures. Track active missions, discover upcoming launches, and learn about groundbreaking discoveries.
             </p>
 
-            {/* Filter Controls */}
-            <div className="flex flex-wrap justify-center gap-4 mb-8">
+            {/* Filter Controls - Mobile Responsive */}
+            <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 mb-6 sm:mb-8 px-4 sm:px-0">
               <div className="flex gap-2">
                 {[
                   { id: 'all', label: 'All Missions', icon: Globe },
@@ -149,26 +149,26 @@ export default function Missions() {
         </div>
       </section>
 
-      {/* Missions Grid */}
-      <section className="pb-20">
-        <div className="container mx-auto px-6">
+      {/* Missions Grid - Mobile Optimized */}
+      <section className="pb-16 sm:pb-20">
+        <div className="container mx-auto px-4 sm:px-6">
           {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-20">
-              <LottieLoader size={120} className="mb-6" />
-              <p className="text-lg opacity-70 mb-8">Loading space missions...</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="flex flex-col items-center justify-center py-12 sm:py-20">
+              <LottieLoader size={80} className="mb-4 sm:mb-6" />
+              <p className="text-base sm:text-lg opacity-70 mb-6 sm:mb-8">Loading space missions...</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {Array.from({ length: 9 }).map((_, index) => (
                   <Card key={index} className="glass-morphism">
-                    <div className="w-full h-48 bg-gray-800/50 rounded-t-lg animate-pulse" />
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="h-4 bg-gray-700/50 rounded w-1/2 animate-pulse" />
-                        <div className="h-6 bg-gray-700/50 rounded-full w-16 animate-pulse" />
+                    <div className="w-full h-40 sm:h-48 bg-gray-800/50 rounded-t-lg animate-pulse" />
+                    <CardContent className="p-4 sm:p-6">
+                      <div className="flex items-center justify-between mb-3 sm:mb-4">
+                        <div className="h-3 sm:h-4 bg-gray-700/50 rounded w-1/2 animate-pulse" />
+                        <div className="h-5 sm:h-6 bg-gray-700/50 rounded-full w-12 sm:w-16 animate-pulse" />
                       </div>
-                      <div className="h-6 bg-gray-700/50 rounded mb-3 animate-pulse" />
+                      <div className="h-5 sm:h-6 bg-gray-700/50 rounded mb-2 sm:mb-3 animate-pulse" />
                       <div className="space-y-2">
-                        <div className="h-3 bg-gray-700/50 rounded animate-pulse" />
-                        <div className="h-3 bg-gray-700/50 rounded w-2/3 animate-pulse" />
+                        <div className="h-2 sm:h-3 bg-gray-700/50 rounded animate-pulse" />
+                        <div className="h-2 sm:h-3 bg-gray-700/50 rounded w-2/3 animate-pulse" />
                       </div>
                     </CardContent>
                   </Card>
@@ -176,7 +176,7 @@ export default function Missions() {
               </div>
             </div>
           ) : missions && missions.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {missions.map((mission) => {
                 const statusColor = getStatusColor(mission.status);
                 return (

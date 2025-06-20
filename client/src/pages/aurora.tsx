@@ -91,19 +91,19 @@ export default function Aurora() {
         </div>
       </section>
 
-      {/* Main Content */}
-      <section className="pb-20">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+      {/* Main Content - Mobile Optimized */}
+      <section className="pb-16 sm:pb-20">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-12 sm:mb-16">
             {/* Current Activity Card */}
             <Card className="glass-morphism">
-              <CardContent className="p-8">
-                <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-                  <Zap className="text-pink-400 mr-3 h-8 w-8" />
+              <CardContent className="p-4 sm:p-6 lg:p-8">
+                <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center">
+                  <Zap className="text-pink-400 mr-2 sm:mr-3 h-6 w-6 sm:h-8 sm:w-8" />
                   Current Activity
                 </h2>
 
-                <div className="relative bg-gradient-to-br from-green-900/50 via-blue-900/50 to-purple-900/50 rounded-xl overflow-hidden mb-6 h-64">
+                <div className="relative bg-gradient-to-br from-green-900/50 via-blue-900/50 to-purple-900/50 rounded-xl overflow-hidden mb-4 sm:mb-6 h-48 sm:h-64">
                   <div className="absolute inset-0 bg-gradient-to-t from-[hsl(222,47%,8%)] via-transparent to-transparent" />
                   <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                     <CosmicPulse size={80} />
