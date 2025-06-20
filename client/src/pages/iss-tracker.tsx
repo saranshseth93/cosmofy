@@ -11,7 +11,14 @@ import { IssPosition, IssPass, IssCrew } from '@/types/space';
 
 export default function ISSTracker() {
   const [autoRefresh, setAutoRefresh] = useState(true);
+  const [manualCoords, setManualCoords] = useState({ lat: '', lon: '' });
+  const [useManualCoords, setUseManualCoords] = useState(false);
   const { coordinates, error: geoError, loading: geoLoading } = useGeolocation();
+
+  // Use manual coordinates if provided, otherwise use geolocation
+  const activeCoordinates = useManualCoords && manualCoords.lat && manualCoords.lon 
+    ? { latitude: parseFloat(manualCoords.lat), longitude: parseFloat(manualCoords.lon) }
+    : coordinates;
 
   useEffect(() => {
     document.title = "ISS Live Tracker - Cosmofy | International Space Station Real-time Position";
@@ -29,16 +36,30 @@ export default function ISSTracker() {
   });
 
   // ISS Passes Query
-  const { data: passes, isLoading: passesLoading } = useQuery<IssPass[]>({
-    queryKey: ['/api/iss/passes', coordinates?.latitude, coordinates?.longitude],
+  const { data: passes, isLoading: passesLoading, error: passesError } = useQuery<IssPass[]>({
+    queryKey: ['/api/iss/passes', activeCoordinates?.latitude, activeCoordinates?.longitude],
     queryFn: async () => {
-      if (!coordinates) return [];
-      const response = await fetch(`/api/iss/passes?lat=${coordinates.latitude}&lon=${coordinates.longitude}`);
+      if (!activeCoordinates) return [];
+      const response = await fetch(`/api/iss/passes?lat=${activeCoordinates.latitude}&lon=${activeCoordinates.longitude}`);
       if (!response.ok) throw new Error('Failed to fetch ISS passes');
       return response.json();
     },
-    enabled: !!coordinates,
+    enabled: !!activeCoordinates,
+    retry: 3,
+    retryDelay: 1000,
   });
+
+  const handleManualSubmit = () => {
+    const lat = parseFloat(manualCoords.lat);
+    const lon = parseFloat(manualCoords.lon);
+    
+    if (isNaN(lat) || isNaN(lon) || lat < -90 || lat > 90 || lon < -180 || lon > 180) {
+      alert('Please enter valid coordinates (Latitude: -90 to 90, Longitude: -180 to 180)');
+      return;
+    }
+    
+    setUseManualCoords(true);
+  };
 
   // ISS Crew Query
   const { data: crew, isLoading: crewLoading } = useQuery<IssCrew[]>({
@@ -240,17 +261,25 @@ export default function ISSTracker() {
                         <input 
                           type="number" 
                           placeholder="Latitude" 
+                          value={manualCoords.lat}
+                          onChange={(e) => setManualCoords(prev => ({ ...prev, lat: e.target.value }))}
                           className="p-2 bg-gray-800/50 border border-gray-600/50 rounded text-white text-sm"
                           step="0.0001"
                         />
                         <input 
                           type="number" 
                           placeholder="Longitude" 
+                          value={manualCoords.lon}
+                          onChange={(e) => setManualCoords(prev => ({ ...prev, lon: e.target.value }))}
                           className="p-2 bg-gray-800/50 border border-gray-600/50 rounded text-white text-sm"
                           step="0.0001"
                         />
                       </div>
-                      <Button size="sm" className="mt-2 w-full bg-gray-700 hover:bg-gray-600">
+                      <Button 
+                        size="sm" 
+                        onClick={handleManualSubmit}
+                        className="mt-2 w-full bg-gray-700 hover:bg-gray-600"
+                      >
                         Use Coordinates
                       </Button>
                     </div>

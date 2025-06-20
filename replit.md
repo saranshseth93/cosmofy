@@ -87,6 +87,13 @@ The application tracks various space-related entities:
 ```
 Changelog:
 - June 19, 2025. Initial setup
+- June 20, 2025. Complete multi-page application with award-winning design
+  * Split into dedicated pages: Gallery, ISS Tracker, Aurora, Asteroids, Missions
+  * Enhanced navigation system with proper routing
+  * Fixed background gradient issues across mobile and desktop
+  * Implemented NASA API integration with fallback systems
+  * Added real-time ISS tracking with pass predictions
+  * Created manual coordinate input for location-based features
 ```
 
 ## User Preferences
