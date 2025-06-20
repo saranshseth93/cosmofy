@@ -170,7 +170,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       clearTimeout(timeout);
-      res.json(position);
+      // Get city/suburb for ISS location
+      let location = "Over Ocean";
+      try {
+        location = await geolocationService.getCityFromCoordinates(
+          parseFloat(issData.iss_position.latitude),
+          parseFloat(issData.iss_position.longitude)
+        );
+      } catch (error) {
+        console.error("Error getting ISS location:", error);
+      }
+
+      const positionWithLocation = {
+        ...position,
+        location
+      };
+      
+      res.json(positionWithLocation);
     } catch (error) {
       clearTimeout(timeout);
       console.error("Error fetching ISS position:", error);
@@ -572,8 +588,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             date: "2024-12-04",
             title: "Artemis 1 Moon Mission",
             explanation: "NASA's Artemis 1 mission successfully demonstrated the Orion spacecraft's capabilities for future human missions to the Moon. This image shows the uncrewed Orion capsule in lunar orbit during its historic test flight.",
-            url: "https://apod.nasa.gov/apod/image/2412/Artemis1_Orion_960.jpg",
-            hdurl: "https://apod.nasa.gov/apod/image/2412/Artemis1_Orion_1080.jpg",
+            url: "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=960&h=640&fit=crop",
+            hdurl: "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=1080&h=720&fit=crop",
             mediaType: "image",
             copyright: "NASA Artemis Program"
           },
@@ -581,8 +597,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             date: "2024-12-03",
             title: "Rosette Nebula in Hydrogen",
             explanation: "The Rosette Nebula, also known as NGC 2237, is a large emission nebula located in the constellation Monoceros. The nebula's distinctive shape and red color come from hydrogen gas excited by the radiation from hot young stars.",
-            url: "https://apod.nasa.gov/apod/image/2412/RosetteNebula_HST_960.jpg",
-            hdurl: "https://apod.nasa.gov/apod/image/2412/RosetteNebula_HST_1080.jpg",
+            url: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=960&h=640&fit=crop",
+            hdurl: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=1080&h=720&fit=crop",
             mediaType: "image",
             copyright: "NASA, ESA, Hubble Heritage Team"
           },
@@ -590,8 +606,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             date: "2024-12-02",
             title: "Cassini's Final View of Saturn",
             explanation: "This farewell image from NASA's Cassini spacecraft shows Saturn in all its glory during the mission's Grand Finale. After 13 years studying Saturn and its moons, Cassini concluded its historic journey in 2017.",
-            url: "https://apod.nasa.gov/apod/image/2412/SaturnFarewell_Cassini_960.jpg",
-            hdurl: "https://apod.nasa.gov/apod/image/2412/SaturnFarewell_Cassini_1080.jpg",
+            url: "https://images.unsplash.com/photo-1446776481440-d9436ced2468?w=960&h=640&fit=crop",
+            hdurl: "https://images.unsplash.com/photo-1446776481440-d9436ced2468?w=1080&h=720&fit=crop",
             mediaType: "image",
             copyright: "NASA/JPL-Caltech/Space Science Institute"
           },
@@ -599,8 +615,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             date: "2024-12-01",
             title: "Milky Way Galactic Center",
             explanation: "This infrared image reveals the crowded center of our Milky Way galaxy, where millions of stars orbit around the supermassive black hole Sagittarius A*. The image pierces through the dust that normally obscures this region.",
-            url: "https://apod.nasa.gov/apod/image/2412/MilkyWayCenter_Spitzer_960.jpg",
-            hdurl: "https://apod.nasa.gov/apod/image/2412/MilkyWayCenter_Spitzer_1080.jpg",
+            url: "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=960&h=640&fit=crop",
+            hdurl: "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=1080&h=720&fit=crop",
             mediaType: "image",
             copyright: "NASA/JPL-Caltech/Spitzer Space Telescope"
           }

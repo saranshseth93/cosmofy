@@ -88,6 +88,49 @@ export class GeolocationService {
       return "UTC";
     }
   }
+
+  async getCityFromCoordinates(lat: number, lon: number): Promise<string> {
+    try {
+      // Using OpenStreetMap Nominatim for reverse geocoding
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10&addressdetails=1`,
+        {
+          headers: {
+            'User-Agent': 'Space-Explorer-App/1.0'
+          }
+        }
+      );
+      
+      if (!response.ok) {
+        throw new Error('Geocoding API error');
+      }
+      
+      const data = await response.json();
+      
+      // Extract city/suburb/town information
+      const address = data.address || {};
+      const city = address.city || 
+                   address.town || 
+                   address.village || 
+                   address.suburb ||
+                   address.county ||
+                   address.state ||
+                   address.country ||
+                   'Unknown Location';
+      
+      const country = address.country || '';
+      
+      // Return city with country if available
+      return country ? `${city}, ${country}` : city;
+    } catch (error) {
+      console.error("Error fetching city from coordinates:", error);
+      // Return ocean/coordinate info as fallback
+      if (Math.abs(lat) < 60) {
+        return lat > 0 ? "Northern Ocean" : "Southern Ocean";
+      }
+      return `${lat.toFixed(2)}°, ${lon.toFixed(2)}°`;
+    }
+  }
 }
 
 export const geolocationService = new GeolocationService();
