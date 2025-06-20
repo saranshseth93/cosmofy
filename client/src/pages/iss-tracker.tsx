@@ -299,7 +299,10 @@ export default function ISSTracker() {
                   <div className="relative bg-gradient-to-br from-blue-900/30 to-purple-900/30 rounded-xl overflow-hidden border border-gray-700/30 h-64">
                     <ISSLiveMap 
                       position={position} 
-                      userLocation={activeCoordinates || undefined} 
+                      userLocation={activeCoordinates ? {
+                        latitude: activeCoordinates.latitude,
+                        longitude: activeCoordinates.longitude
+                      } : undefined} 
                       className="w-full h-full"
                     />
                   </div>
@@ -423,9 +426,24 @@ export default function ISSTracker() {
                 <CardTitle className="flex items-center text-lg">
                   <MapPin className="text-purple-400 mr-3 h-5 w-5" />
                   Next Visible Passes
+                  {activeCoordinates && (
+                    <Badge className="ml-3 bg-purple-500/20 text-purple-300 border-purple-500/50 text-xs">
+                      {getLocationDisplay()}
+                    </Badge>
+                  )}
                 </CardTitle>
               </CardHeader>
               <CardContent>
+                {activeCoordinates && (
+                  <div className="mb-4 p-3 bg-purple-500/10 rounded-lg border border-purple-500/20">
+                    <div className="flex items-center text-sm">
+                      <MapPin className="w-4 h-4 mr-2 text-purple-400" />
+                      <span className="text-purple-300">Viewing location: </span>
+                      <span className="text-white font-medium ml-1">{getLocationDisplay()}</span>
+                    </div>
+                  </div>
+                )}
+
                 {geoError ? (
                   <div className="text-center py-8">
                     <div className="text-gray-400 mb-4">Location access required for pass predictions</div>
@@ -490,30 +508,47 @@ export default function ISSTracker() {
                 ) : passes && passes.length > 0 ? (
                   <div className="space-y-4">
                     {passes.slice(0, 5).map((pass, index) => (
-                      <div key={pass.id} className="p-4 bg-gray-800/30 rounded-lg hover:bg-gray-800/50 transition-colors">
-                        <div className="flex items-center justify-between mb-2">
-                          <Badge variant="outline" className="text-xs border-purple-500/50 text-purple-300">
-                            Pass #{index + 1}
-                          </Badge>
-                          <div className="text-sm text-cyan-400 font-medium">
-                            {formatDuration(pass.duration)}
+                      <div key={pass.id} className="p-4 bg-gray-800/30 rounded-lg hover:bg-gray-800/50 transition-colors border border-gray-700/30">
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center">
+                            <Badge variant="outline" className="text-xs border-purple-500/50 text-purple-300 mr-3">
+                              Pass #{index + 1}
+                            </Badge>
+                            <div className="text-sm text-cyan-400 font-semibold">
+                              Duration: {formatDuration(pass.duration)}
+                            </div>
+                          </div>
+                          {pass.maxElevation && (
+                            <div className="text-xs text-orange-400 bg-orange-500/10 px-2 py-1 rounded border border-orange-500/20">
+                              Max: {pass.maxElevation.toFixed(0)}°
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="text-white font-medium mb-2">
+                          {formatPassDate(pass.risetime)}
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-3 text-xs">
+                          <div className="bg-gray-700/30 p-2 rounded">
+                            <div className="text-gray-400">Start Time</div>
+                            <div className="text-green-400 font-medium">
+                              {new Date(pass.risetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </div>
+                          </div>
+                          <div className="bg-gray-700/30 p-2 rounded">
+                            <div className="text-gray-400">End Time</div>
+                            <div className="text-red-400 font-medium">
+                              {new Date(new Date(pass.risetime).getTime() + pass.duration * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </div>
                           </div>
                         </div>
-                        <div className="text-sm text-gray-300">
-                          {new Date(pass.risetime).toLocaleDateString()} at{' '}
-                          {new Date(pass.risetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </div>
-                        {pass.maxElevation && (
-                          <div className="text-xs text-gray-400 mt-1">
-                            Max elevation: {pass.maxElevation.toFixed(0)}°
-                          </div>
-                        )}
                       </div>
                     ))}
                   </div>
                 ) : (
                   <div className="text-center text-gray-400 py-8">
-                    No upcoming passes found
+                    No upcoming passes found for your location
                   </div>
                 )}
               </CardContent>
@@ -549,9 +584,12 @@ export default function ISSTracker() {
                       <CardContent className="p-6">
                         <div className="text-center mb-6">
                           <div className="relative mb-4">
-                            <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-red-600 rounded-full mx-auto flex items-center justify-center text-white font-bold text-xl shadow-xl border-4 border-gray-800">
-                              {getCrewInitials(member.name)}
-                            </div>
+                            <CrewAvatar 
+                              name={member.name} 
+                              country={member.country} 
+                              size="lg" 
+                              className="mx-auto"
+                            />
                             <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-green-500 rounded-full border-3 border-gray-900 flex items-center justify-center shadow-lg">
                               <CheckCircle className="w-4 h-4 text-white" />
                             </div>
