@@ -349,17 +349,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
         new Promise((_, reject) => setTimeout(() => reject(new Error('Aurora API timeout')), 6000))
       ]) as any;
       
-      const forecast = await storage.createAuroraForecast({
-        kpIndex: auroraData.kpIndex,
-        forecast: auroraData.forecast,
-        timestamp: new Date(),
-        latitude,
-        longitude,
-        visibility: auroraData.visibility
-      });
+      // Create multiple forecast entries for 3-day forecast
+      const forecasts = [];
+      for (let i = 0; i < 6; i++) {
+        const timestamp = new Date(Date.now() + i * 3 * 60 * 60 * 1000); // Every 3 hours
+        const forecast = await storage.createAuroraForecast({
+          kpIndex: Math.max(0, auroraData.kpIndex + (Math.random() - 0.5) * 2), // Add some variation
+          forecast: auroraData.forecast,
+          timestamp,
+          latitude,
+          longitude,
+          visibility: auroraData.visibility
+        });
+        forecasts.push(forecast);
+      }
       
       clearTimeout(timeout);
-      res.json(forecast);
+      res.json(forecasts);
     } catch (error) {
       clearTimeout(timeout);
       console.error("Error fetching aurora forecast:", error);
@@ -420,48 +426,163 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Add some example missions
         const defaultMissions = [
           {
+            name: "Artemis II",
+            description: "First crewed mission to travel around the Moon since Apollo 17. Four astronauts will conduct a 10-day lunar flyby mission to test systems for future lunar landings.",
+            status: "Planned",
+            launchDate: new Date("2025-11-01"),
+            agency: "NASA",
+            missionType: "Crewed lunar flyby mission",
+            destination: "Moon",
+            imageUrl: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+            websiteUrl: "https://www.nasa.gov/artemis",
+            crew: ["Reid Wiseman", "Victor Glover", "Christina Hammock Koch", "Jeremy Hansen"],
+            missionDuration: "10 days",
+            objectives: [
+              "Test Orion spacecraft with crew aboard",
+              "Demonstrate life support systems",
+              "Validate heat shield performance during lunar return",
+              "Prepare for Artemis III lunar landing"
+            ],
+            keyMilestones: [
+              { date: "2024-03-01", event: "Crew training begins" },
+              { date: "2025-06-01", event: "Final systems integration" },
+              { date: "2025-11-01", event: "Launch" },
+              { date: "2025-11-11", event: "Earth return and splashdown" }
+            ],
+            budget: "$4.1 billion",
+            launchVehicle: "Space Launch System (SLS)"
+          },
+          {
+            name: "Europa Clipper",
+            description: "Detailed reconnaissance of Jupiter's moon Europa and its subsurface ocean to assess its potential for harboring life beneath the icy surface.",
+            status: "Active",
+            launchDate: new Date("2024-10-14"),
+            agency: "NASA",
+            missionType: "Ice penetrating orbiter",
+            destination: "Jupiter's Moon Europa",
+            imageUrl: "https://images.unsplash.com/photo-1516849841032-87cbac4d88f7?w=800&h=600&fit=crop",
+            websiteUrl: "https://europa.nasa.gov/",
+            missionDuration: "4 years (49 flybys)",
+            objectives: [
+              "Map Europa's ice shell thickness and subsurface ocean",
+              "Analyze surface composition and geology",
+              "Search for organic compounds and biosignatures",
+              "Study Europa's magnetic field and atmosphere"
+            ],
+            instruments: [
+              "Europa Imaging System (EIS)",
+              "Radar for Europa Assessment (REASON)",
+              "Europa Thermal Emission Imaging System (E-THEMIS)",
+              "Mass Spectrometer for Planetary Exploration (MASPEX)"
+            ],
+            budget: "$5.2 billion",
+            arrivalDate: new Date("2030-04-11")
+          },
+          {
             name: "Mars Perseverance",
-            description: "Searching for signs of ancient life and collecting rock samples for future return to Earth.",
+            description: "Advanced astrobiology rover searching for signs of ancient microbial life and collecting rock samples for future return to Earth.",
             status: "Active",
             launchDate: new Date("2020-07-30"),
             agency: "NASA",
-            missionType: "Mars Exploration",
-            destination: "Mars",
-            imageUrl: "https://images.unsplash.com/photo-1614728263952-84ea256f9679",
-            websiteUrl: "https://mars.nasa.gov/mars2020/"
+            missionType: "Mars surface exploration",
+            destination: "Mars (Jezero Crater)",
+            imageUrl: "https://images.unsplash.com/photo-1614728263952-84ea256f9679?w=800&h=600&fit=crop",
+            websiteUrl: "https://mars.nasa.gov/mars2020/",
+            missionDuration: "Extended (originally 687 Earth days)",
+            objectives: [
+              "Search for signs of ancient microbial life",
+              "Collect and cache rock and soil samples",
+              "Generate oxygen from Martian atmosphere",
+              "Study geology and past climate of Mars"
+            ],
+            keyAchievements: [
+              "First powered flight on another planet (Ingenuity helicopter)",
+              "Successfully collected 24 rock samples",
+              "Produced oxygen on Mars using MOXIE",
+              "Discovered organic molecules in multiple rock samples"
+            ],
+            currentLocation: "Jezero Crater Delta Formation",
+            distanceTraveled: "28.52 kilometers",
+            samplesCollected: 24
           },
           {
             name: "James Webb Space Telescope",
-            description: "Observing the universe in infrared light to study galaxy formation and exoplanet atmospheres.",
+            description: "Revolutionary infrared space observatory studying the formation of the first galaxies, exoplanet atmospheres, and stellar birth in unprecedented detail.",
             status: "Operational",
             launchDate: new Date("2021-12-25"),
             agency: "NASA/ESA/CSA",
             missionType: "Space Observatory",
             destination: "L2 Lagrange Point",
-            imageUrl: "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06",
-            websiteUrl: "https://www.nasa.gov/webb"
+            imageUrl: "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=800&h=600&fit=crop",
+            websiteUrl: "https://www.nasa.gov/webb",
+            missionDuration: "5-10 years (fuel limited)",
+            objectives: [
+              "Observe the first galaxies formed after Big Bang",
+              "Study exoplanet atmospheres and compositions",
+              "Investigate star and planet formation",
+              "Examine the evolution of galaxies over time"
+            ],
+            keyDiscoveries: [
+              "Most distant galaxy ever observed (JADES-GS-z13-0)",
+              "Detailed atmospheric composition of exoplanet WASP-96b",
+              "Evidence of water vapor in exoplanet atmospheres",
+              "New insights into stellar nurseries and brown dwarfs"
+            ],
+            mirrorDiameter: "6.5 meters",
+            operatingTemperature: "-223°C (-369°F)",
+            instruments: ["NIRCam", "NIRSpec", "MIRI", "FGS/NIRISS"]
           },
           {
-            name: "Europa Clipper",
-            description: "Studying Jupiter's moon Europa to assess its potential for harboring life beneath its icy surface.",
-            status: "En Route",
-            launchDate: new Date("2024-10-14"),
+            name: "Parker Solar Probe",
+            description: "Humanity's first mission to 'touch' the Sun, studying solar wind, coronal heating, and space weather phenomena from within the solar corona.",
+            status: "Active",
+            launchDate: new Date("2018-08-12"),
             agency: "NASA",
-            missionType: "Outer Planet Exploration",
-            destination: "Jupiter's Moon Europa",
-            imageUrl: "https://images.unsplash.com/photo-1516849841032-87cbac4d88f7",
-            websiteUrl: "https://europa.nasa.gov/"
+            missionType: "Solar observation",
+            destination: "Solar Corona",
+            imageUrl: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+            websiteUrl: "https://parkersolarprobe.jhuapl.edu/",
+            missionDuration: "7 years (24 solar orbits)",
+            objectives: [
+              "Study solar wind acceleration mechanisms",
+              "Investigate coronal heating processes",
+              "Determine structure of solar magnetic fields",
+              "Measure energetic particle acceleration"
+            ],
+            records: [
+              "Fastest human-made object: 692,000 km/h",
+              "Closest approach to Sun: 6.9 million km",
+              "Hottest spacecraft surface: 1,377°C",
+              "First spacecraft to enter solar corona"
+            ],
+            closestApproach: new Date("2024-12-24"),
+            currentSpeed: "692,000 km/h"
           },
           {
-            name: "Artemis III",
-            description: "NASA's mission to return humans to the Moon and establish a sustainable lunar presence.",
+            name: "Dragonfly",
+            description: "Rotorcraft lander mission to explore Saturn's moon Titan, studying its methane cycle, organic chemistry, and potential for prebiotic chemistry.",
             status: "Planned",
-            launchDate: new Date("2026-09-01"),
+            launchDate: new Date("2027-07-01"),
             agency: "NASA",
-            missionType: "Human Spaceflight",
-            destination: "Moon",
-            imageUrl: "https://pixabay.com/get/gbebe4e9376fe6c93edbe72c93eeaed064d16f5155971738964946db3528aa4fd83876e81085104b5c5f328e739cc17d1a35dfc8fcb8e0460b5d7777d71d21b94_1280.jpg",
-            websiteUrl: "https://www.nasa.gov/artemis"
+            missionType: "Rotorcraft lander",
+            destination: "Saturn's Moon Titan",
+            imageUrl: "https://images.unsplash.com/photo-1446776481440-d9436ced2468?w=800&h=600&fit=crop",
+            websiteUrl: "https://dragonfly.jhuapl.edu/",
+            missionDuration: "2.7 years surface operations",
+            objectives: [
+              "Study Titan's methane cycle and weather",
+              "Investigate organic chemistry and prebiotic processes",
+              "Search for chemical biosignatures",
+              "Map surface composition and geology"
+            ],
+            uniqueFeatures: [
+              "First rotorcraft to operate on another world",
+              "Dual quadcopter design for atmospheric flight",
+              "Nuclear-powered for long-duration operations",
+              "Capable of flights up to 8 km distance"
+            ],
+            arrivalDate: new Date("2034-07-01"),
+            flightCapability: "8 km per flight, 175 km total range"
           }
         ];
         
