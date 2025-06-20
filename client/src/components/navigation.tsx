@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-import { Menu, X, Home, Camera, Satellite, Zap, Circle, Rocket, Globe, Newspaper, Volume2 } from 'lucide-react';
+import { Menu, X, Home, Camera, Satellite, Zap, Circle, Rocket, Globe, Newspaper, Volume2, Telescope, Calendar, Star, MapPin, CloudRain } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import logoImage from '@assets/Cosmo - 1_1750298158776.png';
 
@@ -19,6 +19,12 @@ export function Navigation() {
     { href: '/missions', label: 'Missions', icon: Rocket },
     { href: '/news', label: 'Space News', icon: Newspaper },
     { href: '/sounds', label: 'Space Sounds', icon: Volume2 },
+    { href: '/space-weather', label: 'Space Weather', icon: CloudRain },
+    { href: '/telescope', label: 'Virtual Telescope', icon: Telescope },
+    { href: '/events', label: 'Cosmic Events', icon: Calendar },
+    { href: '/mars-rover', label: 'Mars Rovers', icon: MapPin },
+    { href: '/constellations', label: 'Constellations', icon: Star },
+    { href: '/satellites', label: 'Satellite Tracker', icon: Satellite },
   ];
 
   useEffect(() => {
