@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import Home from "@/pages/home";
 import Gallery from "@/pages/gallery";
 import ISSTracker from "@/pages/iss-tracker";
+import SolarSystem from "@/pages/solar-system";
 import Aurora from "@/pages/aurora";
 import Asteroids from "@/pages/asteroids";
 import Missions from "@/pages/missions";
@@ -16,6 +17,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/gallery" component={Gallery} />
       <Route path="/iss-tracker" component={ISSTracker} />
+      <Route path="/solar-system" component={SolarSystem} />
       <Route path="/aurora" component={Aurora} />
       <Route path="/asteroids" component={Asteroids} />
       <Route path="/missions" component={Missions} />
