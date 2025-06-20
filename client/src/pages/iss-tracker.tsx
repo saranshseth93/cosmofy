@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { SatelliteOrbit } from '@/components/lottie-loader';
 import { useGeolocation } from '@/hooks/use-geolocation';
-import { SVGWorldMap } from '@/components/svg-world-map';
+import { AmChartsWorldMap } from '@/components/amcharts-world-map';
 import { CrewAvatar } from '@/components/crew-avatar';
 import { 
   Satellite, 
@@ -317,7 +317,7 @@ export default function ISSTracker() {
             <CardContent className="p-3 sm:p-4 lg:p-6">
               {/* Live Map */}
               <div className="relative bg-gradient-to-br from-blue-900/30 to-purple-900/30 rounded-xl overflow-hidden border border-gray-700/30 h-80 sm:h-96 mb-6">
-                <SVGWorldMap 
+                <AmChartsWorldMap 
                   position={position} 
                   userLocation={activeCoordinates ? {
                     latitude: activeCoordinates.latitude,
