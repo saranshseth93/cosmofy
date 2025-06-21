@@ -1,7 +1,10 @@
 #!/usr/bin/env node
-const crypto = require('crypto');
-const fs = require('fs');
-const path = require('path');
+import crypto from 'crypto';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Generate a secure random session secret
 function generateSessionSecret() {
@@ -10,7 +13,7 @@ function generateSessionSecret() {
 
 // Create .env file with secure defaults
 function createEnvFile() {
-  const envPath = path.join(process.cwd(), '.env');
+  const envPath = path.join(__dirname, '.env');
   const sessionSecret = generateSessionSecret();
   
   const envContent = `# Cosmofy Environment Configuration
@@ -38,7 +41,7 @@ NODE_ENV=development
   // Check if .env already exists
   if (fs.existsSync(envPath)) {
     console.log('⚠️  .env file already exists. Creating .env.example instead.');
-    fs.writeFileSync(path.join(process.cwd(), '.env.example'), envContent);
+    fs.writeFileSync(path.join(__dirname, '.env.example'), envContent);
     console.log('✅ Created .env.example with secure session secret');
     console.log('📝 Copy .env.example to .env and add your NASA API key');
   } else {

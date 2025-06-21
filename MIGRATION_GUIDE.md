@@ -23,6 +23,11 @@ node generate-env.js
 # - Secure random SESSION_SECRET (128 characters)
 # - .env file with proper structure
 # - NASA API key placeholders
+
+# Alternative: Manual SESSION_SECRET generation
+# node -p "require('crypto').randomBytes(64).toString('hex')"
+# or
+# node -p "crypto.randomBytes(64).toString('hex')"
 ```
 
 ### 3. Install Dependencies
