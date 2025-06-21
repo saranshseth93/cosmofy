@@ -1303,7 +1303,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const lat = parseFloat(req.query.lat as string);
       const lon = parseFloat(req.query.lon as string);
       
-      const satellites = [
+      // Comprehensive satellite database with real-time simulation
+      const allSatellites = [
+        // Space Stations
         {
           id: 'iss',
           name: 'International Space Station',
@@ -1312,9 +1314,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           position: {
             latitude: -25.4 + Math.random() * 50,
             longitude: -180 + Math.random() * 360,
-            altitude: 408
+            altitude: 408 + Math.random() * 15
           },
-          velocity: { speed: 7.66, direction: 45 },
+          velocity: { speed: 7.66, direction: 45 + Math.random() * 90 },
           orbit: { period: 92.68, inclination: 51.6, apogee: 421, perigee: 408 },
           nextPass: {
             aos: new Date(Date.now() + 7200000).toISOString(),
@@ -1326,10 +1328,338 @@ export async function registerRoutes(app: Express): Promise<Server> {
           status: 'active' as const,
           launchDate: '1998-11-20',
           country: 'International',
-          description: 'Largest human-made object in space, serving as a microgravity research laboratory'
+          description: 'Largest human-made object in space, serving as a microgravity research laboratory with continuous human presence since 2000'
+        },
+        {
+          id: 'tiangong',
+          name: 'Tiangong Space Station',
+          noradId: 48274,
+          type: 'space_station' as const,
+          position: {
+            latitude: -30 + Math.random() * 60,
+            longitude: -180 + Math.random() * 360,
+            altitude: 340 + Math.random() * 20
+          },
+          velocity: { speed: 7.68, direction: 120 + Math.random() * 60 },
+          orbit: { period: 90.4, inclination: 41.5, apogee: 450, perigee: 340 },
+          nextPass: {
+            aos: new Date(Date.now() + 12600000).toISOString(),
+            los: new Date(Date.now() + 13200000).toISOString(),
+            maxElevation: 35,
+            direction: 'SW',
+            magnitude: -2.8
+          },
+          status: 'active' as const,
+          launchDate: '2021-04-29',
+          country: 'China',
+          description: 'Chinese space station serving as a platform for scientific research and technology demonstrations'
+        },
+        
+        // Communication Satellites
+        {
+          id: 'starlink-1',
+          name: 'Starlink-1007',
+          noradId: 44713,
+          type: 'communication' as const,
+          position: {
+            latitude: -50 + Math.random() * 100,
+            longitude: -180 + Math.random() * 360,
+            altitude: 550 + Math.random() * 10
+          },
+          velocity: { speed: 7.56, direction: 200 + Math.random() * 160 },
+          orbit: { period: 95.6, inclination: 53.0, apogee: 570, perigee: 540 },
+          status: 'active' as const,
+          launchDate: '2019-11-11',
+          country: 'USA',
+          description: 'Part of SpaceX constellation providing global broadband internet coverage'
+        },
+        {
+          id: 'starlink-2',
+          name: 'Starlink-2156',
+          noradId: 47926,
+          type: 'communication' as const,
+          position: {
+            latitude: -50 + Math.random() * 100,
+            longitude: -180 + Math.random() * 360,
+            altitude: 548 + Math.random() * 12
+          },
+          velocity: { speed: 7.57, direction: 310 + Math.random() * 50 },
+          orbit: { period: 95.4, inclination: 53.2, apogee: 565, perigee: 545 },
+          status: 'active' as const,
+          launchDate: '2021-03-24',
+          country: 'USA',
+          description: 'Advanced Starlink satellite with laser inter-satellite links for global connectivity'
+        },
+        {
+          id: 'viasat-3',
+          name: 'ViaSat-3 Americas',
+          noradId: 56761,
+          type: 'communication' as const,
+          position: {
+            latitude: -5 + Math.random() * 10,
+            longitude: -100 + Math.random() * 20,
+            altitude: 35786
+          },
+          velocity: { speed: 3.07, direction: 90 },
+          orbit: { period: 1436, inclination: 0.1, apogee: 35800, perigee: 35780 },
+          status: 'active' as const,
+          launchDate: '2023-04-30',
+          country: 'USA',
+          description: 'High-capacity geostationary satellite providing broadband services across the Americas'
+        },
+        
+        // Earth Observation
+        {
+          id: 'landsat-9',
+          name: 'Landsat 9',
+          noradId: 49260,
+          type: 'earth_observation' as const,
+          position: {
+            latitude: -80 + Math.random() * 160,
+            longitude: -180 + Math.random() * 360,
+            altitude: 705 + Math.random() * 5
+          },
+          velocity: { speed: 7.45, direction: 80 + Math.random() * 200 },
+          orbit: { period: 98.9, inclination: 98.2, apogee: 710, perigee: 700 },
+          status: 'active' as const,
+          launchDate: '2021-09-27',
+          country: 'USA',
+          description: 'Earth observation satellite monitoring land use, deforestation, and climate change'
+        },
+        {
+          id: 'sentinel-2a',
+          name: 'Sentinel-2A',
+          noradId: 40697,
+          type: 'earth_observation' as const,
+          position: {
+            latitude: -80 + Math.random() * 160,
+            longitude: -180 + Math.random() * 360,
+            altitude: 786 + Math.random() * 8
+          },
+          velocity: { speed: 7.41, direction: 150 + Math.random() * 120 },
+          orbit: { period: 100.6, inclination: 98.6, apogee: 790, perigee: 780 },
+          status: 'active' as const,
+          launchDate: '2015-06-23',
+          country: 'ESA',
+          description: 'European Space Agency satellite for environmental monitoring and agriculture'
+        },
+        {
+          id: 'worldview-3',
+          name: 'WorldView-3',
+          noradId: 40115,
+          type: 'earth_observation' as const,
+          position: {
+            latitude: -80 + Math.random() * 160,
+            longitude: -180 + Math.random() * 360,
+            altitude: 617 + Math.random() * 10
+          },
+          velocity: { speed: 7.51, direction: 270 + Math.random() * 90 },
+          orbit: { period: 97.2, inclination: 97.9, apogee: 625, perigee: 610 },
+          status: 'active' as const,
+          launchDate: '2014-08-13',
+          country: 'USA',
+          description: 'High-resolution commercial imaging satellite with 31cm resolution capability'
+        },
+        
+        // Navigation Satellites
+        {
+          id: 'gps-iif-12',
+          name: 'GPS IIF-12 (Capella)',
+          noradId: 41019,
+          type: 'navigation' as const,
+          position: {
+            latitude: -55 + Math.random() * 110,
+            longitude: -180 + Math.random() * 360,
+            altitude: 20180 + Math.random() * 40
+          },
+          velocity: { speed: 3.87, direction: 45 + Math.random() * 270 },
+          orbit: { period: 717.9, inclination: 55.0, apogee: 20200, perigee: 20160 },
+          status: 'active' as const,
+          launchDate: '2016-02-05',
+          country: 'USA',
+          description: 'GPS Block IIF satellite providing precise positioning and timing services globally'
+        },
+        {
+          id: 'galileo-24',
+          name: 'Galileo-24',
+          noradId: 43564,
+          type: 'navigation' as const,
+          position: {
+            latitude: -56 + Math.random() * 112,
+            longitude: -180 + Math.random() * 360,
+            altitude: 23222 + Math.random() * 50
+          },
+          velocity: { speed: 3.59, direction: 180 + Math.random() * 180 },
+          orbit: { period: 844.0, inclination: 56.0, apogee: 23250, perigee: 23200 },
+          status: 'active' as const,
+          launchDate: '2018-07-25',
+          country: 'ESA',
+          description: 'European navigation satellite providing independent positioning services'
+        },
+        {
+          id: 'glonass-m',
+          name: 'GLONASS-M 761',
+          noradId: 44299,
+          type: 'navigation' as const,
+          position: {
+            latitude: -65 + Math.random() * 130,
+            longitude: -180 + Math.random() * 360,
+            altitude: 19130 + Math.random() * 60
+          },
+          velocity: { speed: 3.95, direction: 90 + Math.random() * 180 },
+          orbit: { period: 675.7, inclination: 64.8, apogee: 19160, perigee: 19100 },
+          status: 'active' as const,
+          launchDate: '2019-05-27',
+          country: 'Russia',
+          description: 'Russian navigation satellite for GLONASS positioning system'
+        },
+        
+        // Scientific Satellites
+        {
+          id: 'hubble',
+          name: 'Hubble Space Telescope',
+          noradId: 20580,
+          type: 'scientific' as const,
+          position: {
+            latitude: -28 + Math.random() * 56,
+            longitude: -180 + Math.random() * 360,
+            altitude: 535 + Math.random() * 20
+          },
+          velocity: { speed: 7.59, direction: 315 + Math.random() * 90 },
+          orbit: { period: 95.4, inclination: 28.5, apogee: 540, perigee: 530 },
+          nextPass: {
+            aos: new Date(Date.now() + 14400000).toISOString(),
+            los: new Date(Date.now() + 15000000).toISOString(),
+            maxElevation: 25,
+            direction: 'E',
+            magnitude: 2.0
+          },
+          status: 'active' as const,
+          launchDate: '1990-04-24',
+          country: 'USA',
+          description: 'Iconic space telescope that has revolutionized astronomy with stunning images and discoveries'
+        },
+        {
+          id: 'jwst',
+          name: 'James Webb Space Telescope',
+          noradId: 50463,
+          type: 'scientific' as const,
+          position: {
+            latitude: 0,
+            longitude: 0,
+            altitude: 1500000
+          },
+          velocity: { speed: 0.1, direction: 0 },
+          orbit: { period: 175320, inclination: 0, apogee: 1500000, perigee: 1500000 },
+          status: 'active' as const,
+          launchDate: '2021-12-25',
+          country: 'International',
+          description: 'Next-generation space telescope observing the universe in infrared light from L2 Lagrange point'
+        },
+        {
+          id: 'kepler',
+          name: 'Kepler Space Telescope',
+          noradId: 35061,
+          type: 'scientific' as const,
+          position: {
+            latitude: 0,
+            longitude: 180 + Math.random() * 360,
+            altitude: 150000000
+          },
+          velocity: { speed: 30, direction: 0 },
+          orbit: { period: 52596000, inclination: 0, apogee: 150000000, perigee: 150000000 },
+          status: 'inactive' as const,
+          launchDate: '2009-03-07',
+          country: 'USA',
+          description: 'Planet-hunting telescope that discovered thousands of exoplanets (mission ended 2018)'
+        },
+        
+        // Military Satellites
+        {
+          id: 'nrol-44',
+          name: 'NROL-44',
+          noradId: 46984,
+          type: 'military' as const,
+          position: {
+            latitude: -85 + Math.random() * 170,
+            longitude: -180 + Math.random() * 360,
+            altitude: 1000 + Math.random() * 200
+          },
+          velocity: { speed: 7.35, direction: 45 + Math.random() * 270 },
+          orbit: { period: 104.5, inclination: 97.8, apogee: 1200, perigee: 900 },
+          status: 'active' as const,
+          launchDate: '2020-12-19',
+          country: 'USA',
+          description: 'Classified reconnaissance satellite operated by National Reconnaissance Office'
+        },
+        {
+          id: 'cosmos-2558',
+          name: 'Cosmos 2558',
+          noradId: 50915,
+          type: 'military' as const,
+          position: {
+            latitude: -85 + Math.random() * 170,
+            longitude: -180 + Math.random() * 360,
+            altitude: 800 + Math.random() * 300
+          },
+          velocity: { speed: 7.43, direction: 180 + Math.random() * 180 },
+          orbit: { period: 101.2, inclination: 82.5, apogee: 1050, perigee: 750 },
+          status: 'active' as const,
+          launchDate: '2022-02-05',
+          country: 'Russia',
+          description: 'Russian military reconnaissance satellite for strategic intelligence gathering'
+        },
+        
+        // Space Debris
+        {
+          id: 'debris-1',
+          name: 'SL-16 R/B (Debris)',
+          noradId: 43013,
+          type: 'debris' as const,
+          position: {
+            latitude: -85 + Math.random() * 170,
+            longitude: -180 + Math.random() * 360,
+            altitude: 650 + Math.random() * 100
+          },
+          velocity: { speed: 7.48, direction: Math.random() * 360 },
+          orbit: { period: 97.8, inclination: 98.1, apogee: 720, perigee: 630 },
+          status: 'inactive' as const,
+          launchDate: '2017-11-28',
+          country: 'Russia',
+          description: 'Rocket body debris from Soyuz launch, tracked for collision avoidance'
+        },
+        {
+          id: 'debris-2',
+          name: 'Fengyun-1C Debris',
+          noradId: 30000,
+          type: 'debris' as const,
+          position: {
+            latitude: -85 + Math.random() * 170,
+            longitude: -180 + Math.random() * 360,
+            altitude: 850 + Math.random() * 50
+          },
+          velocity: { speed: 7.44, direction: Math.random() * 360 },
+          orbit: { period: 100.8, inclination: 98.8, apogee: 870, perigee: 830 },
+          status: 'inactive' as const,
+          launchDate: '2007-01-11',
+          country: 'China',
+          description: 'Debris fragment from Chinese anti-satellite weapon test, poses collision risk'
         }
       ];
-      res.json(satellites);
+
+      // Filter satellites by category
+      let filteredSatellites = allSatellites;
+      
+      if (category && category !== 'featured') {
+        filteredSatellites = allSatellites.filter(sat => sat.type === category);
+      } else if (category === 'featured') {
+        // Featured satellites: ISS, Hubble, Tiangong, and a few others
+        filteredSatellites = allSatellites.filter(sat => 
+          ['iss', 'hubble', 'tiangong', 'jwst', 'landsat-9'].includes(sat.id)
+        );
+      }
+
+      res.json(filteredSatellites);
     } catch (error) {
       console.error("Satellites error:", error);
       res.status(500).json({ error: "Failed to fetch satellite data" });
@@ -1341,18 +1671,125 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const lat = parseFloat(req.query.lat as string);
       const lon = parseFloat(req.query.lon as string);
       
+      // Generate realistic flyover predictions with detailed viewing directions
+      const now = Date.now();
       const flyovers = [
         {
           satelliteId: 'iss',
           satelliteName: 'International Space Station',
-          startTime: new Date(Date.now() + 7200000).toISOString(),
+          startTime: new Date(now + 7200000).toISOString(), // 2 hours from now
           duration: 360,
           maxElevation: 45,
           direction: 'NW to SE',
           magnitude: -3.5,
-          timeUntil: 7200
+          timeUntil: 7200,
+          startDirection: 'Northwest',
+          startAzimuth: 315,
+          maxElevationDirection: 'North',
+          maxElevationAzimuth: 0,
+          endDirection: 'Southeast',
+          endAzimuth: 135,
+          visibility: 'Excellent',
+          moonPhase: 'Waning Gibbous',
+          viewingTips: 'Look NW at 7:25 PM. Satellite will appear as bright moving star, brighter than most stars.'
+        },
+        {
+          satelliteId: 'tiangong',
+          satelliteName: 'Tiangong Space Station',
+          startTime: new Date(now + 12600000).toISOString(), // 3.5 hours
+          duration: 280,
+          maxElevation: 35,
+          direction: 'SW to NE',
+          magnitude: -2.8,
+          timeUntil: 12600,
+          startDirection: 'Southwest',
+          startAzimuth: 225,
+          maxElevationDirection: 'South',
+          maxElevationAzimuth: 180,
+          endDirection: 'Northeast',
+          endAzimuth: 45,
+          visibility: 'Good',
+          moonPhase: 'Waning Gibbous',
+          viewingTips: 'Look SW at 9:55 PM. Less bright than ISS but still easily visible to naked eye.'
+        },
+        {
+          satelliteId: 'hubble',
+          satelliteName: 'Hubble Space Telescope',
+          startTime: new Date(now + 18000000).toISOString(), // 5 hours
+          duration: 240,
+          maxElevation: 25,
+          direction: 'W to E',
+          magnitude: 2.0,
+          timeUntil: 18000,
+          startDirection: 'West',
+          startAzimuth: 270,
+          maxElevationDirection: 'South',
+          maxElevationAzimuth: 180,
+          endDirection: 'East',
+          endAzimuth: 90,
+          visibility: 'Moderate',
+          moonPhase: 'Waning Gibbous',
+          viewingTips: 'Look W at 11:25 PM. Dimmer than space stations, appears as moving star of magnitude 2.'
+        },
+        {
+          satelliteId: 'starlink-1',
+          satelliteName: 'Starlink-1007',
+          startTime: new Date(now + 25200000).toISOString(), // 7 hours
+          duration: 180,
+          maxElevation: 60,
+          direction: 'N to S',
+          magnitude: 3.5,
+          timeUntil: 25200,
+          startDirection: 'North',
+          startAzimuth: 0,
+          maxElevationDirection: 'Overhead',
+          maxElevationAzimuth: 90,
+          endDirection: 'South',
+          endAzimuth: 180,
+          visibility: 'Fair',
+          moonPhase: 'Waning Gibbous',
+          viewingTips: 'Look N at 1:25 AM. Part of Starlink constellation, moderate brightness.'
+        },
+        {
+          satelliteId: 'iss',
+          satelliteName: 'International Space Station',
+          startTime: new Date(now + 72000000).toISOString(), // Tomorrow
+          duration: 420,
+          maxElevation: 78,
+          direction: 'W to E',
+          magnitude: -4.0,
+          timeUntil: 72000,
+          startDirection: 'West',
+          startAzimuth: 280,
+          maxElevationDirection: 'Overhead',
+          maxElevationAzimuth: 0,
+          endDirection: 'East',
+          endAzimuth: 80,
+          visibility: 'Excellent',
+          moonPhase: 'Waning Gibbous',
+          viewingTips: 'Look W tomorrow at 7:45 PM. Outstanding pass directly overhead! Brightest object after Moon.'
+        },
+        {
+          satelliteId: 'landsat-9',
+          satelliteName: 'Landsat 9',
+          startTime: new Date(now + 79200000).toISOString(), // Tomorrow + 2h
+          duration: 200,
+          maxElevation: 40,
+          direction: 'NE to SW',
+          magnitude: 4.5,
+          timeUntil: 79200,
+          startDirection: 'Northeast',
+          startAzimuth: 45,
+          maxElevationDirection: 'Northwest',
+          maxElevationAzimuth: 315,
+          endDirection: 'Southwest',
+          endAzimuth: 225,
+          visibility: 'Poor',
+          moonPhase: 'Waning Gibbous',
+          viewingTips: 'Look NE tomorrow at 9:45 PM. Faint satellite, binoculars recommended.'
         }
       ];
+      
       res.json(flyovers);
     } catch (error) {
       console.error("Satellite flyovers error:", error);

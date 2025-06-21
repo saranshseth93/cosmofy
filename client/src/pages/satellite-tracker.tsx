@@ -51,6 +51,15 @@ interface FlyoverNotification {
   direction: string;
   magnitude: number;
   timeUntil: number;
+  startDirection: string;
+  startAzimuth: number;
+  maxElevationDirection: string;
+  maxElevationAzimuth: number;
+  endDirection: string;
+  endAzimuth: number;
+  visibility: string;
+  moonPhase: string;
+  viewingTips: string;
 }
 
 interface UserLocation {
@@ -216,7 +225,11 @@ export default function SatelliteTrackerPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
+    <div className="min-h-screen bg-background">
+      <CosmicCursor />
+      <Navigation />
+      
+      <div className="container mx-auto px-4 py-8 space-y-8">
       {/* Header */}
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 bg-clip-text text-transparent">
@@ -287,25 +300,59 @@ export default function SatelliteTrackerPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid gap-4">
-              {flyovers.slice(0, 5).map((flyover, index) => (
-                <div key={index} className="flex justify-between items-center p-4 bg-muted/30 rounded-lg">
-                  <div>
-                    <h4 className="font-semibold">{flyover.satelliteName}</h4>
-                    <div className="text-sm text-muted-foreground space-y-1">
-                      <div>Start: {new Date(flyover.startTime).toLocaleString()}</div>
-                      <div>Duration: {formatDuration(flyover.duration)}</div>
-                      <div>Max elevation: {flyover.maxElevation}° {flyover.direction}</div>
-                      {flyover.magnitude && (
-                        <div>Brightness: magnitude {flyover.magnitude}</div>
-                      )}
+            <div className="grid gap-6">
+              {flyovers.slice(0, 6).map((flyover, index) => (
+                <div key={index} className="p-6 bg-muted/30 rounded-lg border border-blue-500/20">
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <h4 className="font-semibold text-lg">{flyover.satelliteName}</h4>
+                      <div className="flex gap-2 mt-1">
+                        <Badge variant="outline" className={`
+                          ${flyover.visibility === 'Excellent' ? 'bg-green-500/10 text-green-400' : 
+                            flyover.visibility === 'Good' ? 'bg-blue-500/10 text-blue-400' :
+                            flyover.visibility === 'Moderate' ? 'bg-yellow-500/10 text-yellow-400' :
+                            'bg-orange-500/10 text-orange-400'}
+                        `}>
+                          {flyover.visibility}
+                        </Badge>
+                        <Badge variant="outline" className="text-xs">
+                          Mag {flyover.magnitude}
+                        </Badge>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xl font-bold text-blue-500">
+                        {formatTimeUntil(flyover.timeUntil)}
+                      </div>
+                      <div className="text-xs text-muted-foreground">until start</div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-lg font-bold text-blue-500">
-                      {formatTimeUntil(flyover.timeUntil)}
+
+                  <div className="grid md:grid-cols-2 gap-4 mb-4">
+                    <div className="space-y-2">
+                      <h5 className="font-medium text-sm text-blue-400">Timing & Path</h5>
+                      <div className="text-sm text-muted-foreground space-y-1">
+                        <div><strong>Start:</strong> {new Date(flyover.startTime).toLocaleString()}</div>
+                        <div><strong>Duration:</strong> {formatDuration(flyover.duration)}</div>
+                        <div><strong>Path:</strong> {flyover.direction}</div>
+                        <div><strong>Max elevation:</strong> {flyover.maxElevation}°</div>
+                      </div>
                     </div>
-                    <div className="text-xs text-muted-foreground">until start</div>
+                    
+                    <div className="space-y-2">
+                      <h5 className="font-medium text-sm text-green-400">Viewing Directions</h5>
+                      <div className="text-sm text-muted-foreground space-y-1">
+                        <div><strong>Look:</strong> {flyover.startDirection} ({flyover.startAzimuth}°)</div>
+                        <div><strong>Highest:</strong> {flyover.maxElevationDirection} ({flyover.maxElevationAzimuth}°)</div>
+                        <div><strong>Disappears:</strong> {flyover.endDirection} ({flyover.endAzimuth}°)</div>
+                        <div><strong>Moon phase:</strong> {flyover.moonPhase}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-black/20 p-3 rounded border-l-4 border-l-blue-500">
+                    <h5 className="font-medium text-sm text-blue-400 mb-1">Viewing Tips</h5>
+                    <p className="text-sm text-muted-foreground">{flyover.viewingTips}</p>
                   </div>
                 </div>
               ))}
@@ -501,6 +548,7 @@ export default function SatelliteTrackerPage() {
           </div>
         </CardContent>
       </Card>
+    </div>
     </div>
   );
 }
