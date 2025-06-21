@@ -173,6 +173,19 @@ Changelog:
     - All comprehensive API data display including meanings, next elements, timing details
     - Advanced Panchang details with calendar, astronomical, and directional information
     - Detailed auspicious/inauspicious times with descriptions from authentic calculations
+    - Removed Hindi text and applied darker color palette for better dark theme compatibility
+    - Added comprehensive educational description about Hindu Panchang for non-Hindu users
+  * Significantly enhanced Satellite Tracker page with comprehensive data:
+    - Expanded satellite database from 1 to 20+ satellites across all categories
+    - Added Space Stations (ISS, Tiangong), Communication (Starlink, ViaSat), Earth Observation (Landsat, Sentinel), Navigation (GPS, Galileo, GLONASS), Scientific (Hubble, JWST, Kepler), Military (NROL, Cosmos), and Space Debris tracking
+    - Enhanced flyover predictions with detailed viewing directions including start/end azimuth angles
+    - Added comprehensive viewing tips with exact times, brightness information, and observing conditions
+    - Implemented visibility ratings (Excellent/Good/Moderate/Poor) with color-coded badges
+    - Added moon phase information and viewing condition details for each flyover
+    - Enhanced orbital data display with real-time position simulation and velocity tracking
+    - Added proper Navigation component and CosmicCursor for consistent site experience
+    - Comprehensive satellite information including NORAD IDs, launch dates, countries, and detailed descriptions
+    - Real-time position updates every 30 seconds with authentic orbital mechanics simulation
 ```
 
 ## User Preferences
