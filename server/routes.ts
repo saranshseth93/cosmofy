@@ -1279,14 +1279,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Hindu Panchang API endpoints
   app.get("/api/panchang", async (req, res) => {
     try {
-      const lat = parseFloat(req.query.lat as string);
-      const lon = parseFloat(req.query.lon as string);
+      const lat = req.query.lat ? parseFloat(req.query.lat as string) : null;
+      const lon = req.query.lon ? parseFloat(req.query.lon as string) : null;
       
-      if (isNaN(lat) || isNaN(lon)) {
-        return res.status(400).json({ error: "Valid latitude and longitude are required" });
-      }
+      // Use default coordinates (Mumbai, India) if none provided
+      const latitude = lat !== null && !isNaN(lat) ? lat : 19.0760;
+      const longitude = lon !== null && !isNaN(lon) ? lon : 72.8777;
       
-      const panchangData = await panchangApi.getPanchangData(lat, lon);
+      console.log(`Panchang API called with coordinates: lat=${latitude}, lon=${longitude}`);
+      
+      const panchangData = await panchangApi.getPanchangData(latitude, longitude);
       res.json(panchangData);
     } catch (error) {
       console.error("Panchang error:", error);
