@@ -72,7 +72,7 @@ interface SpaceWeatherData {
 }
 
 export default function SpaceWeatherPage() {
-  const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lon: number; city?: string } | null>(null);
 
   const { data: spaceWeather, isLoading } = useQuery<SpaceWeatherData>({
     queryKey: ['/api/space-weather'],
@@ -82,11 +82,26 @@ export default function SpaceWeatherPage() {
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            lat: position.coords.latitude,
-            lon: position.coords.longitude
-          });
+        async (position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          
+          // Get city name from coordinates
+          try {
+            const response = await fetch(`/api/location?lat=${lat}&lon=${lon}`);
+            const locationData = await response.json();
+            setUserLocation({
+              lat,
+              lon,
+              city: locationData.city || `${lat.toFixed(2)}°, ${lon.toFixed(2)}°`
+            });
+          } catch (error) {
+            setUserLocation({
+              lat,
+              lon,
+              city: `${lat.toFixed(2)}°, ${lon.toFixed(2)}°`
+            });
+          }
         }
       );
     }
@@ -116,7 +131,15 @@ export default function SpaceWeatherPage() {
   };
 
   const formatTimestamp = (timestamp: string) => {
-    return new Date(timestamp).toLocaleString();
+    const date = new Date(timestamp);
+    return date.toLocaleString(navigator.language || 'en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZoneName: 'short'
+    });
   };
 
   if (isLoading) {
@@ -142,6 +165,15 @@ export default function SpaceWeatherPage() {
       <CosmicCursor />
       <div className="min-h-screen bg-gradient-to-b from-black via-blue-950/20 to-black pt-24">
         <div className="container mx-auto px-4 py-8 space-y-8">
+          {/* Location Chip */}
+          {userLocation?.city && (
+            <div className="flex justify-center">
+              <Badge variant="outline" className="px-4 py-2 text-sm bg-blue-500/10 border-blue-500/30 text-blue-400">
+                📍 {userLocation.city}
+              </Badge>
+            </div>
+          )}
+
           {/* Header */}
           <div className="text-center space-y-4">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 bg-clip-text text-transparent">
