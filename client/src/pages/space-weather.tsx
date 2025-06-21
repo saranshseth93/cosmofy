@@ -6,6 +6,7 @@ import { AlertTriangle, Zap, Sun, Shield, Globe, Activity, Radio, Eye } from 'lu
 import { useQuery } from '@tanstack/react-query';
 import { Navigation } from '@/components/navigation';
 import { CosmicCursor } from '@/components/cosmic-cursor';
+import { Footer } from '@/components/footer';
 
 interface SpaceWeatherData {
   solarWind: {
@@ -631,6 +632,7 @@ export default function SpaceWeatherPage() {
           </Card>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

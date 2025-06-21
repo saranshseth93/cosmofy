@@ -6,6 +6,7 @@ import { Calendar, Clock, MapPin, Eye, Rocket, Moon, Sun, Star, Globe, Camera, T
 import { useQuery } from '@tanstack/react-query';
 import { Navigation } from '@/components/navigation';
 import { CosmicCursor } from '@/components/cosmic-cursor';
+import { Footer } from '@/components/footer';
 
 interface CosmicEvent {
   id: string;
@@ -452,6 +453,7 @@ export default function CosmicEventsPage() {
           </Card>
         </div>
       </div>
+      <Footer />
     </>
   );
 }
