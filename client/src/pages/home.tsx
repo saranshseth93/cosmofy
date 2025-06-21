@@ -172,7 +172,7 @@ export default function Home() {
               const Icon = feature.icon;
               return (
                 <Link key={feature.id} href={feature.href}>
-                  <Card className="glass-morphism p-6 hover:bg-white/[0.04] transition-all duration-300 cursor-pointer group">
+                  <Card className="glass-morphism p-6 hover:bg-white/[0.04] transition-all duration-300 cursor-pointer group h-full flex flex-col">
                     <div className="flex items-center mb-4">
                       <div className="p-2 rounded-lg bg-blue-500/10 border border-blue-500/20 mr-4">
                         <Icon className="h-6 w-6 text-blue-400" />
@@ -184,11 +184,11 @@ export default function Home() {
                       {feature.title}
                     </h3>
                     
-                    <p className="text-neutral-400 leading-relaxed mb-4">
+                    <p className="text-neutral-400 leading-relaxed mb-4 flex-grow">
                       {feature.description}
                     </p>
 
-                    <div className="flex items-center text-blue-400 font-medium text-sm group-hover:text-white transition-colors">
+                    <div className="flex items-center text-blue-400 font-medium text-sm group-hover:text-white transition-colors mt-auto">
                       Explore
                       <ArrowRight className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
                     </div>
