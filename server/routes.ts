@@ -1347,9 +1347,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const lat = parseFloat(req.query.lat as string);
       const lon = parseFloat(req.query.lon as string);
       
+      if (isNaN(lat) || isNaN(lon)) {
+        return res.status(400).json({ error: "Invalid coordinates" });
+      }
+      
+      const city = await geolocationService.getCityFromCoordinates(lat, lon);
+      const timezone = await geolocationService.getTimezone(lat, lon);
+      
       const locationData = {
-        city: 'Unknown Location',
-        timezone: 'UTC'
+        city: city || `${lat.toFixed(2)}°, ${lon.toFixed(2)}°`,
+        timezone: timezone || 'UTC'
       };
       res.json(locationData);
     } catch (error) {

@@ -146,6 +146,10 @@ Changelog:
   * Implemented backend API endpoints for all new features with authentic data structures
   * Added complete routing system and component architecture for seamless user experience
   * Updated navigation to use hamburger menu on both desktop and mobile with responsive grid layout (3-column desktop, 2-column tablet, 1-column mobile) to accommodate all 15 menu items cleanly
+  * Enhanced space weather dashboard with comprehensive NOAA data display including magnetic field components, radiation environment, Kp forecasts, solar flux, and detailed aurora viewing conditions
+  * Added global website header to space weather dashboard with Navigation and CosmicCursor components
+  * Implemented user location detection with suburb/city display chip at top of space weather dashboard
+  * Formatted all timestamps to user's locale without timezone suffix for cleaner date display
 ```
 
 ## User Preferences
