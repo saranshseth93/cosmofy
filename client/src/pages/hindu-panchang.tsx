@@ -8,67 +8,140 @@ import { CosmicCursor } from '@/components/cosmic-cursor';
 // Divine Hindu Background Component
 const DivineBackground = () => (
   <div className="absolute inset-0 overflow-hidden">
-    {/* Gradient Background */}
-    <div className="absolute inset-0 bg-gradient-to-br from-orange-900 via-red-900 to-purple-900 opacity-90" />
+    {/* Rich Gradient Background */}
+    <div className="absolute inset-0 bg-gradient-to-br from-orange-600 via-red-700 via-purple-800 to-indigo-900" />
     
-    {/* Sacred Geometry Pattern */}
-    <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 1000 1000">
-      <defs>
-        <pattern id="om-pattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
-          <g fill="none" stroke="url(#gold-gradient)" strokeWidth="2" opacity="0.3">
-            {/* Om Symbol */}
-            <path d="M50 100 Q 80 80, 100 100 Q 120 120, 100 140 Q 80 160, 50 140 Q 30 120, 50 100" />
-            <circle cx="110" cy="90" r="8" />
-            <path d="M100 110 Q 120 130, 140 110" />
-          </g>
-        </pattern>
-        <linearGradient id="gold-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#FFD700" />
-          <stop offset="50%" stopColor="#FFA500" />
-          <stop offset="100%" stopColor="#FF6B35" />
-        </linearGradient>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#om-pattern)" />
-    </svg>
-    
-    {/* Lotus Petals */}
-    <div className="absolute inset-0">
-      {[...Array(8)].map((_, i) => (
-        <div
-          key={i}
-          className="absolute w-32 h-32 opacity-10"
-          style={{
-            left: `${20 + (i * 15)}%`,
-            top: `${10 + (i * 10)}%`,
-            transform: `rotate(${i * 45}deg)`,
-          }}
-        >
-          <svg viewBox="0 0 100 100" className="w-full h-full">
-            <path
-              d="M50 10 Q 70 30, 50 50 Q 30 30, 50 10"
-              fill="url(#gold-gradient)"
-              opacity="0.4"
-            />
-          </svg>
-        </div>
-      ))}
+    {/* Large Central Om Symbol */}
+    <div className="absolute inset-0 flex items-center justify-center">
+      <svg className="w-96 h-96 opacity-30" viewBox="0 0 400 400">
+        <defs>
+          <linearGradient id="om-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#FFD700" />
+            <stop offset="50%" stopColor="#FF8C00" />
+            <stop offset="100%" stopColor="#FF4500" />
+          </linearGradient>
+        </defs>
+        {/* Detailed Om Symbol */}
+        <path
+          d="M100 200 C 100 150, 150 100, 200 100 C 250 100, 300 150, 300 200 C 300 250, 250 300, 200 300 C 150 300, 100 250, 100 200"
+          fill="url(#om-gold)"
+          strokeWidth="4"
+          stroke="#FFD700"
+        />
+        <circle cx="320" cy="160" r="25" fill="url(#om-gold)" />
+        <path d="M200 220 C 240 260, 280 240, 320 220" stroke="url(#om-gold)" strokeWidth="6" fill="none" />
+      </svg>
     </div>
     
-    {/* Divine Light Rays */}
-    <div className="absolute inset-0">
-      {[...Array(12)].map((_, i) => (
-        <div
-          key={i}
-          className="absolute w-1 bg-gradient-to-t from-transparent via-yellow-400 to-transparent opacity-20"
-          style={{
-            left: `${50 + Math.cos(i * 30 * Math.PI / 180) * 40}%`,
-            top: `${50 + Math.sin(i * 30 * Math.PI / 180) * 40}%`,
-            height: '30%',
-            transform: `rotate(${i * 30}deg)`,
-            transformOrigin: 'center bottom',
-          }}
-        />
-      ))}
+    {/* Corner Lotus Flowers */}
+    <div className="absolute top-10 left-10">
+      <svg className="w-32 h-32 opacity-40" viewBox="0 0 100 100">
+        <g fill="url(#lotus-gradient)">
+          {[...Array(8)].map((_, i) => (
+            <path
+              key={i}
+              d="M50 30 Q 65 45, 50 60 Q 35 45, 50 30"
+              transform={`rotate(${i * 45} 50 50)`}
+            />
+          ))}
+        </g>
+        <defs>
+          <radialGradient id="lotus-gradient">
+            <stop offset="0%" stopColor="#FFD700" />
+            <stop offset="100%" stopColor="#FF6B35" />
+          </radialGradient>
+        </defs>
+      </svg>
+    </div>
+    
+    <div className="absolute top-10 right-10">
+      <svg className="w-32 h-32 opacity-40" viewBox="0 0 100 100">
+        <g fill="url(#lotus-gradient2)">
+          {[...Array(8)].map((_, i) => (
+            <path
+              key={i}
+              d="M50 30 Q 65 45, 50 60 Q 35 45, 50 30"
+              transform={`rotate(${i * 45} 50 50)`}
+            />
+          ))}
+        </g>
+        <defs>
+          <radialGradient id="lotus-gradient2">
+            <stop offset="0%" stopColor="#FFD700" />
+            <stop offset="100%" stopColor="#FF6B35" />
+          </radialGradient>
+        </defs>
+      </svg>
+    </div>
+    
+    <div className="absolute bottom-10 left-10">
+      <svg className="w-32 h-32 opacity-40" viewBox="0 0 100 100">
+        <g fill="url(#lotus-gradient3)">
+          {[...Array(8)].map((_, i) => (
+            <path
+              key={i}
+              d="M50 30 Q 65 45, 50 60 Q 35 45, 50 30"
+              transform={`rotate(${i * 45} 50 50)`}
+            />
+          ))}
+        </g>
+        <defs>
+          <radialGradient id="lotus-gradient3">
+            <stop offset="0%" stopColor="#FFD700" />
+            <stop offset="100%" stopColor="#FF6B35" />
+          </radialGradient>
+        </defs>
+      </svg>
+    </div>
+    
+    <div className="absolute bottom-10 right-10">
+      <svg className="w-32 h-32 opacity-40" viewBox="0 0 100 100">
+        <g fill="url(#lotus-gradient4)">
+          {[...Array(8)].map((_, i) => (
+            <path
+              key={i}
+              d="M50 30 Q 65 45, 50 60 Q 35 45, 50 30"
+              transform={`rotate(${i * 45} 50 50)`}
+            />
+          ))}
+        </g>
+        <defs>
+          <radialGradient id="lotus-gradient4">
+            <stop offset="0%" stopColor="#FFD700" />
+            <stop offset="100%" stopColor="#FF6B35" />
+          </radialGradient>
+        </defs>
+      </svg>
+    </div>
+    
+    {/* Mandala Pattern */}
+    <div className="absolute inset-0 flex items-center justify-center">
+      <svg className="w-full h-full opacity-20" viewBox="0 0 800 800">
+        <defs>
+          <pattern id="mandala-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+            <circle cx="50" cy="50" r="20" fill="none" stroke="#FFD700" strokeWidth="1" opacity="0.5" />
+            <circle cx="50" cy="50" r="35" fill="none" stroke="#FF8C00" strokeWidth="1" opacity="0.3" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#mandala-pattern)" />
+      </svg>
+    </div>
+    
+    {/* Swastika Symbols in Corners */}
+    <div className="absolute top-20 left-1/4 opacity-25">
+      <svg className="w-16 h-16" viewBox="0 0 50 50">
+        <g stroke="#FFD700" strokeWidth="3" fill="none">
+          <path d="M25 10 L25 40 M10 25 L40 25 M25 10 L35 10 M40 25 L40 15 M25 40 L15 40 M10 25 L10 35" />
+        </g>
+      </svg>
+    </div>
+    
+    <div className="absolute bottom-20 right-1/4 opacity-25">
+      <svg className="w-16 h-16" viewBox="0 0 50 50">
+        <g stroke="#FFD700" strokeWidth="3" fill="none">
+          <path d="M25 10 L25 40 M10 25 L40 25 M25 10 L35 10 M40 25 L40 15 M25 40 L15 40 M10 25 L10 35" />
+        </g>
+      </svg>
     </div>
   </div>
 );
@@ -281,8 +354,8 @@ export default function HinduPanchangPage() {
           {/* Divine Hindu Background */}
           <DivineBackground />
           
-          {/* Responsive Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/80 md:bg-gradient-to-b md:from-black/70 md:via-black/60 md:to-black/70" />
+          {/* Light Overlay - allows background to show through */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/50 sm:bg-gradient-to-b sm:from-black/45 sm:via-black/35 sm:to-black/45 md:bg-gradient-to-b md:from-black/40 md:via-black/30 md:to-black/40" />
           
           {/* Content Container */}
           <div className="relative z-10">
@@ -306,8 +379,8 @@ export default function HinduPanchangPage() {
         {/* Divine Hindu Background */}
         <DivineBackground />
         
-        {/* Responsive Overlay - stronger on mobile for better readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/75 to-black/85 sm:bg-gradient-to-b sm:from-black/75 sm:via-black/65 sm:to-black/75 md:bg-gradient-to-b md:from-black/70 md:via-black/60 md:to-black/70" />
+        {/* Light Overlay - allows background to show through */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/50 sm:bg-gradient-to-b sm:from-black/45 sm:via-black/35 sm:to-black/45 md:bg-gradient-to-b md:from-black/40 md:via-black/30 md:to-black/40" />
         
         {/* Content Container */}
         <div className="relative z-10">
