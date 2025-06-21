@@ -82,6 +82,10 @@ The application tracks various space-related entities:
 - NASA API key via `NASA_API_KEY` or `VITE_NASA_API_KEY`
 - Development/production mode switching via `NODE_ENV`
 
+## Local Development
+
+A comprehensive `LOCAL_SETUP.md` guide has been created for replicating the entire Cosmofy platform locally. The guide includes complete setup instructions, environment configuration, API key requirements, and troubleshooting steps for all 15 space exploration features.
+
 ## Changelog
 
 ```
