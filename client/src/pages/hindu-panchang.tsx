@@ -5,333 +5,104 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Navigation } from '@/components/navigation';
 import { CosmicCursor } from '@/components/cosmic-cursor';
-// Divine Hindu Background Component
+// Animated Hindu Background Component
 const DivineBackground = () => (
   <div className="absolute inset-0 overflow-hidden">
-    {/* Rich Gradient Background */}
-    <div className="absolute inset-0 bg-gradient-to-br from-orange-600 via-red-700 via-purple-800 to-indigo-900" />
+    {/* Animated Gradient Background - Traditional Hindu Colors */}
+    <div className="absolute inset-0 bg-gradient-to-br from-orange-500 via-red-600 via-orange-700 to-yellow-600 animate-pulse" 
+         style={{
+           background: `
+             radial-gradient(circle at 20% 50%, rgba(255, 140, 0, 0.8) 0%, transparent 50%),
+             radial-gradient(circle at 80% 20%, rgba(255, 69, 0, 0.8) 0%, transparent 50%),
+             radial-gradient(circle at 40% 80%, rgba(255, 215, 0, 0.8) 0%, transparent 50%),
+             linear-gradient(135deg, #FF8C00 0%, #FF4500 25%, #FF6347 50%, #FFD700 75%, #FFA500 100%)
+           `,
+           animation: 'hinduGradient 8s ease-in-out infinite alternate'
+         }}
+    />
     
-    {/* Central Om Symbol - Authentic Design */}
-    <div className="absolute inset-0 flex items-center justify-center">
-      <svg className="w-64 h-64 opacity-50" viewBox="0 0 200 200">
-        <defs>
-          <linearGradient id="om-gold" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FFD700" />
-            <stop offset="50%" stopColor="#FF8C00" />
-            <stop offset="100%" stopColor="#FF4500" />
-          </linearGradient>
-        </defs>
-        {/* Om Symbol (ॐ) - Based on authentic design */}
-        <g fill="url(#om-gold)" stroke="#FFD700" strokeWidth="1.5">
-          {/* Main body curve */}
-          <path d="M50 130 Q 40 110, 55 95 Q 75 80, 95 95 Q 115 110, 105 130 Q 95 145, 75 130 Z" />
-          {/* Upper right curve */}
-          <path d="M105 130 Q 130 115, 145 135 Q 150 155, 130 160 Q 115 155, 105 140" />
-          {/* Lower extension */}
-          <path d="M50 130 Q 35 150, 55 165 Q 75 170, 85 155" fill="none" strokeWidth="4" />
-          {/* Upper curve */}
-          <path d="M55 95 Q 75 70, 95 85 Q 115 100, 105 115" fill="none" strokeWidth="3" />
-          {/* Bindu (sacred dot) */}
-          <circle cx="100" cy="60" r="4" />
-          {/* Chandrabindu (crescent moon) */}
-          <path d="M90 70 Q 100 65, 110 70" fill="none" strokeWidth="2" />
-        </g>
-      </svg>
+    {/* Secondary Animated Layer */}
+    <div className="absolute inset-0 opacity-60"
+         style={{
+           background: `
+             radial-gradient(circle at 60% 40%, rgba(255, 140, 0, 0.6) 0%, transparent 40%),
+             radial-gradient(circle at 30% 70%, rgba(255, 69, 0, 0.5) 0%, transparent 40%),
+             radial-gradient(circle at 70% 80%, rgba(255, 215, 0, 0.7) 0%, transparent 40%)
+           `,
+           animation: 'hinduWave 10s ease-in-out infinite alternate-reverse'
+         }}
+    />
+    
+    {/* Tertiary Floating Gradient Orbs */}
+    <div className="absolute inset-0 opacity-40">
+      {[...Array(5)].map((_, i) => (
+        <div
+          key={i}
+          className="absolute rounded-full"
+          style={{
+            left: `${20 + i * 15}%`,
+            top: `${15 + i * 12}%`,
+            width: `${80 + i * 20}px`,
+            height: `${80 + i * 20}px`,
+            background: `radial-gradient(circle, rgba(255, ${140 + i * 20}, 0, 0.6) 0%, transparent 70%)`,
+            animation: `hinduFloat${i} ${6 + i * 2}s ease-in-out infinite alternate`,
+            animationDelay: `${i * 0.5}s`
+          }}
+        />
+      ))}
     </div>
     
-    {/* Authentic Lotus Flowers in Corners */}
-    <div className="absolute top-8 left-8">
-      <svg className="w-24 h-24 opacity-50" viewBox="0 0 100 100">
-        <defs>
-          <radialGradient id="lotus-gradient-1" cx="50%" cy="50%">
-            <stop offset="0%" stopColor="#FFD700" />
-            <stop offset="70%" stopColor="#FF8C00" />
-            <stop offset="100%" stopColor="#FF6B35" />
-          </radialGradient>
-        </defs>
-        {/* Outer petals */}
-        <g fill="url(#lotus-gradient-1)" stroke="#FFD700" strokeWidth="0.5">
-          {[...Array(8)].map((_, i) => (
-            <ellipse
-              key={i}
-              cx="50"
-              cy="30"
-              rx="8"
-              ry="18"
-              transform={`rotate(${i * 45} 50 50)`}
-            />
-          ))}
-        </g>
-        {/* Inner petals */}
-        <g fill="url(#lotus-gradient-1)" stroke="#FFD700" strokeWidth="0.5">
-          {[...Array(8)].map((_, i) => (
-            <ellipse
-              key={i}
-              cx="50"
-              cy="38"
-              rx="5"
-              ry="12"
-              transform={`rotate(${i * 45 + 22.5} 50 50)`}
-            />
-          ))}
-        </g>
-        {/* Center */}
-        <circle cx="50" cy="50" r="6" fill="#FFD700" />
-      </svg>
-    </div>
-    
-    <div className="absolute top-8 right-8">
-      <svg className="w-24 h-24 opacity-50" viewBox="0 0 100 100">
-        <defs>
-          <radialGradient id="lotus-gradient-2" cx="50%" cy="50%">
-            <stop offset="0%" stopColor="#FFD700" />
-            <stop offset="70%" stopColor="#FF8C00" />
-            <stop offset="100%" stopColor="#FF6B35" />
-          </radialGradient>
-        </defs>
-        <g fill="url(#lotus-gradient-2)" stroke="#FFD700" strokeWidth="0.5">
-          {[...Array(8)].map((_, i) => (
-            <ellipse
-              key={i}
-              cx="50"
-              cy="30"
-              rx="8"
-              ry="18"
-              transform={`rotate(${i * 45} 50 50)`}
-            />
-          ))}
-        </g>
-        <g fill="url(#lotus-gradient-2)" stroke="#FFD700" strokeWidth="0.5">
-          {[...Array(8)].map((_, i) => (
-            <ellipse
-              key={i}
-              cx="50"
-              cy="38"
-              rx="5"
-              ry="12"
-              transform={`rotate(${i * 45 + 22.5} 50 50)`}
-            />
-          ))}
-        </g>
-        <circle cx="50" cy="50" r="6" fill="#FFD700" />
-      </svg>
-    </div>
-    
-    <div className="absolute bottom-8 left-8">
-      <svg className="w-24 h-24 opacity-50" viewBox="0 0 100 100">
-        <defs>
-          <radialGradient id="lotus-gradient-3" cx="50%" cy="50%">
-            <stop offset="0%" stopColor="#FFD700" />
-            <stop offset="70%" stopColor="#FF8C00" />
-            <stop offset="100%" stopColor="#FF6B35" />
-          </radialGradient>
-        </defs>
-        <g fill="url(#lotus-gradient-3)" stroke="#FFD700" strokeWidth="0.5">
-          {[...Array(8)].map((_, i) => (
-            <ellipse
-              key={i}
-              cx="50"
-              cy="30"
-              rx="8"
-              ry="18"
-              transform={`rotate(${i * 45} 50 50)`}
-            />
-          ))}
-        </g>
-        <g fill="url(#lotus-gradient-3)" stroke="#FFD700" strokeWidth="0.5">
-          {[...Array(8)].map((_, i) => (
-            <ellipse
-              key={i}
-              cx="50"
-              cy="38"
-              rx="5"
-              ry="12"
-              transform={`rotate(${i * 45 + 22.5} 50 50)`}
-            />
-          ))}
-        </g>
-        <circle cx="50" cy="50" r="6" fill="#FFD700" />
-      </svg>
-    </div>
-    
-    <div className="absolute bottom-8 right-8">
-      <svg className="w-24 h-24 opacity-50" viewBox="0 0 100 100">
-        <defs>
-          <radialGradient id="lotus-gradient-4" cx="50%" cy="50%">
-            <stop offset="0%" stopColor="#FFD700" />
-            <stop offset="70%" stopColor="#FF8C00" />
-            <stop offset="100%" stopColor="#FF6B35" />
-          </radialGradient>
-        </defs>
-        <g fill="url(#lotus-gradient-4)" stroke="#FFD700" strokeWidth="0.5">
-          {[...Array(8)].map((_, i) => (
-            <ellipse
-              key={i}
-              cx="50"
-              cy="30"
-              rx="8"
-              ry="18"
-              transform={`rotate(${i * 45} 50 50)`}
-            />
-          ))}
-        </g>
-        <g fill="url(#lotus-gradient-4)" stroke="#FFD700" strokeWidth="0.5">
-          {[...Array(8)].map((_, i) => (
-            <ellipse
-              key={i}
-              cx="50"
-              cy="38"
-              rx="5"
-              ry="12"
-              transform={`rotate(${i * 45 + 22.5} 50 50)`}
-            />
-          ))}
-        </g>
-        <circle cx="50" cy="50" r="6" fill="#FFD700" />
-      </svg>
-    </div>
-    
-    {/* Sacred Geometry and Rangoli Pattern */}
-    <div className="absolute inset-0 flex items-center justify-center">
-      <svg className="w-full h-full opacity-25" viewBox="0 0 800 800">
-        <defs>
-          <pattern id="rangoli-pattern" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
-            {/* Central flower */}
-            <g transform="translate(60,60)">
-              <circle cx="0" cy="0" r="15" fill="none" stroke="#FFD700" strokeWidth="1" opacity="0.6" />
-              <circle cx="0" cy="0" r="25" fill="none" stroke="#FF8C00" strokeWidth="1" opacity="0.4" />
-              {/* Petals */}
-              {[...Array(6)].map((_, i) => (
-                <circle 
-                  key={i}
-                  cx={Math.cos(i * Math.PI / 3) * 20} 
-                  cy={Math.sin(i * Math.PI / 3) * 20} 
-                  r="8" 
-                  fill="none" 
-                  stroke="#FFD700" 
-                  strokeWidth="0.8" 
-                  opacity="0.5" 
-                />
-              ))}
-            </g>
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#rangoli-pattern)" />
-      </svg>
-    </div>
-    
-    {/* Authentic Diya (Oil Lamp) Elements */}
-    <div className="absolute top-24 right-16 opacity-50">
-      <svg className="w-16 h-16" viewBox="0 0 50 50">
-        <g fill="#FFD700" stroke="#FF8C00" strokeWidth="1">
-          {/* Diya bowl */}
-          <ellipse cx="25" cy="30" rx="15" ry="8" />
-          <ellipse cx="25" cy="28" rx="12" ry="5" fill="#FF8C00" />
-          {/* Wick holder */}
-          <path d="M35 30 Q 40 27, 38 33" fill="#FFD700" />
-          {/* Flame */}
-          <ellipse cx="25" cy="20" rx="3" ry="6" fill="#FF4500" />
-          <ellipse cx="25" cy="18" rx="2" ry="4" fill="#FFD700" />
-        </g>
-      </svg>
-    </div>
-    
-    <div className="absolute bottom-24 left-16 opacity-50">
-      <svg className="w-16 h-16" viewBox="0 0 50 50">
-        <g fill="#FFD700" stroke="#FF8C00" strokeWidth="1">
-          <ellipse cx="25" cy="30" rx="15" ry="8" />
-          <ellipse cx="25" cy="28" rx="12" ry="5" fill="#FF8C00" />
-          <path d="M35 30 Q 40 27, 38 33" fill="#FFD700" />
-          <ellipse cx="25" cy="20" rx="3" ry="6" fill="#FF4500" />
-          <ellipse cx="25" cy="18" rx="2" ry="4" fill="#FFD700" />
-        </g>
-      </svg>
-    </div>
-    
-    {/* Additional Scattered Sacred Symbols */}
-    <div className="absolute top-40 left-12 opacity-35">
-      <svg className="w-12 h-12" viewBox="0 0 40 40">
-        <g stroke="#FFD700" strokeWidth="1.5" fill="none">
-          {/* Star of David */}
-          <path d="M20 8 L28 20 L20 32 L12 20 Z" />
-          <path d="M20 32 L28 20 L20 8 L12 20 Z" transform="rotate(180 20 20)" />
-        </g>
-      </svg>
-    </div>
-    
-    <div className="absolute top-60 right-12 opacity-35">
-      <svg className="w-12 h-12" viewBox="0 0 40 40">
-        <g stroke="#FFD700" strokeWidth="1.5" fill="#FFD700" opacity="0.7">
-          {/* Ankh symbol */}
-          <circle cx="20" cy="12" r="6" fill="none" />
-          <line x1="20" y1="18" x2="20" y2="32" />
-          <line x1="14" y1="24" x2="26" y2="24" />
-        </g>
-      </svg>
-    </div>
-    
-    <div className="absolute bottom-40 right-20 opacity-35">
-      <svg className="w-12 h-12" viewBox="0 0 40 40">
-        <g stroke="#FFD700" strokeWidth="1.5" fill="none">
-          {/* Dharma Wheel */}
-          <circle cx="20" cy="20" r="12" />
-          <circle cx="20" cy="20" r="3" fill="#FFD700" />
-          {[...Array(8)].map((_, i) => (
-            <line 
-              key={i}
-              x1="20" y1="20" 
-              x2={20 + Math.cos(i * Math.PI / 4) * 12} 
-              y2={20 + Math.sin(i * Math.PI / 4) * 12} 
-            />
-          ))}
-        </g>
-      </svg>
-    </div>
-    
-    <div className="absolute bottom-60 left-24 opacity-35">
-      <svg className="w-12 h-12" viewBox="0 0 40 40">
-        <g stroke="#FFD700" strokeWidth="1.5" fill="none">
-          {/* Conch Shell */}
-          <path d="M15 25 Q 10 20, 15 15 Q 20 10, 25 15 Q 30 20, 25 25 Q 20 30, 15 25" />
-          <path d="M25 15 Q 28 12, 32 16" />
-          <circle cx="20" cy="20" r="2" fill="#FFD700" />
-        </g>
-      </svg>
-    </div>
-    
-    {/* Authentic Hindu Symbols - Trishul and Swastika */}
-    <div className="absolute top-16 left-1/4 opacity-45">
-      <svg className="w-20 h-20" viewBox="0 0 60 60">
-        <g stroke="#FFD700" strokeWidth="2" fill="none">
-          {/* Trishul (Trident) - Authentic design */}
-          <line x1="30" y1="15" x2="30" y2="50" strokeWidth="3" />
-          {/* Left prong */}
-          <path d="M20 20 L30 15 L25 25" strokeWidth="2" />
-          {/* Right prong */}
-          <path d="M40 20 L30 15 L35 25" strokeWidth="2" />
-          {/* Center prong */}
-          <line x1="30" y1="15" x2="30" y2="25" strokeWidth="2" />
-          {/* Handle decoration */}
-          <circle cx="30" cy="40" r="3" strokeWidth="2" />
-          <rect x="27" y="44" width="6" height="4" strokeWidth="1.5" />
-        </g>
-      </svg>
-    </div>
-    
-    <div className="absolute bottom-16 right-1/4 opacity-45">
-      <svg className="w-20 h-20" viewBox="0 0 60 60">
-        <g stroke="#FFD700" strokeWidth="2.5" fill="none">
-          {/* Swastika - Sacred Hindu symbol */}
-          <line x1="30" y1="15" x2="30" y2="45" />
-          <line x1="15" y1="30" x2="45" y2="30" />
-          {/* Right angles */}
-          <line x1="30" y1="15" x2="40" y2="15" />
-          <line x1="45" y1="30" x2="45" y2="20" />
-          <line x1="30" y1="45" x2="20" y2="45" />
-          <line x1="15" y1="30" x2="15" y2="40" />
-        </g>
-      </svg>
-    </div>
+    <style jsx>{`
+      @keyframes hinduGradient {
+        0% {
+          background: linear-gradient(135deg, #FF8C00 0%, #FF4500 25%, #FF6347 50%, #FFD700 75%, #FFA500 100%);
+        }
+        25% {
+          background: linear-gradient(165deg, #FFA500 0%, #FF6347 25%, #FFD700 50%, #FF4500 75%, #FF8C00 100%);
+        }
+        50% {
+          background: linear-gradient(195deg, #FFD700 0%, #FF8C00 25%, #FFA500 50%, #FF6347 75%, #FF4500 100%);
+        }
+        75% {
+          background: linear-gradient(225deg, #FF4500 0%, #FFD700 25%, #FF8C00 50%, #FFA500 75%, #FF6347 100%);
+        }
+        100% {
+          background: linear-gradient(255deg, #FF6347 0%, #FFA500 25%, #FF4500 50%, #FF8C00 75%, #FFD700 100%);
+        }
+      }
+      
+      @keyframes hinduWave {
+        0% { transform: translateX(0px) translateY(0px) scale(1); }
+        33% { transform: translateX(20px) translateY(-10px) scale(1.1); }
+        66% { transform: translateX(-15px) translateY(15px) scale(0.9); }
+        100% { transform: translateX(0px) translateY(0px) scale(1); }
+      }
+      
+      @keyframes hinduFloat0 {
+        0% { transform: translateY(0px) scale(1); opacity: 0.4; }
+        100% { transform: translateY(-20px) scale(1.2); opacity: 0.7; }
+      }
+      
+      @keyframes hinduFloat1 {
+        0% { transform: translateY(0px) scale(1); opacity: 0.3; }
+        100% { transform: translateY(-30px) scale(1.1); opacity: 0.6; }
+      }
+      
+      @keyframes hinduFloat2 {
+        0% { transform: translateY(0px) scale(1); opacity: 0.5; }
+        100% { transform: translateY(-25px) scale(1.3); opacity: 0.8; }
+      }
+      
+      @keyframes hinduFloat3 {
+        0% { transform: translateY(0px) scale(1); opacity: 0.4; }
+        100% { transform: translateY(-35px) scale(1.15); opacity: 0.7; }
+      }
+      
+      @keyframes hinduFloat4 {
+        0% { transform: translateY(0px) scale(1); opacity: 0.3; }
+        100% { transform: translateY(-40px) scale(1.25); opacity: 0.6; }
+      }
+    `}</style>
   </div>
 );
 
