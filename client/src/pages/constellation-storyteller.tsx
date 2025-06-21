@@ -171,11 +171,22 @@ export default function ConstellationStorytellerPage() {
     return Math.abs(declination) <= maxVisibleDeclination;
   };
 
-  const filteredConstellations = constellations?.filter(constellation =>
-    constellation.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    constellation.mythology.culture.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    constellation.mythology.meaning.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredConstellations = constellations
+    ?.filter(constellation => {
+      if (!searchQuery.trim()) return true; // Show all when search is empty
+      return constellation.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+             constellation.mythology.culture.toLowerCase().includes(searchQuery.toLowerCase()) ||
+             constellation.mythology.meaning.toLowerCase().includes(searchQuery.toLowerCase());
+    })
+    ?.sort((a, b) => {
+      // Sort by visibility first (visible ones first), then alphabetically
+      const aVisible = isConstellationVisible(a);
+      const bVisible = isConstellationVisible(b);
+      
+      if (aVisible && !bVisible) return -1;
+      if (!aVisible && bVisible) return 1;
+      return a.name.localeCompare(b.name);
+    });
 
   const selectedConstellationData = constellations?.find(c => c.id === selectedConstellation);
 

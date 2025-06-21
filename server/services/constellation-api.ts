@@ -855,44 +855,6 @@ export class ConstellationApiService {
         starMapUrl: this.getStarMapImage('taurus')
       },
       {
-        id: 'ursa-major',
-        name: 'Ursa Major',
-        latinName: 'Ursa Major',
-        abbreviation: 'UMa',
-        mythology: {
-          culture: 'Greek',
-          story: 'Ursa Major represents Callisto, a nymph who was transformed into a bear by Zeus\' jealous wife Hera. When Callisto\'s son Arcas nearly killed her while hunting, Zeus placed both mother and son in the sky as Ursa Major and Ursa Minor.',
-          meaning: 'The Great Bear',
-          characters: ['Callisto', 'Zeus', 'Hera', 'Arcas']
-        },
-        astronomy: {
-          brightestStar: 'Alioth',
-          starCount: 125,
-          area: 1280,
-          visibility: {
-            hemisphere: 'northern',
-            bestMonth: 'April',
-            declination: 60
-          }
-        },
-        coordinates: { ra: 11.0, dec: 50 },
-        stars: [
-          { name: 'Alioth', magnitude: 1.77, type: 'White Subgiant', distance: 81 },
-          { name: 'Dubhe', magnitude: 1.79, type: 'Orange Giant', distance: 124 },
-          { name: 'Alkaid', magnitude: 1.86, type: 'Blue Main Sequence', distance: 104 },
-          { name: 'Mizar', magnitude: 2.04, type: 'White Main Sequence', distance: 83 },
-          { name: 'Merak', magnitude: 2.37, type: 'White Main Sequence', distance: 79 },
-          { name: 'Phecda', magnitude: 2.44, type: 'White Main Sequence', distance: 84 }
-        ],
-        deepSkyObjects: [
-          { name: 'Whirlpool Galaxy (M51)', type: 'Spiral Galaxy', magnitude: 8.4, description: 'Interacting spiral galaxy 23 million light-years away' },
-          { name: 'Pinwheel Galaxy (M101)', type: 'Spiral Galaxy', magnitude: 7.9, description: 'Face-on spiral galaxy 21 million light-years away' },
-          { name: 'Owl Nebula (M97)', type: 'Planetary Nebula', magnitude: 9.9, description: 'Planetary nebula resembling an owl\'s face' }
-        ],
-        imageUrl: 'https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=400&h=300&fit=crop',
-        starMapUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop'
-      },
-      {
         id: 'cassiopeia',
         name: 'Cassiopeia',
         latinName: 'Cassiopeia',
@@ -1071,7 +1033,7 @@ export class ConstellationApiService {
       const isNorthern = lat > 0;
       
       const allConstellations = this.getConstellationData();
-      const visibleConstellations = allConstellations
+      const visibleConstellationIds = allConstellations
         .filter(constellation => {
           // Filter based on hemisphere
           if (constellation.astronomy.visibility.hemisphere === 'northern' && !isNorthern) return false;
@@ -1083,6 +1045,14 @@ export class ConstellationApiService {
           return monthDiff <= 2 || monthDiff >= 10; // Visible 2 months before/after best month
         })
         .map(c => c.id);
+
+      // Remove duplicates manually for TypeScript compatibility
+      const visibleConstellations: string[] = [];
+      for (const id of visibleConstellationIds) {
+        if (!visibleConstellations.includes(id)) {
+          visibleConstellations.push(id);
+        }
+      }
 
       // Calculate moon phase (simplified)
       const moonPhases = ['New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous', 'Full Moon', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent'];
