@@ -33,6 +33,9 @@ node generate-env.js
 ### 3. Install Dependencies
 ```bash
 npm install
+
+# For Windows users - install cross-platform environment support
+npm install --save-dev cross-env
 ```
 
 ### 4. Add Your NASA API Key
@@ -41,10 +44,20 @@ npm install
 # Get free key at: https://api.nasa.gov/
 ```
 
-### 5. Start Development
+### 5. Fix Windows npm Scripts (One-time setup)
 ```bash
+# Update package.json scripts for Windows compatibility
+node scripts-update.js
+```
+
+### 6. Start Development
+```bash
+# Now works on Windows, Mac, and Linux
 npm run dev
 # Access at: http://localhost:5000
+
+# Alternative if you encounter issues:
+npx cross-env NODE_ENV=development tsx server/index.ts
 ```
 
 ## What is SESSION_SECRET?
