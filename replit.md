@@ -150,6 +150,9 @@ Changelog:
   * Added global website header to space weather dashboard with Navigation and CosmicCursor components
   * Implemented user location detection with suburb/city display chip at top of space weather dashboard
   * Formatted all timestamps to user's locale without timezone suffix for cleaner date display
+  * Enhanced Cosmic Event Calendar with comprehensive data display, mission objectives, event significance, and images
+  * Enhanced Constellation Storyteller with detailed mythology, astronomical data, star information, and authentic constellation images
+  * Fixed hamburger menu scrolling on smaller devices by adding max-height and overflow scroll functionality
 ```
 
 ## User Preferences

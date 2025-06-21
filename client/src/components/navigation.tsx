@@ -65,7 +65,7 @@ export function Navigation() {
 
         {/* Navigation Menu (Both Desktop and Mobile) */}
         {isOpen && (
-          <div className="absolute top-full left-0 w-full bg-neutral-900/95 backdrop-blur-xl border-b border-neutral-700/50 shadow-xl">
+          <div className="absolute top-full left-0 w-full bg-neutral-900/95 backdrop-blur-xl border-b border-neutral-700/50 shadow-xl max-h-[80vh] overflow-y-auto">
             <div className="container mx-auto px-4 sm:px-6 py-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                 {navItems.map((item) => {
