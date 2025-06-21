@@ -5,12 +5,14 @@ This guide will help you replicate the Cosmofy space exploration app on your loc
 ## Prerequisites
 
 ### Required Software
+
 - **Node.js**: Version 20.18.1 or higher
 - **npm**: Version 10+ (comes with Node.js)
 - **PostgreSQL**: Version 16+ (optional, uses in-memory storage by default)
 - **Git**: For version control
 
 ### Get Required API Keys
+
 1. **NASA API Key** (Required):
    - Visit: https://api.nasa.gov/
    - Sign up for a free account
@@ -20,6 +22,7 @@ This guide will help you replicate the Cosmofy space exploration app on your loc
 ## Project Setup
 
 ### 1. Clone or Download Project Files
+
 ```bash
 # If using git (recommended)
 git clone <your-repository-url>
@@ -32,6 +35,7 @@ cd cosmofy
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 # Install all project dependencies
 npm install
@@ -47,6 +51,7 @@ npm install
 ```
 
 ### 3. Environment Configuration
+
 Generate secure environment configuration automatically:
 
 ```bash
@@ -60,6 +65,7 @@ node generate-env.js
 ```
 
 Then edit `.env` to add your NASA API key:
+
 ```env
 # Replace DEMO_KEY with your actual NASA API key
 NASA_API_KEY=your_actual_nasa_api_key_from_api_nasa_gov
@@ -67,12 +73,14 @@ VITE_NASA_API_KEY=your_actual_nasa_api_key_from_api_nasa_gov
 ```
 
 **What is SESSION_SECRET?**
+
 - Encrypts user session data stored in cookies
-- Prevents session tampering and security attacks  
+- Prevents session tampering and security attacks
 - Auto-generated as 128-character secure random string
 - Must be kept secret and never shared publicly
 
 ### 4. Database Setup (Optional)
+
 The app uses in-memory storage by default. For persistent data:
 
 ```bash
@@ -93,6 +101,7 @@ createdb cosmofy
 ```
 
 ### 5. Development Server
+
 ```bash
 # Start the development server
 npm run dev
@@ -130,6 +139,7 @@ cosmofy/
 Once running locally, you'll have access to all 15 space exploration features:
 
 ### Core Features
+
 - **APOD Gallery**: NASA Astronomy Picture of the Day
 - **ISS Tracker**: Real-time International Space Station tracking
 - **Solar System**: Interactive planetary explorer
@@ -138,14 +148,14 @@ Once running locally, you'll have access to all 15 space exploration features:
 - **Space Missions**: Active mission monitoring
 
 ### Advanced Features
+
 - **Space Weather**: Real-time solar activity dashboard
-- **Virtual Telescope**: Live feeds from space telescopes
 - **Cosmic Events**: Upcoming astronomical events calendar
-- **Mars Rover Live**: Real photos from Mars rovers
 - **Constellation Guide**: Interactive star pattern stories
 - **Satellite Tracker**: Real-time satellite position tracking
 
 ### Additional Features
+
 - **Space News**: Latest space exploration news
 - **Space Sounds**: Authentic cosmic audio library
 - **Hindu Panchang**: Traditional Vedic calendar
@@ -172,12 +182,13 @@ npm run lint
 ## API Integration
 
 ### NASA APIs Used
+
 - **APOD API**: Daily astronomy images
 - **ISS Location API**: Real-time station tracking
 - **Near Earth Object API**: Asteroid data
-- **Mars Rover Photos API**: Latest Mars images
 
 ### External APIs
+
 - **Spaceflight News API**: Latest space news
 - **NOAA Space Weather API**: Solar activity data
 - **Geolocation APIs**: User location services
@@ -187,11 +198,13 @@ npm run lint
 ### Common Issues
 
 1. **NASA API Key Not Working**
+
    - Verify your API key at https://api.nasa.gov/
    - Check both `NASA_API_KEY` and `VITE_NASA_API_KEY` in .env
    - Restart development server after changing .env
 
 2. **Port Already in Use**
+
    ```bash
    # Find process using port 5000
    lsof -ti:5000
@@ -200,6 +213,7 @@ npm run lint
    ```
 
 3. **Dependencies Not Installing**
+
    ```bash
    # Clear npm cache and reinstall
    npm cache clean --force
@@ -223,7 +237,9 @@ npm run lint
 ## Deployment Options
 
 ### Local Network Access
+
 To access from other devices on your network:
+
 ```bash
 # Find your local IP
 ipconfig getifaddr en0  # macOS
@@ -233,6 +249,7 @@ ip route get 1.1.1.1 | awk '{print $7}'  # Linux
 ```
 
 ### Production Deployment
+
 - **Vercel**: `npm run build` then deploy dist folder
 - **Netlify**: Connect GitHub repo for automatic deploys
 - **Docker**: Use provided Dockerfile for containerization

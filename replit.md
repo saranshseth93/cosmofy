@@ -7,13 +7,16 @@ Cosmofy is a modern web application that provides an immersive space exploration
 ## System Architecture
 
 ### Full-Stack TypeScript Application
+
 - **Frontend**: React with TypeScript, styled using Tailwind CSS and shadcn/ui components
 - **Backend**: Express.js server with TypeScript
 - **Database**: PostgreSQL with Drizzle ORM for data persistence
 - **Build System**: Vite for frontend bundling, esbuild for server compilation
 
 ### Architectural Pattern
+
 The application follows a monorepo structure with shared TypeScript types and schemas:
+
 - `client/` - React frontend application
 - `server/` - Express.js backend API
 - `shared/` - Common types, schemas, and utilities
@@ -21,6 +24,7 @@ The application follows a monorepo structure with shared TypeScript types and sc
 ## Key Components
 
 ### Frontend Architecture
+
 - **Component Library**: Custom UI components built on Radix UI primitives
 - **State Management**: TanStack Query for server state management
 - **Animations**: GSAP for advanced animations and scroll-triggered effects
@@ -28,13 +32,16 @@ The application follows a monorepo structure with shared TypeScript types and sc
 - **Styling**: Tailwind CSS with custom cosmic color palette and design system
 
 ### Backend Architecture
+
 - **API Layer**: RESTful API endpoints organized in `/api` routes
 - **Data Access**: Drizzle ORM with PostgreSQL for structured data storage
 - **External Integrations**: NASA API services for real-time space data
 - **Storage Abstraction**: Interface-based storage layer supporting both in-memory and database implementations
 
 ### Database Schema
+
 The application tracks various space-related entities:
+
 - **APOD Images**: Astronomy Picture of the Day data
 - **ISS Tracking**: Position, passes, and crew information
 - **Aurora Forecasts**: Geomagnetic activity and visibility predictions
@@ -52,12 +59,14 @@ The application tracks various space-related entities:
 ## External Dependencies
 
 ### NASA and Space APIs
+
 - NASA APOD API for daily astronomy images
 - ISS tracking APIs for position and pass predictions
 - NOAA Space Weather API for aurora forecasting
 - NASA NEO API for asteroid tracking
 
 ### Key Libraries
+
 - **UI Framework**: React 18 with TypeScript
 - **Database**: PostgreSQL with Drizzle ORM and Neon serverless
 - **Animations**: GSAP with ScrollTrigger plugin
@@ -68,16 +77,19 @@ The application tracks various space-related entities:
 ## Deployment Strategy
 
 ### Development Environment
+
 - Replit integration with hot reload via Vite dev server
 - PostgreSQL database provisioned through Replit modules
 - Environment variables for API keys and database URLs
 
 ### Production Build
+
 - Frontend: Vite builds optimized static assets
 - Backend: esbuild compiles TypeScript server code
 - Deployment: Configured for Replit's autoscale deployment target
 
 ### Environment Configuration
+
 - Database connection via `DATABASE_URL` environment variable
 - NASA API key via `NASA_API_KEY` or `VITE_NASA_API_KEY`
 - Development/production mode switching via `NODE_ENV`
@@ -141,9 +153,7 @@ Changelog:
   * Implemented proper volume controls, category filtering, and comprehensive scientific background information
   * Added 6 major new features as requested:
     - Space Weather Dashboard: Real-time solar activity, geomagnetic storms, and aurora forecasts
-    - Virtual Telescope: Live feeds from Hubble, James Webb, and ground observatories with observation schedules
     - Cosmic Event Calendar: Upcoming eclipses, meteor showers, planetary alignments, and rocket launches with countdown timers
-    - Mars Rover Live Feed: Real photos and updates from Perseverance and Curiosity with interactive mission data
     - Constellation Storyteller: Interactive star patterns with mythology, navigation based on user location and time
     - Satellite Tracker: Real-time satellite positions, space stations, debris with flyover notifications
   * Enhanced navigation system with 15 total pages covering comprehensive space exploration topics
@@ -201,7 +211,7 @@ Changelog:
     - Added all 15 space exploration features with proper navigation links
     - Comprehensive descriptions and statistics for each feature
     - Organized feature cards with appropriate icons and direct routing
-    - Updated to include all new pages: Space Weather, Virtual Telescope, Cosmic Events, Mars Rover, Constellation Guide, Satellite Tracker, and Hindu Panchang
+    - Updated to include all new pages: Space Weather, Cosmic Events, Mars Rover, Constellation Guide, Satellite Tracker, and Hindu Panchang
     - Maintains consistent design and user experience across entire application
 ```
 

@@ -13,9 +13,7 @@ import Missions from "@/pages/missions";
 import SpaceNews from "@/pages/space-news";
 import SpaceSounds from "@/pages/space-sounds";
 import SpaceWeather from "@/pages/space-weather";
-import VirtualTelescope from "@/pages/virtual-telescope";
 import CosmicEvents from "@/pages/cosmic-events";
-import MarsRover from "@/pages/mars-rover";
 import ConstellationStoryteller from "@/pages/constellation-storyteller";
 import SatelliteTracker from "@/pages/satellite-tracker";
 import HinduPanchang from "@/pages/hindu-panchang";
@@ -34,11 +32,9 @@ function Router() {
       <Route path="/news" component={SpaceNews} />
       <Route path="/sounds" component={SpaceSounds} />
       <Route path="/space-weather" component={SpaceWeather} />
-      <Route path="/telescope" component={VirtualTelescope} />
       <Route path="/events" component={CosmicEvents} />
-      <Route path="/mars-rover" component={MarsRover} />
       <Route path="/constellations" component={ConstellationStoryteller} />
-      <Route path="/satellite-tracker" component={SatelliteTracker} />
+      <Route path="/satellites" component={SatelliteTracker} />
       <Route path="/panchang" component={HinduPanchang} />
       <Route component={NotFound} />
     </Switch>
