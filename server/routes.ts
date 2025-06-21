@@ -1361,20 +1361,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Location service endpoint
   app.get("/api/location", async (req, res) => {
     try {
-      const lat = parseFloat(req.query.lat as string);
-      const lon = parseFloat(req.query.lon as string);
+      const lat = req.query.lat ? parseFloat(req.query.lat as string) : null;
+      const lon = req.query.lon ? parseFloat(req.query.lon as string) : null;
       
-      if (isNaN(lat) || isNaN(lon)) {
-        return res.status(400).json({ error: "Invalid coordinates" });
+      // If no coordinates provided, use default location (Mumbai, India)
+      if (lat === null || lon === null || isNaN(lat) || isNaN(lon)) {
+        const defaultLat = 19.0760;
+        const defaultLon = 72.8777;
+        
+        const city = await geolocationService.getCityFromCoordinates(defaultLat, defaultLon);
+        const timezone = await geolocationService.getTimezone(defaultLat, defaultLon);
+        
+        const locationData = {
+          latitude: defaultLat,
+          longitude: defaultLon,
+          city: city || "Mumbai, India",
+          timezone: timezone || 'Asia/Kolkata'
+        };
+        
+        console.log("Using default location:", locationData);
+        return res.json(locationData);
+      }
+      
+      // Validate provided coordinates
+      if (lat < -90 || lat > 90 || lon < -180 || lon > 180) {
+        return res.status(400).json({ error: "Invalid coordinate ranges" });
       }
       
       const city = await geolocationService.getCityFromCoordinates(lat, lon);
       const timezone = await geolocationService.getTimezone(lat, lon);
       
       const locationData = {
+        latitude: lat,
+        longitude: lon,
         city: city || `${lat.toFixed(2)}°, ${lon.toFixed(2)}°`,
         timezone: timezone || 'UTC'
       };
+      
+      console.log("Using provided coordinates:", locationData);
       res.json(locationData);
     } catch (error) {
       console.error("Location error:", error);
