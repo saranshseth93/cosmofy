@@ -11,9 +11,9 @@ const DivineBackground = () => (
     {/* Rich Gradient Background */}
     <div className="absolute inset-0 bg-gradient-to-br from-orange-600 via-red-700 via-purple-800 to-indigo-900" />
     
-    {/* Authentic Om Symbol */}
+    {/* Central Om Symbol - Authentic Design */}
     <div className="absolute inset-0 flex items-center justify-center">
-      <svg className="w-80 h-80 opacity-40" viewBox="0 0 300 300">
+      <svg className="w-64 h-64 opacity-50" viewBox="0 0 200 200">
         <defs>
           <linearGradient id="om-gold" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#FFD700" />
@@ -21,20 +21,20 @@ const DivineBackground = () => (
             <stop offset="100%" stopColor="#FF4500" />
           </linearGradient>
         </defs>
-        {/* Authentic Om Symbol - ॐ */}
-        <g fill="url(#om-gold)" stroke="#FFD700" strokeWidth="2">
-          {/* Main curve */}
-          <path d="M80 180 Q 60 140, 90 120 Q 120 100, 150 120 Q 180 140, 160 180 Q 140 200, 110 180 Z" />
+        {/* Om Symbol (ॐ) - Based on authentic design */}
+        <g fill="url(#om-gold)" stroke="#FFD700" strokeWidth="1.5">
+          {/* Main body curve */}
+          <path d="M50 130 Q 40 110, 55 95 Q 75 80, 95 95 Q 115 110, 105 130 Q 95 145, 75 130 Z" />
+          {/* Upper right curve */}
+          <path d="M105 130 Q 130 115, 145 135 Q 150 155, 130 160 Q 115 155, 105 140" />
+          {/* Lower extension */}
+          <path d="M50 130 Q 35 150, 55 165 Q 75 170, 85 155" fill="none" strokeWidth="4" />
           {/* Upper curve */}
-          <path d="M90 120 Q 110 80, 140 100 Q 170 120, 150 140" fill="none" strokeWidth="8" />
-          {/* Lower part */}
-          <path d="M80 180 Q 60 220, 100 240 Q 140 250, 160 220" fill="none" strokeWidth="8" />
-          {/* Right curve */}
-          <path d="M160 180 Q 200 160, 220 190 Q 230 220, 200 230 Q 180 220, 160 200" />
-          {/* Bindu (dot) */}
-          <circle cx="150" cy="70" r="8" />
-          {/* Chandrabindu (crescent) */}
-          <path d="M130 85 Q 150 75, 170 85" fill="none" strokeWidth="4" />
+          <path d="M55 95 Q 75 70, 95 85 Q 115 100, 105 115" fill="none" strokeWidth="3" />
+          {/* Bindu (sacred dot) */}
+          <circle cx="100" cy="60" r="4" />
+          {/* Chandrabindu (crescent moon) */}
+          <path d="M90 70 Q 100 65, 110 70" fill="none" strokeWidth="2" />
         </g>
       </svg>
     </div>
@@ -220,50 +220,115 @@ const DivineBackground = () => (
       </svg>
     </div>
     
-    {/* Diya (Oil Lamp) Elements */}
-    <div className="absolute top-32 right-20 opacity-40">
-      <svg className="w-12 h-12" viewBox="0 0 40 40">
-        <g fill="#FFD700" stroke="#FF8C00" strokeWidth="0.5">
-          <ellipse cx="20" cy="25" rx="12" ry="6" />
-          <ellipse cx="20" cy="23" rx="10" ry="4" fill="#FF8C00" />
-          <path d="M28 25 Q 32 22, 30 28" fill="#FFD700" />
-          <ellipse cx="20" cy="18" rx="2" ry="4" fill="#FF4500" />
-        </g>
-      </svg>
-    </div>
-    
-    <div className="absolute bottom-32 left-20 opacity-40">
-      <svg className="w-12 h-12" viewBox="0 0 40 40">
-        <g fill="#FFD700" stroke="#FF8C00" strokeWidth="0.5">
-          <ellipse cx="20" cy="25" rx="12" ry="6" />
-          <ellipse cx="20" cy="23" rx="10" ry="4" fill="#FF8C00" />
-          <path d="M28 25 Q 32 22, 30 28" fill="#FFD700" />
-          <ellipse cx="20" cy="18" rx="2" ry="4" fill="#FF4500" />
-        </g>
-      </svg>
-    </div>
-    
-    {/* Sacred Trishul and Kalash Symbols */}
-    <div className="absolute top-20 left-1/4 opacity-35">
+    {/* Authentic Diya (Oil Lamp) Elements */}
+    <div className="absolute top-24 right-16 opacity-50">
       <svg className="w-16 h-16" viewBox="0 0 50 50">
-        <g stroke="#FFD700" strokeWidth="2.5" fill="#FFD700">
-          {/* Trishul (Trident) */}
-          <line x1="25" y1="10" x2="25" y2="45" />
-          <path d="M15 15 L25 10 L35 15" fill="none" />
-          <path d="M20 12 L25 8 L30 12" fill="none" />
-          <circle cx="25" cy="38" r="3" fill="none" />
+        <g fill="#FFD700" stroke="#FF8C00" strokeWidth="1">
+          {/* Diya bowl */}
+          <ellipse cx="25" cy="30" rx="15" ry="8" />
+          <ellipse cx="25" cy="28" rx="12" ry="5" fill="#FF8C00" />
+          {/* Wick holder */}
+          <path d="M35 30 Q 40 27, 38 33" fill="#FFD700" />
+          {/* Flame */}
+          <ellipse cx="25" cy="20" rx="3" ry="6" fill="#FF4500" />
+          <ellipse cx="25" cy="18" rx="2" ry="4" fill="#FFD700" />
         </g>
       </svg>
     </div>
     
-    <div className="absolute bottom-20 right-1/4 opacity-35">
+    <div className="absolute bottom-24 left-16 opacity-50">
       <svg className="w-16 h-16" viewBox="0 0 50 50">
-        <g stroke="#FFD700" strokeWidth="2" fill="#FFD700">
-          {/* Kalash (Sacred Pot) */}
-          <path d="M18 35 Q 18 30, 25 30 Q 32 30, 32 35 L32 42 Q 32 45, 25 45 Q 18 45, 18 42 Z" />
-          <rect x="22" y="25" width="6" height="5" />
-          <path d="M15 20 Q 20 15, 25 18 Q 30 15, 35 20" fill="none" />
-          <circle cx="25" cy="22" r="2" />
+        <g fill="#FFD700" stroke="#FF8C00" strokeWidth="1">
+          <ellipse cx="25" cy="30" rx="15" ry="8" />
+          <ellipse cx="25" cy="28" rx="12" ry="5" fill="#FF8C00" />
+          <path d="M35 30 Q 40 27, 38 33" fill="#FFD700" />
+          <ellipse cx="25" cy="20" rx="3" ry="6" fill="#FF4500" />
+          <ellipse cx="25" cy="18" rx="2" ry="4" fill="#FFD700" />
+        </g>
+      </svg>
+    </div>
+    
+    {/* Additional Scattered Sacred Symbols */}
+    <div className="absolute top-40 left-12 opacity-35">
+      <svg className="w-12 h-12" viewBox="0 0 40 40">
+        <g stroke="#FFD700" strokeWidth="1.5" fill="none">
+          {/* Star of David */}
+          <path d="M20 8 L28 20 L20 32 L12 20 Z" />
+          <path d="M20 32 L28 20 L20 8 L12 20 Z" transform="rotate(180 20 20)" />
+        </g>
+      </svg>
+    </div>
+    
+    <div className="absolute top-60 right-12 opacity-35">
+      <svg className="w-12 h-12" viewBox="0 0 40 40">
+        <g stroke="#FFD700" strokeWidth="1.5" fill="#FFD700" opacity="0.7">
+          {/* Ankh symbol */}
+          <circle cx="20" cy="12" r="6" fill="none" />
+          <line x1="20" y1="18" x2="20" y2="32" />
+          <line x1="14" y1="24" x2="26" y2="24" />
+        </g>
+      </svg>
+    </div>
+    
+    <div className="absolute bottom-40 right-20 opacity-35">
+      <svg className="w-12 h-12" viewBox="0 0 40 40">
+        <g stroke="#FFD700" strokeWidth="1.5" fill="none">
+          {/* Dharma Wheel */}
+          <circle cx="20" cy="20" r="12" />
+          <circle cx="20" cy="20" r="3" fill="#FFD700" />
+          {[...Array(8)].map((_, i) => (
+            <line 
+              key={i}
+              x1="20" y1="20" 
+              x2={20 + Math.cos(i * Math.PI / 4) * 12} 
+              y2={20 + Math.sin(i * Math.PI / 4) * 12} 
+            />
+          ))}
+        </g>
+      </svg>
+    </div>
+    
+    <div className="absolute bottom-60 left-24 opacity-35">
+      <svg className="w-12 h-12" viewBox="0 0 40 40">
+        <g stroke="#FFD700" strokeWidth="1.5" fill="none">
+          {/* Conch Shell */}
+          <path d="M15 25 Q 10 20, 15 15 Q 20 10, 25 15 Q 30 20, 25 25 Q 20 30, 15 25" />
+          <path d="M25 15 Q 28 12, 32 16" />
+          <circle cx="20" cy="20" r="2" fill="#FFD700" />
+        </g>
+      </svg>
+    </div>
+    
+    {/* Authentic Hindu Symbols - Trishul and Swastika */}
+    <div className="absolute top-16 left-1/4 opacity-45">
+      <svg className="w-20 h-20" viewBox="0 0 60 60">
+        <g stroke="#FFD700" strokeWidth="2" fill="none">
+          {/* Trishul (Trident) - Authentic design */}
+          <line x1="30" y1="15" x2="30" y2="50" strokeWidth="3" />
+          {/* Left prong */}
+          <path d="M20 20 L30 15 L25 25" strokeWidth="2" />
+          {/* Right prong */}
+          <path d="M40 20 L30 15 L35 25" strokeWidth="2" />
+          {/* Center prong */}
+          <line x1="30" y1="15" x2="30" y2="25" strokeWidth="2" />
+          {/* Handle decoration */}
+          <circle cx="30" cy="40" r="3" strokeWidth="2" />
+          <rect x="27" y="44" width="6" height="4" strokeWidth="1.5" />
+        </g>
+      </svg>
+    </div>
+    
+    <div className="absolute bottom-16 right-1/4 opacity-45">
+      <svg className="w-20 h-20" viewBox="0 0 60 60">
+        <g stroke="#FFD700" strokeWidth="2.5" fill="none">
+          {/* Swastika - Sacred Hindu symbol */}
+          <line x1="30" y1="15" x2="30" y2="45" />
+          <line x1="15" y1="30" x2="45" y2="30" />
+          {/* Right angles */}
+          <line x1="30" y1="15" x2="40" y2="15" />
+          <line x1="45" y1="30" x2="45" y2="20" />
+          <line x1="30" y1="45" x2="20" y2="45" />
+          <line x1="15" y1="30" x2="15" y2="40" />
         </g>
       </svg>
     </div>
