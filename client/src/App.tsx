@@ -33,7 +33,10 @@ function Router() {
       <Route path="/sounds" component={SpaceSounds} />
       <Route path="/space-weather" component={SpaceWeather} />
       <Route path="/events" component={CosmicEvents} />
-      <Route path="/constellations" component={ConstellationStoryteller} />
+      <Route
+        path="/constellation-storyteller"
+        component={ConstellationStoryteller}
+      />
       <Route path="/satellites" component={SatelliteTracker} />
       <Route path="/panchang" component={HinduPanchang} />
       <Route component={NotFound} />

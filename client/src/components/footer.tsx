@@ -33,7 +33,7 @@ export function Footer() {
     discover: [
       { label: "Space Weather", href: "/space-weather" },
       { label: "Cosmic Events", href: "/events" },
-      { label: "Constellation Guide", href: "/constellations" },
+      { label: "Constellation Guide", href: "/constellation-storyteller" },
       { label: "Satellite Tracker", href: "/satellite-tracker" },
       { label: "Hindu Panchang", href: "/panchang" },
     ],

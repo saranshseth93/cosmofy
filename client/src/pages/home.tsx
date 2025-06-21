@@ -142,7 +142,7 @@ export default function Home() {
       description:
         "Interactive star patterns with mythology, visibility tracking based on your location and time.",
       icon: Star,
-      href: "/constellations",
+      href: "/constellation-storyteller",
       stats: "88 Constellations",
     },
     {

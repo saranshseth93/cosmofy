@@ -38,7 +38,7 @@ export function Navigation() {
     { href: "/sounds", label: "Space Sounds", icon: Volume2 },
     { href: "/space-weather", label: "Space Weather", icon: CloudRain },
     { href: "/events", label: "Cosmic Events", icon: Calendar },
-    { href: "/constellations", label: "Constellations", icon: Star },
+    { href: "/constellation-storyteller", label: "Constellations", icon: Star },
     { href: "/satellites", label: "Satellite Tracker", icon: Satellite },
     { href: "/panchang", label: "Hindu Panchang", icon: Calendar },
   ];

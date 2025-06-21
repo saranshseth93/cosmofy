@@ -1,13 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { MapPin, Clock, Eye, Star, Moon, Sun, Search, Globe, Telescope, Calendar, BookOpen, Navigation as NavIcon, Compass } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
-import { Navigation } from '@/components/navigation';
-import { CosmicCursor } from '@/components/cosmic-cursor';
-import { Footer } from '@/components/footer';
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  MapPin,
+  Clock,
+  Eye,
+  Star,
+  Moon,
+  Sun,
+  Search,
+  Globe,
+  Telescope,
+  Calendar,
+  BookOpen,
+  Navigation as NavIcon,
+  Compass,
+} from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Navigation } from "@/components/navigation";
+import { CosmicCursor } from "@/components/cosmic-cursor";
+import { Footer } from "@/components/footer";
 
 interface Constellation {
   id: string;
@@ -25,7 +45,7 @@ interface Constellation {
     starCount: number;
     area: number;
     visibility: {
-      hemisphere: 'northern' | 'southern' | 'both';
+      hemisphere: "northern" | "southern" | "both";
       bestMonth: string;
       declination: number;
     };
@@ -67,44 +87,56 @@ interface SkyConditions {
 
 export default function ConstellationStorytellerPage() {
   const [userLocation, setUserLocation] = useState<LocationData | null>(null);
-  const [selectedConstellation, setSelectedConstellation] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedConstellation, setSelectedConstellation] = useState<
+    string | null
+  >(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
 
-  const { data: constellations, isLoading: constellationsLoading } = useQuery<Constellation[]>({
-    queryKey: ['/api/constellations'],
+  const { data: constellations, isLoading: constellationsLoading } = useQuery<
+    Constellation[]
+  >({
+    queryKey: ["/api/constellations"],
   });
 
-  const { data: skyConditions, isLoading: skyLoading } = useQuery<SkyConditions>({
-    queryKey: ['/api/sky-conditions', userLocation?.latitude, userLocation?.longitude],
-    queryFn: () => 
-      fetch(`/api/sky-conditions?lat=${userLocation?.latitude}&lon=${userLocation?.longitude}`)
-        .then(res => res.json()),
-    enabled: !!userLocation?.latitude && !!userLocation?.longitude,
-    refetchInterval: 3600000, // 1 hour
-  });
+  const { data: skyConditions, isLoading: skyLoading } =
+    useQuery<SkyConditions>({
+      queryKey: [
+        "/api/sky-conditions",
+        userLocation?.latitude,
+        userLocation?.longitude,
+      ],
+      queryFn: () =>
+        fetch(
+          `/api/sky-conditions?lat=${userLocation?.latitude}&lon=${userLocation?.longitude}`
+        ).then((res) => res.json()),
+      enabled: !!userLocation?.latitude && !!userLocation?.longitude,
+      refetchInterval: 3600000, // 1 hour
+    });
 
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords;
-          
+
           try {
-            const response = await fetch(`/api/location?lat=${latitude}&lon=${longitude}`);
+            const response = await fetch(
+              `/api/location?lat=${latitude}&lon=${longitude}`
+            );
             const locationData = await response.json();
             setUserLocation({
               latitude,
               longitude,
-              timezone: locationData.timezone || 'UTC',
-              city: locationData.city || 'Unknown Location'
+              timezone: locationData.timezone || "UTC",
+              city: locationData.city || "Unknown Location",
             });
           } catch (error) {
             setUserLocation({
               latitude,
               longitude,
-              timezone: 'UTC',
-              city: `${latitude.toFixed(2)}°, ${longitude.toFixed(2)}°`
+              timezone: "UTC",
+              city: `${latitude.toFixed(2)}°, ${longitude.toFixed(2)}°`,
             });
           }
         },
@@ -112,8 +144,8 @@ export default function ConstellationStorytellerPage() {
           setUserLocation({
             latitude: 0,
             longitude: 0,
-            timezone: 'UTC',
-            city: 'Default Location'
+            timezone: "UTC",
+            city: "Default Location",
           });
         }
       );
@@ -127,69 +159,83 @@ export default function ConstellationStorytellerPage() {
   }, []);
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString(navigator.language || 'en-US', {
-      hour: '2-digit',
-      minute: '2-digit'
+    return date.toLocaleTimeString(navigator.language || "en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   const formatMonth = (monthName: string) => {
     const date = new Date(`${monthName} 1, 2024`);
-    return date.toLocaleDateString(navigator.language || 'en-US', {
-      month: 'long'
+    return date.toLocaleDateString(navigator.language || "en-US", {
+      month: "long",
     });
   };
 
   const getHemisphereIcon = (hemisphere: string) => {
     switch (hemisphere) {
-      case 'northern': return <NavIcon className="h-4 w-4 text-blue-500" />;
-      case 'southern': return <Compass className="h-4 w-4 text-orange-500" />;
-      case 'both': return <Globe className="h-4 w-4 text-green-500" />;
-      default: return <Globe className="h-4 w-4 text-gray-500" />;
+      case "northern":
+        return <NavIcon className="h-4 w-4 text-blue-500" />;
+      case "southern":
+        return <Compass className="h-4 w-4 text-orange-500" />;
+      case "both":
+        return <Globe className="h-4 w-4 text-green-500" />;
+      default:
+        return <Globe className="h-4 w-4 text-gray-500" />;
     }
   };
 
   const getMoonPhaseIcon = (phase: string) => {
-    if (phase.includes('New')) return <Moon className="h-5 w-5 text-gray-600" />;
-    if (phase.includes('Full')) return <Sun className="h-5 w-5 text-yellow-400" />;
+    if (phase.includes("New"))
+      return <Moon className="h-5 w-5 text-gray-600" />;
+    if (phase.includes("Full"))
+      return <Sun className="h-5 w-5 text-yellow-400" />;
     return <Moon className="h-5 w-5 text-blue-400" />;
   };
 
   const isConstellationVisible = (constellation: Constellation) => {
     if (!userLocation) return true;
-    
+
     const userLat = userLocation.latitude;
     const hemisphere = constellation.astronomy.visibility.hemisphere;
-    
+
     // Check hemisphere visibility
-    if (hemisphere === 'northern' && userLat < -30) return false;
-    if (hemisphere === 'southern' && userLat > 30) return false;
-    
+    if (hemisphere === "northern" && userLat < -30) return false;
+    if (hemisphere === "southern" && userLat > 30) return false;
+
     // Check declination visibility
     const declination = constellation.astronomy.visibility.declination;
     const maxVisibleDeclination = 90 - Math.abs(userLat);
-    
+
     return Math.abs(declination) <= maxVisibleDeclination;
   };
 
   const filteredConstellations = constellations
-    ?.filter(constellation => {
+    ?.filter((constellation) => {
       if (!searchQuery.trim()) return true; // Show all when search is empty
-      return constellation.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-             constellation.mythology.culture.toLowerCase().includes(searchQuery.toLowerCase()) ||
-             constellation.mythology.meaning.toLowerCase().includes(searchQuery.toLowerCase());
+      return (
+        constellation.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        constellation.mythology.culture
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()) ||
+        constellation.mythology.meaning
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
+      );
     })
     ?.sort((a, b) => {
       // Sort by visibility first (visible ones first), then alphabetically
       const aVisible = isConstellationVisible(a);
       const bVisible = isConstellationVisible(b);
-      
+
       if (aVisible && !bVisible) return -1;
       if (!aVisible && bVisible) return 1;
       return a.name.localeCompare(b.name);
     });
 
-  const selectedConstellationData = constellations?.find(c => c.id === selectedConstellation);
+  const selectedConstellationData = constellations?.find(
+    (c) => c.id === selectedConstellation
+  );
 
   if (constellationsLoading) {
     return (
@@ -200,7 +246,9 @@ export default function ConstellationStorytellerPage() {
           <div className="container mx-auto px-4 py-8">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-              <p className="mt-4 text-muted-foreground">Loading constellation data...</p>
+              <p className="mt-4 text-muted-foreground">
+                Loading constellation data...
+              </p>
             </div>
           </div>
         </div>
@@ -217,7 +265,10 @@ export default function ConstellationStorytellerPage() {
           {/* Location Chip */}
           {userLocation?.city && (
             <div className="flex justify-center">
-              <Badge variant="outline" className="px-4 py-2 text-sm bg-indigo-500/10 border-indigo-500/30 text-indigo-400">
+              <Badge
+                variant="outline"
+                className="px-4 py-2 text-sm bg-indigo-500/10 border-indigo-500/30 text-indigo-400"
+              >
                 📍 {userLocation.city}
               </Badge>
             </div>
@@ -229,12 +280,13 @@ export default function ConstellationStorytellerPage() {
               Constellation Storyteller
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Interactive star patterns with mythology, navigation based on your location and time
+              Interactive star patterns with mythology, navigation based on your
+              location and time
             </p>
           </div>
 
           {/* Sky Conditions Cards */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 gap-6">
             <Card className="border-l-4 border-l-blue-500">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg">
@@ -247,7 +299,7 @@ export default function ConstellationStorytellerPage() {
                   {formatTime(currentTime)}
                 </div>
                 <div className="text-xs text-muted-foreground mt-1">
-                  {userLocation?.timezone || 'Local Time'}
+                  {userLocation?.timezone || "Local Time"}
                 </div>
               </CardContent>
             </Card>
@@ -255,13 +307,17 @@ export default function ConstellationStorytellerPage() {
             <Card className="border-l-4 border-l-yellow-500">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg">
-                  {skyConditions ? getMoonPhaseIcon(skyConditions.moonPhase) : <Moon className="h-5 w-5 text-yellow-500" />}
+                  {skyConditions ? (
+                    getMoonPhaseIcon(skyConditions.moonPhase)
+                  ) : (
+                    <Moon className="h-5 w-5 text-yellow-500" />
+                  )}
                   Moon Phase
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-lg font-bold text-yellow-500">
-                  {skyConditions?.moonPhase || 'Loading...'}
+                  {skyConditions?.moonPhase || "Loading..."}
                 </div>
                 <div className="text-xs text-muted-foreground mt-1">
                   {skyConditions?.moonIllumination}% illuminated
@@ -278,7 +334,7 @@ export default function ConstellationStorytellerPage() {
               </CardHeader>
               <CardContent>
                 <div className="text-lg font-bold text-green-500">
-                  {skyConditions?.bestViewingTime || 'Loading...'}
+                  {skyConditions?.bestViewingTime || "Loading..."}
                 </div>
                 <div className="text-xs text-muted-foreground mt-1">
                   Optimal stargazing window
@@ -295,7 +351,7 @@ export default function ConstellationStorytellerPage() {
               </CardHeader>
               <CardContent>
                 <div className="text-lg font-bold text-purple-500">
-                  {skyConditions?.conditions || 'Loading...'}
+                  {skyConditions?.conditions || "Loading..."}
                 </div>
                 <div className="text-xs text-muted-foreground mt-1">
                   Current weather conditions
@@ -319,7 +375,9 @@ export default function ConstellationStorytellerPage() {
               <CardContent>
                 <div className="flex flex-wrap gap-2">
                   {skyConditions.visibleConstellations.map((id) => {
-                    const constellation = constellations?.find(c => c.id === id);
+                    const constellation = constellations?.find(
+                      (c) => c.id === id
+                    );
                     return constellation ? (
                       <Badge
                         key={id}
@@ -342,7 +400,10 @@ export default function ConstellationStorytellerPage() {
               <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4" />
                 <span>Observation Location:</span>
-                <Badge variant="outline" className="bg-background/50 text-foreground">
+                <Badge
+                  variant="outline"
+                  className="bg-background/50 text-foreground"
+                >
                   {userLocation.city}
                 </Badge>
               </div>
@@ -361,19 +422,27 @@ export default function ConstellationStorytellerPage() {
           </div>
 
           {/* Constellation List */}
-          <div className="grid gap-6">
+          <div className="grid grid-cols-2 gap-6">
             {filteredConstellations?.map((constellation) => (
               <Card key={constellation.id} className="overflow-hidden">
-                <div className="flex flex-col lg:flex-row gap-6">
+                <div className="flex flex-col gap-6">
                   {/* Constellation Image */}
-                  <div className="relative lg:w-80 flex-shrink-0">
+                  <div className="relative flex-shrink-0">
                     <img
                       src={constellation.imageUrl}
                       alt={`${constellation.name} constellation`}
-                      className="w-full h-64 lg:h-80 object-cover"
+                      className="w-full h-64 lg:h-80 object-contain"
+                      style={{ backgroundColor: "#040404" }}
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = `https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=300&fit=crop&q=80`;
+                      }}
                     />
                     <div className="absolute top-2 left-2 space-y-2">
-                      <Badge variant="outline" className="bg-black/50 text-white border-white/30">
+                      <Badge
+                        variant="outline"
+                        className="bg-black/50 text-white border-white/30"
+                      >
                         {constellation.abbreviation}
                       </Badge>
                       <div>
@@ -394,12 +463,20 @@ export default function ConstellationStorytellerPage() {
                   <div className="flex-1 p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div>
-                        <h3 className="text-2xl font-bold">{constellation.name}</h3>
-                        <p className="text-muted-foreground">{constellation.latinName}</p>
+                        <h3 className="text-2xl font-bold">
+                          {constellation.name}
+                        </h3>
+                        <p className="text-muted-foreground">
+                          {constellation.latinName}
+                        </p>
                       </div>
                       <div className="flex items-center gap-2">
-                        {getHemisphereIcon(constellation.astronomy.visibility.hemisphere)}
-                        <span className="text-sm capitalize">{constellation.astronomy.visibility.hemisphere}</span>
+                        {getHemisphereIcon(
+                          constellation.astronomy.visibility.hemisphere
+                        )}
+                        <span className="text-sm capitalize">
+                          {constellation.astronomy.visibility.hemisphere}
+                        </span>
                       </div>
                     </div>
 
@@ -411,13 +488,20 @@ export default function ConstellationStorytellerPage() {
                           Mythology ({constellation.mythology.culture})
                         </h4>
                         <p className="text-sm text-muted-foreground mb-2">
-                          <strong>Meaning:</strong> {constellation.mythology.meaning}
+                          <strong>Meaning:</strong>{" "}
+                          {constellation.mythology.meaning}
                         </p>
-                        <p className="text-sm leading-relaxed">{constellation.mythology.story}</p>
+                        <p className="text-sm leading-relaxed">
+                          {constellation.mythology.story}
+                        </p>
                         {constellation.mythology.characters.length > 0 && (
                           <div className="mt-2">
-                            <span className="text-xs font-medium text-muted-foreground">Characters: </span>
-                            <span className="text-xs">{constellation.mythology.characters.join(', ')}</span>
+                            <span className="text-xs font-medium text-muted-foreground">
+                              Characters:{" "}
+                            </span>
+                            <span className="text-xs">
+                              {constellation.mythology.characters.join(", ")}
+                            </span>
                           </div>
                         )}
                       </div>
@@ -430,12 +514,33 @@ export default function ConstellationStorytellerPage() {
                             Astronomical Data
                           </h4>
                           <div className="space-y-1 text-sm">
-                            <div><strong>Brightest Star:</strong> {constellation.astronomy.brightestStar}</div>
-                            <div><strong>Star Count:</strong> {constellation.astronomy.starCount}</div>
-                            <div><strong>Area:</strong> {constellation.astronomy.area} sq degrees</div>
-                            <div><strong>Best Month:</strong> {formatMonth(constellation.astronomy.visibility.bestMonth)}</div>
-                            <div><strong>Declination:</strong> {constellation.astronomy.visibility.declination}°</div>
-                            <div><strong>Coordinates:</strong> RA {constellation.coordinates.ra}h, Dec {constellation.coordinates.dec}°</div>
+                            <div>
+                              <strong>Brightest Star:</strong>{" "}
+                              {constellation.astronomy.brightestStar}
+                            </div>
+                            <div>
+                              <strong>Star Count:</strong>{" "}
+                              {constellation.astronomy.starCount}
+                            </div>
+                            <div>
+                              <strong>Area:</strong>{" "}
+                              {constellation.astronomy.area} sq degrees
+                            </div>
+                            <div>
+                              <strong>Best Month:</strong>{" "}
+                              {formatMonth(
+                                constellation.astronomy.visibility.bestMonth
+                              )}
+                            </div>
+                            <div>
+                              <strong>Declination:</strong>{" "}
+                              {constellation.astronomy.visibility.declination}°
+                            </div>
+                            <div>
+                              <strong>Coordinates:</strong> RA{" "}
+                              {constellation.coordinates.ra}h, Dec{" "}
+                              {constellation.coordinates.dec}°
+                            </div>
                           </div>
                         </div>
 
@@ -447,7 +552,8 @@ export default function ConstellationStorytellerPage() {
                           <div className="space-y-1 text-sm">
                             {constellation.stars.map((star, index) => (
                               <div key={`${constellation.id}-star-${index}`}>
-                                <strong>{star.name}</strong> - {star.type} (Mag {star.magnitude}, {star.distance} ly)
+                                <strong>{star.name}</strong> - {star.type} (Mag{" "}
+                                {star.magnitude}, {star.distance} ly)
                               </div>
                             ))}
                           </div>
@@ -462,12 +568,17 @@ export default function ConstellationStorytellerPage() {
                             Deep Sky Objects
                           </h4>
                           <div className="space-y-1 text-sm">
-                            {constellation.deepSkyObjects.map((object, index) => (
-                              <div key={index}>
-                                <strong>{object.name}</strong> - {object.type} (Mag {object.magnitude})
-                                <p className="text-muted-foreground text-xs">{object.description}</p>
-                              </div>
-                            ))}
+                            {constellation.deepSkyObjects.map(
+                              (object, index) => (
+                                <div key={index}>
+                                  <strong>{object.name}</strong> - {object.type}{" "}
+                                  (Mag {object.magnitude})
+                                  <p className="text-muted-foreground text-xs">
+                                    {object.description}
+                                  </p>
+                                </div>
+                              )
+                            )}
                           </div>
                         </div>
                       )}
@@ -477,9 +588,18 @@ export default function ConstellationStorytellerPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setSelectedConstellation(constellation.id === selectedConstellation ? null : constellation.id)}
+                          onClick={() =>
+                            setSelectedConstellation(
+                              constellation.id === selectedConstellation
+                                ? null
+                                : constellation.id
+                            )
+                          }
                         >
-                          {constellation.id === selectedConstellation ? 'Hide' : 'Show'} Star Map
+                          {constellation.id === selectedConstellation
+                            ? "Hide"
+                            : "Show"}{" "}
+                          Star Map
                         </Button>
                       </div>
 
@@ -492,7 +612,8 @@ export default function ConstellationStorytellerPage() {
                             className="w-full h-64 object-cover rounded-lg border"
                           />
                           <p className="text-xs text-muted-foreground mt-2">
-                            Star map showing the pattern and major stars of {constellation.name}
+                            Star map showing the pattern and major stars of{" "}
+                            {constellation.name}
                           </p>
                         </div>
                       )}
@@ -516,17 +637,22 @@ export default function ConstellationStorytellerPage() {
                 <div className="grid md:grid-cols-3 gap-4 text-sm">
                   <div>
                     <div className="font-medium">Location</div>
-                    <div className="text-muted-foreground">{userLocation.city}</div>
+                    <div className="text-muted-foreground">
+                      {userLocation.city}
+                    </div>
                   </div>
                   <div>
                     <div className="font-medium">Coordinates</div>
                     <div className="text-muted-foreground">
-                      {userLocation.latitude.toFixed(4)}°, {userLocation.longitude.toFixed(4)}°
+                      {userLocation.latitude.toFixed(4)}°,{" "}
+                      {userLocation.longitude.toFixed(4)}°
                     </div>
                   </div>
                   <div>
                     <div className="font-medium">Timezone</div>
-                    <div className="text-muted-foreground">{userLocation.timezone}</div>
+                    <div className="text-muted-foreground">
+                      {userLocation.timezone}
+                    </div>
                   </div>
                 </div>
               </CardContent>
