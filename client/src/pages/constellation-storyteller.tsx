@@ -76,7 +76,10 @@ export default function ConstellationStorytellerPage() {
 
   const { data: skyConditions, isLoading: skyLoading } = useQuery<SkyConditions>({
     queryKey: ['/api/sky-conditions', userLocation?.latitude, userLocation?.longitude],
-    enabled: !!userLocation,
+    queryFn: () => 
+      fetch(`/api/sky-conditions?lat=${userLocation?.latitude}&lon=${userLocation?.longitude}`)
+        .then(res => res.json()),
+    enabled: !!userLocation?.latitude && !!userLocation?.longitude,
     refetchInterval: 3600000, // 1 hour
   });
 
@@ -418,7 +421,7 @@ export default function ConstellationStorytellerPage() {
                           </h4>
                           <div className="space-y-1 text-sm">
                             {constellation.stars.map((star, index) => (
-                              <div key={index}>
+                              <div key={`${constellation.id}-star-${index}`}>
                                 <strong>{star.name}</strong> - {star.type} (Mag {star.magnitude}, {star.distance} ly)
                               </div>
                             ))}
