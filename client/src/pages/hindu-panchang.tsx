@@ -151,12 +151,14 @@ export default function HinduPanchangPage() {
         });
         
         console.log("User location obtained:", position.coords.latitude, position.coords.longitude);
-        setUserCoords({
+        const coords = {
           lat: position.coords.latitude,
           lon: position.coords.longitude
-        });
+        };
+        setUserCoords(coords);
         setLocationStatus('granted');
         setLocationError(null);
+        console.log("Setting user coordinates for API calls:", coords);
         
       } catch (error: any) {
         console.log("Geolocation error:", error.message);
@@ -173,6 +175,7 @@ export default function HinduPanchangPage() {
   // Get location details using coordinates
   const { data: locationData } = useQuery<LocationData>({
     queryKey: ['/api/location', userCoords?.lat, userCoords?.lon],
+    queryFn: () => fetch(`/api/location?lat=${userCoords?.lat}&lon=${userCoords?.lon}`).then(res => res.json()),
     enabled: !!userCoords,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
@@ -180,6 +183,7 @@ export default function HinduPanchangPage() {
   // Get Panchang data using coordinates
   const { data: panchangData, isLoading: panchangLoading } = useQuery<PanchangData>({
     queryKey: ['/api/panchang', userCoords?.lat, userCoords?.lon],
+    queryFn: () => fetch(`/api/panchang?lat=${userCoords?.lat}&lon=${userCoords?.lon}`).then(res => res.json()),
     enabled: !!userCoords,
     staleTime: 60 * 60 * 1000, // 1 hour
   });

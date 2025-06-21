@@ -169,6 +169,10 @@ Changelog:
     - Moon Rashi information with elements and planetary lords
     - Weekly vrats and festivals based on current date
     - Comprehensive backend API service with astronomical calculations
+    - Enhanced with user geolocation detection for location-specific calculations
+    - All comprehensive API data display including meanings, next elements, timing details
+    - Advanced Panchang details with calendar, astronomical, and directional information
+    - Detailed auspicious/inauspicious times with descriptions from authentic calculations
 ```
 
 ## User Preferences
