@@ -153,6 +153,12 @@ Changelog:
   * Enhanced Cosmic Event Calendar with comprehensive data display, mission objectives, event significance, and images
   * Enhanced Constellation Storyteller with detailed mythology, astronomical data, star information, and authentic constellation images
   * Fixed hamburger menu scrolling on smaller devices by adding max-height and overflow scroll functionality
+  * Expanded constellation database from 6 to 26 authentic constellations based on IAU standards
+  * Added visibility chips showing whether each constellation is visible from user's location
+  * Implemented proper sky conditions API with location-based calculations
+  * Changed constellation card layout to horizontal row format (image left, data right)
+  * Fixed sky conditions coordinate passing and authentication API errors
+  * Added comprehensive constellation data including all zodiac constellations and major northern/southern hemisphere patterns
 ```
 
 ## User Preferences

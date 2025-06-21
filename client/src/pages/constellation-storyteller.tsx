@@ -339,13 +339,13 @@ export default function ConstellationStorytellerPage() {
           <div className="grid gap-6">
             {filteredConstellations?.map((constellation) => (
               <Card key={constellation.id} className="overflow-hidden">
-                <div className="grid md:grid-cols-3 gap-6">
+                <div className="flex flex-col lg:flex-row gap-6">
                   {/* Constellation Image */}
-                  <div className="relative">
+                  <div className="relative lg:w-80 flex-shrink-0">
                     <img
                       src={constellation.imageUrl}
                       alt={`${constellation.name} constellation`}
-                      className="w-full h-48 md:h-full object-cover"
+                      className="w-full h-64 lg:h-80 object-cover"
                     />
                     <div className="absolute top-2 left-2 space-y-2">
                       <Badge variant="outline" className="bg-black/50 text-white border-white/30">
@@ -366,7 +366,7 @@ export default function ConstellationStorytellerPage() {
                   </div>
 
                   {/* Constellation Info */}
-                  <div className="md:col-span-2 p-6">
+                  <div className="flex-1 p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div>
                         <h3 className="text-2xl font-bold">{constellation.name}</h3>
