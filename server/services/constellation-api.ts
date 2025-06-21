@@ -854,61 +854,15 @@ export class ConstellationApiService {
         imageUrl: this.getConstellationImage('taurus'),
         starMapUrl: this.getStarMapImage('taurus')
       },
-      {
-        id: 'cassiopeia',
-        name: 'Cassiopeia',
-        latinName: 'Cassiopeia',
-        abbreviation: 'Cas',
-        mythology: {
-          culture: 'Greek',
-          story: 'Cassiopeia was the vain queen of Aethiopia who boasted that she and her daughter Andromeda were more beautiful than the sea nymphs. As punishment, Poseidon sent the sea monster Cetus to ravage the coast. Cassiopeia was placed in the sky, condemned to circle the pole head-first for half of each rotation.',
-          meaning: 'The Vain Queen',
-          characters: ['Cassiopeia', 'Andromeda', 'Perseus', 'Cetus', 'Poseidon']
-        },
-        astronomy: {
-          brightestStar: 'Gamma Cassiopeiae',
-          starCount: 90,
-          area: 598,
-          visibility: {
-            hemisphere: 'northern',
-            bestMonth: 'November',
-            declination: 60
-          }
-        },
-        coordinates: { ra: 1.0, dec: 60 },
-        stars: [
-          { name: 'Gamma Cassiopeiae', magnitude: 2.47, type: 'Blue Giant', distance: 550 },
-          { name: 'Alpha Cassiopeiae (Schedar)', magnitude: 2.23, type: 'Orange Giant', distance: 228 },
-          { name: 'Beta Cassiopeiae (Caph)', magnitude: 2.27, type: 'White Giant', distance: 54 },
-          { name: 'Delta Cassiopeiae (Ruchbah)', magnitude: 2.68, type: 'White Giant', distance: 99 },
-          { name: 'Epsilon Cassiopeiae (Segin)', magnitude: 3.38, type: 'Blue Giant', distance: 442 }
-        ],
-        deepSkyObjects: [
-          { name: 'Heart Nebula (IC 1805)', type: 'Emission Nebula', magnitude: 6.5, description: 'Heart-shaped emission nebula 7,500 light-years away' },
-          { name: 'Soul Nebula (IC 1848)', type: 'Emission Nebula', magnitude: 6.5, description: 'Large emission nebula adjacent to Heart Nebula' },
-          { name: 'Pacman Nebula (NGC 281)', type: 'Emission Nebula', magnitude: 7.4, description: 'Nebula resembling the Pac-Man character' }
-        ],
-        imageUrl: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=400&h=300&fit=crop',
-        starMapUrl: 'https://images.unsplash.com/photo-1516849841032-87cbac4d88f7?w=400&h=300&fit=crop'
-      },
 
     ];
   }
 
   async getConstellations(): Promise<ConstellationData[]> {
-    const cacheKey = 'constellations';
-    const cached = this.cache.get(cacheKey);
-    
-    if (cached && (Date.now() - cached.timestamp) < this.CACHE_DURATION) {
-      console.log('Returning cached constellation data');
-      return cached.data;
-    }
-
     try {
       // Use authentic astronomical data from IAU standards
       const constellations = this.getConstellationData();
       
-      this.cache.set(cacheKey, { data: constellations, timestamp: Date.now() });
       console.log(`Loaded ${constellations.length} constellations from astronomical database`);
       
       return constellations;
