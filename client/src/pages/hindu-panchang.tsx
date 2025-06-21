@@ -912,6 +912,7 @@ export default function HinduPanchangPage() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

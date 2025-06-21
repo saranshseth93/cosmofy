@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Navigation } from '@/components/navigation';
+import { Footer } from '@/components/footer';
 import { Info, Zap, Thermometer, Calendar, Users } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -481,6 +482,7 @@ export default function SolarSystem() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
