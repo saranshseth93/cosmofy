@@ -1251,6 +1251,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
           starMapUrl: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=400'
         }
       ];
+      
+      console.log("=== CONSTELLATION API DATA DUMP ===");
+      console.log("Total Constellations:", constellations.length);
+      constellations.forEach((constellation, index) => {
+        console.log(`\nConstellation ${index + 1}:`);
+        console.log("ID:", constellation.id);
+        console.log("Name:", constellation.name);
+        console.log("Latin Name:", constellation.latinName);
+        console.log("Abbreviation:", constellation.abbreviation);
+        console.log("Culture:", constellation.mythology.culture);
+        console.log("Meaning:", constellation.mythology.meaning);
+        console.log("Story:", constellation.mythology.story);
+        console.log("Characters:", constellation.mythology.characters.join(', '));
+        console.log("Brightest Star:", constellation.astronomy.brightestStar);
+        console.log("Star Count:", constellation.astronomy.starCount);
+        console.log("Area (sq degrees):", constellation.astronomy.area);
+        console.log("Hemisphere:", constellation.astronomy.visibility.hemisphere);
+        console.log("Best Month:", constellation.astronomy.visibility.bestMonth);
+        console.log("Declination:", constellation.astronomy.visibility.declination);
+        console.log("Coordinates - RA:", constellation.coordinates.ra, "Dec:", constellation.coordinates.dec);
+        console.log("Stars:");
+        constellation.stars.forEach(star => {
+          console.log(`  - ${star.name}: ${star.type}, Magnitude ${star.magnitude}, ${star.distance} ly`);
+        });
+        console.log("Deep Sky Objects:");
+        constellation.deepSkyObjects.forEach(obj => {
+          console.log(`  - ${obj.name}: ${obj.type}, Magnitude ${obj.magnitude} - ${obj.description}`);
+        });
+        console.log("Image URL:", constellation.imageUrl);
+        console.log("Star Map URL:", constellation.starMapUrl);
+      });
+      console.log("Full Data Object:", JSON.stringify(constellations, null, 2));
+      console.log("=== END CONSTELLATION DUMP ===");
+      
       res.json(constellations);
     } catch (error) {
       console.error("Constellations error:", error);
