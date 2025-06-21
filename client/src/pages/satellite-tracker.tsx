@@ -16,6 +16,7 @@ import {
   RefreshCw,
   Search,
 } from "lucide-react";
+import { Footer } from "@/components/footer";
 
 interface SatelliteData {
   id: string;
@@ -378,215 +379,225 @@ export default function SatelliteTracker() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      <CosmicCursor />
-      <Navigation />
+    <>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+        <CosmicCursor />
+        <Navigation />
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-            Satellite Tracker
-          </h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Track real-time satellite positions and predict flyover times for
-            your location
-          </p>
-        </div>
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+              Satellite Tracker
+            </h1>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Track real-time satellite positions and predict flyover times for
+              your location
+            </p>
+          </div>
 
-        {/* Location Display */}
-        <div className="flex justify-center items-center gap-4 mb-8">
-          {locationLoading && (
-            <Badge variant="secondary" className="bg-blue-500/20 text-blue-300">
-              <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-              Detecting location...
-            </Badge>
-          )}
-          {userLocation && (
-            <Badge
-              variant="secondary"
-              className="bg-green-500/20 text-green-300"
+          {/* Location Display */}
+          <div className="flex justify-center items-center gap-4 mb-8">
+            {locationLoading && (
+              <Badge
+                variant="secondary"
+                className="bg-blue-500/20 text-blue-300"
+              >
+                <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                Detecting location...
+              </Badge>
+            )}
+            {userLocation && (
+              <Badge
+                variant="secondary"
+                className="bg-green-500/20 text-green-300"
+              >
+                <MapPin className="w-4 h-4 mr-2" />
+                {userLocation.city}
+              </Badge>
+            )}
+            {!locationLoading && !userLocation && (
+              <Badge
+                variant="secondary"
+                className="bg-orange-500/20 text-orange-300"
+              >
+                <MapPin className="w-4 h-4 mr-2" />
+                Location not detected
+              </Badge>
+            )}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleRefreshLocation}
+              className="text-xs"
             >
-              <MapPin className="w-4 h-4 mr-2" />
-              {userLocation.city}
-            </Badge>
-          )}
-          {!locationLoading && !userLocation && (
-            <Badge
-              variant="secondary"
-              className="bg-orange-500/20 text-orange-300"
-            >
-              <MapPin className="w-4 h-4 mr-2" />
-              Location not detected
-            </Badge>
-          )}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleRefreshLocation}
-            className="text-xs"
-          >
-            <RefreshCw className="w-3 h-3 mr-1" />
-            Refresh Location
-          </Button>
-        </div>
+              <RefreshCw className="w-3 h-3 mr-1" />
+              Refresh Location
+            </Button>
+          </div>
 
-        {/* Search and Filters */}
-        <div className="mb-8">
-          <div className="flex flex-col md:flex-row gap-4 mb-6">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <Input
-                placeholder="Search satellites..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-white/10 border-white/20 text-white placeholder-gray-400"
-              />
+          {/* Search and Filters */}
+          <div className="mb-8">
+            <div className="flex flex-col md:flex-row gap-4 mb-6">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Input
+                  placeholder="Search satellites..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 bg-white/10 border-white/20 text-white placeholder-gray-400"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              {categories.map((category) => (
+                <Button
+                  key={category.id}
+                  variant={
+                    selectedCategory === category.id ? "default" : "outline"
+                  }
+                  size="sm"
+                  onClick={() => setSelectedCategory(category.id)}
+                  className={`text-xs ${
+                    selectedCategory === category.id
+                      ? "bg-purple-600 hover:bg-purple-700"
+                      : "bg-white/10 hover:bg-white/20 border-white/20"
+                  }`}
+                >
+                  {category.name} ({category.count})
+                </Button>
+              ))}
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2">
-            {categories.map((category) => (
-              <Button
-                key={category.id}
-                variant={
-                  selectedCategory === category.id ? "default" : "outline"
-                }
-                size="sm"
-                onClick={() => setSelectedCategory(category.id)}
-                className={`text-xs ${
-                  selectedCategory === category.id
-                    ? "bg-purple-600 hover:bg-purple-700"
-                    : "bg-white/10 hover:bg-white/20 border-white/20"
-                }`}
+          {/* Satellites Grid */}
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
+            {filteredSatellites.map((satellite) => (
+              <Card
+                key={satellite.id}
+                className="bg-white/10 border-white/20 backdrop-blur-sm"
               >
-                {category.name} ({category.count})
-              </Button>
+                <CardHeader>
+                  <CardTitle className="flex items-center text-white">
+                    <Satellite className="w-5 h-5 mr-2 text-blue-400" />
+                    {satellite.name}
+                  </CardTitle>
+                  <div className="flex gap-2">
+                    <Badge
+                      variant="secondary"
+                      className={`text-xs ${
+                        satellite.status === "active"
+                          ? "bg-green-500/20 text-green-300"
+                          : "bg-red-500/20 text-red-300"
+                      }`}
+                    >
+                      {satellite.status}
+                    </Badge>
+                    <Badge
+                      variant="outline"
+                      className="text-xs border-white/20 text-gray-300"
+                    >
+                      {satellite.type.replace("_", " ")}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="text-gray-300">
+                  <div className="space-y-3">
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div>
+                        <span className="text-gray-400">Position:</span>
+                        <p>
+                          {satellite.position.latitude.toFixed(2)}°,{" "}
+                          {satellite.position.longitude.toFixed(2)}°
+                        </p>
+                        <p>{satellite.position.altitude} km</p>
+                      </div>
+                      <div>
+                        <span className="text-gray-400">Velocity:</span>
+                        <p>{satellite.velocity.speed.toLocaleString()} km/h</p>
+                      </div>
+                    </div>
+
+                    <div className="text-xs">
+                      <span className="text-gray-400">Orbit:</span>
+                      <p>Period: {satellite.orbit.period.toFixed(1)} min</p>
+                      <p>Inclination: {satellite.orbit.inclination}°</p>
+                    </div>
+
+                    {satellite.nextPass && (
+                      <div className="bg-blue-500/10 p-3 rounded-lg">
+                        <div className="flex items-center mb-2">
+                          <Eye className="w-4 h-4 mr-2 text-blue-400" />
+                          <span className="text-sm font-medium text-blue-300">
+                            Next Flyover
+                          </span>
+                        </div>
+                        <div className="text-xs space-y-1">
+                          <p>Start: {formatTime(satellite.nextPass.aos)}</p>
+                          <p>End: {formatTime(satellite.nextPass.los)}</p>
+                          <p>
+                            Max Elevation: {satellite.nextPass.maxElevation}°
+                          </p>
+                          <p>Direction: {satellite.nextPass.direction}</p>
+                          <p>Magnitude: {satellite.nextPass.magnitude}</p>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="text-xs text-muted-foreground">
+                      <p>Country: {satellite.country}</p>
+                      <p>Launched: {formatDate(satellite.launchDate)}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
-        </div>
 
-        {/* Satellites Grid */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
-          {filteredSatellites.map((satellite) => (
-            <Card
-              key={satellite.id}
-              className="bg-white/10 border-white/20 backdrop-blur-sm"
-            >
-              <CardHeader>
-                <CardTitle className="flex items-center text-white">
-                  <Satellite className="w-5 h-5 mr-2 text-blue-400" />
-                  {satellite.name}
-                </CardTitle>
-                <div className="flex gap-2">
-                  <Badge
-                    variant="secondary"
-                    className={`text-xs ${
-                      satellite.status === "active"
-                        ? "bg-green-500/20 text-green-300"
-                        : "bg-red-500/20 text-red-300"
-                    }`}
-                  >
-                    {satellite.status}
-                  </Badge>
-                  <Badge
-                    variant="outline"
-                    className="text-xs border-white/20 text-gray-300"
-                  >
-                    {satellite.type.replace("_", " ")}
-                  </Badge>
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Zap className="w-5 h-5 mr-2 text-yellow-500" />
+                Satellite Viewing Tips
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="text-gray-300">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <h4 className="font-semibold mb-2 text-white">
+                    Best Viewing Conditions
+                  </h4>
+                  <ul className="space-y-1 text-sm">
+                    <li>• Clear, dark skies away from city lights</li>
+                    <li>• Look during twilight hours (dawn/dusk)</li>
+                    <li>• Use the predicted direction and elevation</li>
+                    <li>
+                      • Brighter satellites (lower magnitude) are easier to spot
+                    </li>
+                  </ul>
                 </div>
-              </CardHeader>
-              <CardContent className="text-gray-300">
-                <div className="space-y-3">
-                  <div className="grid grid-cols-2 gap-2 text-xs">
-                    <div>
-                      <span className="text-gray-400">Position:</span>
-                      <p>
-                        {satellite.position.latitude.toFixed(2)}°,{" "}
-                        {satellite.position.longitude.toFixed(2)}°
-                      </p>
-                      <p>{satellite.position.altitude} km</p>
-                    </div>
-                    <div>
-                      <span className="text-gray-400">Velocity:</span>
-                      <p>{satellite.velocity.speed.toLocaleString()} km/h</p>
-                    </div>
-                  </div>
-
-                  <div className="text-xs">
-                    <span className="text-gray-400">Orbit:</span>
-                    <p>Period: {satellite.orbit.period.toFixed(1)} min</p>
-                    <p>Inclination: {satellite.orbit.inclination}°</p>
-                  </div>
-
-                  {satellite.nextPass && (
-                    <div className="bg-blue-500/10 p-3 rounded-lg">
-                      <div className="flex items-center mb-2">
-                        <Eye className="w-4 h-4 mr-2 text-blue-400" />
-                        <span className="text-sm font-medium text-blue-300">
-                          Next Flyover
-                        </span>
-                      </div>
-                      <div className="text-xs space-y-1">
-                        <p>Start: {formatTime(satellite.nextPass.aos)}</p>
-                        <p>End: {formatTime(satellite.nextPass.los)}</p>
-                        <p>Max Elevation: {satellite.nextPass.maxElevation}°</p>
-                        <p>Direction: {satellite.nextPass.direction}</p>
-                        <p>Magnitude: {satellite.nextPass.magnitude}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="text-xs text-muted-foreground">
-                    <p>Country: {satellite.country}</p>
-                    <p>Launched: {formatDate(satellite.launchDate)}</p>
-                  </div>
+                <div>
+                  <h4 className="font-semibold mb-2 text-white">
+                    What You'll See
+                  </h4>
+                  <ul className="space-y-1 text-sm">
+                    <li>• Steady moving point of light (not blinking)</li>
+                    <li>
+                      • ISS appears as bright as Venus (-3 to -4 magnitude)
+                    </li>
+                    <li>
+                      • Satellites reflect sunlight, appearing brightest at
+                      twilight
+                    </li>
+                    <li>• Movement is smooth and consistent across the sky</li>
+                  </ul>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
+              </div>
+            </CardContent>
+          </Card>
         </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Zap className="w-5 h-5 mr-2 text-yellow-500" />
-              Satellite Viewing Tips
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="text-gray-300">
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <h4 className="font-semibold mb-2 text-white">
-                  Best Viewing Conditions
-                </h4>
-                <ul className="space-y-1 text-sm">
-                  <li>• Clear, dark skies away from city lights</li>
-                  <li>• Look during twilight hours (dawn/dusk)</li>
-                  <li>• Use the predicted direction and elevation</li>
-                  <li>
-                    • Brighter satellites (lower magnitude) are easier to spot
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-2 text-white">
-                  What You'll See
-                </h4>
-                <ul className="space-y-1 text-sm">
-                  <li>• Steady moving point of light (not blinking)</li>
-                  <li>• ISS appears as bright as Venus (-3 to -4 magnitude)</li>
-                  <li>
-                    • Satellites reflect sunlight, appearing brightest at
-                    twilight
-                  </li>
-                  <li>• Movement is smooth and consistent across the sky</li>
-                </ul>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }

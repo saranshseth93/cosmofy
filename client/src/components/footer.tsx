@@ -204,8 +204,10 @@ export function Footer() {
             This project is not affiliated with NASA. All space data is provided
             via public NASA APIs.
             <br />
-            Built with React, TypeScript, and GSAP for an award-winning cosmic
-            experience.
+            Built with ❤️ by{" "}
+            <a href="https://saranshseth.me" class="underline">
+              Saransh Seth
+            </a>
           </p>
         </div>
       </div>
