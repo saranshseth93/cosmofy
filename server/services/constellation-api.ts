@@ -861,11 +861,16 @@ export class ConstellationApiService {
   async getConstellations(): Promise<ConstellationData[]> {
     try {
       // Use authentic astronomical data from IAU standards
-      const constellations = this.getConstellationData();
+      const allConstellations = this.getConstellationData();
       
-      console.log(`Loaded ${constellations.length} constellations from astronomical database`);
+      // Remove duplicates based on constellation ID
+      const uniqueConstellations = allConstellations.filter((constellation, index, array) => 
+        array.findIndex(c => c.id === constellation.id) === index
+      );
       
-      return constellations;
+      console.log(`Loaded ${uniqueConstellations.length} unique constellations from astronomical database`);
+      
+      return uniqueConstellations;
     } catch (error) {
       console.error('Error loading constellation data:', error);
       throw new Error('Failed to load constellation data');
