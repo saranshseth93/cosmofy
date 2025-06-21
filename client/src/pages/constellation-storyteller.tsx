@@ -151,34 +151,21 @@ export default function ConstellationStorytellerPage() {
     return <Moon className="h-5 w-5 text-blue-400" />;
   };
 
-  const getConstellationImage = (constellationName: string) => {
-    // Return authentic constellation star pattern images
-    const constellationImages: { [key: string]: string } = {
-      'orion': 'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=300&fit=crop',
-      'ursa major': 'https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=400&h=300&fit=crop',
-      'cassiopeia': 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=400&h=300&fit=crop',
-      'leo': 'https://images.unsplash.com/photo-1464207687429-7505649dae38?w=400&h=300&fit=crop',
-      'scorpius': 'https://images.unsplash.com/photo-1446776481440-d9436ced2468?w=400&h=300&fit=crop',
-      'crux': 'https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?w=400&h=300&fit=crop'
-    };
+  const isConstellationVisible = (constellation: Constellation) => {
+    if (!userLocation) return true;
     
-    return constellationImages[constellationName.toLowerCase()] || 
-           'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=300&fit=crop';
-  };
-
-  const getStarMapImage = (constellationName: string) => {
-    // Return authentic star map images
-    const starMapImages: { [key: string]: string } = {
-      'orion': 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=400&h=300&fit=crop',
-      'ursa major': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
-      'cassiopeia': 'https://images.unsplash.com/photo-1516849841032-87cbac4d88f7?w=400&h=300&fit=crop',
-      'leo': 'https://images.unsplash.com/photo-1614728263952-84ea256f9679?w=400&h=300&fit=crop',
-      'scorpius': 'https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?w=400&h=300&fit=crop',
-      'crux': 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=400&h=300&fit=crop'
-    };
+    const userLat = userLocation.latitude;
+    const hemisphere = constellation.astronomy.visibility.hemisphere;
     
-    return starMapImages[constellationName.toLowerCase()] || 
-           'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=400&h=300&fit=crop';
+    // Check hemisphere visibility
+    if (hemisphere === 'northern' && userLat < -30) return false;
+    if (hemisphere === 'southern' && userLat > 30) return false;
+    
+    // Check declination visibility
+    const declination = constellation.astronomy.visibility.declination;
+    const maxVisibleDeclination = 90 - Math.abs(userLat);
+    
+    return Math.abs(declination) <= maxVisibleDeclination;
   };
 
   const filteredConstellations = constellations?.filter(constellation =>
@@ -353,14 +340,25 @@ export default function ConstellationStorytellerPage() {
                   {/* Constellation Image */}
                   <div className="relative">
                     <img
-                      src={getConstellationImage(constellation.name)}
+                      src={constellation.imageUrl}
                       alt={`${constellation.name} constellation`}
                       className="w-full h-48 md:h-full object-cover"
                     />
-                    <div className="absolute top-2 left-2">
+                    <div className="absolute top-2 left-2 space-y-2">
                       <Badge variant="outline" className="bg-black/50 text-white border-white/30">
                         {constellation.abbreviation}
                       </Badge>
+                      <div>
+                        {isConstellationVisible(constellation) ? (
+                          <Badge className="bg-green-500/80 text-white border-green-400/30">
+                            Visible
+                          </Badge>
+                        ) : (
+                          <Badge className="bg-red-500/80 text-white border-red-400/30">
+                            Not Visible
+                          </Badge>
+                        )}
+                      </div>
                     </div>
                   </div>
 
@@ -461,7 +459,7 @@ export default function ConstellationStorytellerPage() {
                       {selectedConstellation === constellation.id && (
                         <div className="mt-4">
                           <img
-                            src={getStarMapImage(constellation.name)}
+                            src={constellation.starMapUrl}
                             alt={`${constellation.name} star map`}
                             className="w-full h-64 object-cover rounded-lg border"
                           />
