@@ -1,1 +1,12 @@
-/*    /index.html   200
+# API routes to individual Netlify functions
+/api/constellations  /.netlify/functions/constellations  200
+/api/sky-conditions  /.netlify/functions/sky-conditions  200
+/api/location        /.netlify/functions/location        200
+/api/apod            /.netlify/functions/apod            200
+/api/iss/position    /.netlify/functions/iss-position    200
+/api/space-weather   /.netlify/functions/space-weather   200
+/api/news            /.netlify/functions/news            200
+/api/missions        /.netlify/functions/missions        200
+
+# SPA routing for all other paths
+/*                   /index.html                         200
