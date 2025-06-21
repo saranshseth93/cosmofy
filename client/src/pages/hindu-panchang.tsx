@@ -11,7 +11,7 @@ const DivineBackground = () => (
     <div 
       className="absolute inset-0"
       style={{
-        background: 'linear-gradient(-45deg, #FF8C00, #FF4500, #FF6347, #FFD700, #FFA500, #DC143C)',
+        background: 'linear-gradient(-45deg, #4A1A3A, #B91C1C, #EA580C, #F97316, #D97706, #7C2D12)',
         backgroundSize: '400% 400%',
         animation: 'hinduGradientWave 15s ease infinite'
       }}
@@ -314,17 +314,59 @@ export default function HinduPanchangPage() {
           {/* Header */}
           <div className="text-center space-y-6">
             <div className="inline-block bg-black/40 backdrop-blur-md rounded-2xl px-8 py-6 border border-white/20 shadow-xl">
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-3 drop-shadow-lg">
-                हिंदू पंचांग
-              </h1>
               <h2 className="text-2xl md:text-3xl font-semibold text-orange-200 drop-shadow-md">
                 Hindu Panchang
               </h2>
             </div>
-            <div className="bg-black/30 backdrop-blur-sm rounded-xl px-6 py-4 border border-white/10 max-w-2xl mx-auto">
-              <p className="text-lg text-white/90 drop-shadow-sm">
-                Daily Hindu calendar with Tithi, Nakshatra, Yoga, Karana and auspicious timings
+            
+            {/* Educational Description */}
+            <div className="bg-black/30 backdrop-blur-sm rounded-xl px-6 py-6 border border-white/10 max-w-4xl mx-auto space-y-4">
+              <p className="text-lg text-white/95 drop-shadow-sm font-medium">
+                Ancient Hindu Calendar System - A Comprehensive Guide to Vedic Timekeeping
               </p>
+              
+              <div className="grid md:grid-cols-2 gap-6 text-left">
+                <div className="space-y-3">
+                  <h3 className="text-orange-200 font-semibold text-base">What is Panchang?</h3>
+                  <p className="text-white/85 text-sm leading-relaxed">
+                    Panchang (meaning "five limbs") is the traditional Hindu calendar that combines astronomy, astrology, and spirituality. 
+                    It tracks celestial movements to determine auspicious times for daily activities, festivals, and life events. 
+                    Used for over 5,000 years, it remains central to Hindu religious and cultural practices.
+                  </p>
+                  
+                  <h3 className="text-orange-200 font-semibold text-base pt-2">The Five Elements</h3>
+                  <ul className="text-white/85 text-sm space-y-1">
+                    <li><strong>Tithi:</strong> Lunar day phase (1-30)</li>
+                    <li><strong>Nakshatra:</strong> Moon's position among 27 star clusters</li>
+                    <li><strong>Yoga:</strong> Sun-Moon angular relationship</li>
+                    <li><strong>Karana:</strong> Half of a Tithi period</li>
+                    <li><strong>Vaara:</strong> Day of the week</li>
+                  </ul>
+                </div>
+                
+                <div className="space-y-3">
+                  <h3 className="text-orange-200 font-semibold text-base">How is it Calculated?</h3>
+                  <p className="text-white/85 text-sm leading-relaxed">
+                    Panchang calculations are based on precise astronomical observations of the Sun, Moon, and planetary positions. 
+                    Ancient Indian astronomers developed sophisticated mathematical formulas considering Earth's rotation, lunar cycles, 
+                    and celestial mechanics. Modern calculations use location-specific coordinates for accuracy.
+                  </p>
+                  
+                  <h3 className="text-orange-200 font-semibold text-base pt-2">Practical Applications</h3>
+                  <ul className="text-white/85 text-sm space-y-1">
+                    <li><strong>Muhurat:</strong> Finding auspicious timing for events</li>
+                    <li><strong>Festivals:</strong> Determining religious celebration dates</li>
+                    <li><strong>Agriculture:</strong> Traditional farming and harvesting times</li>
+                    <li><strong>Life Events:</strong> Weddings, naming ceremonies, travel</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="pt-2 border-t border-white/10">
+                <p className="text-white/75 text-xs text-center">
+                  This Panchang is calculated using your precise location coordinates for accurate local timings and celestial positions.
+                </p>
+              </div>
             </div>
           </div>
 
