@@ -17,19 +17,20 @@ export const handler: Handler = async (event, context) => {
       statusCode: 503,
       headers,
       body: JSON.stringify({
-        error: "Sky conditions API unavailable",
+        error: "Hindu Panchang API unavailable",
         message:
-          "Unable to fetch authentic astronomical conditions from observational services. Please check API configuration.",
+          "Unable to fetch authentic Vedic calendar data from astronomical calculation services. Please check API configuration.",
       }),
     };
   } catch (error) {
-    console.error("Sky Conditions API Error:", error);
+    console.error("Panchang API Error:", error);
     return {
-      statusCode: 500,
+      statusCode: 503,
       headers,
       body: JSON.stringify({
-        error: "Internal server error",
-        message: error instanceof Error ? error.message : "Unknown error",
+        error: "Hindu Panchang API unavailable",
+        message:
+          "Unable to fetch authentic Vedic calendar data from astronomical calculation services.",
       }),
     };
   }

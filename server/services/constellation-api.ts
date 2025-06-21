@@ -334,25 +334,22 @@ export class ConstellationApiService {
         },
         astronomy: {
           brightestStar: parsedData.brightestStar || "Variable",
-          starCount:
-            parsedData.starCount || Math.floor(Math.random() * 30) + 15,
-          area: parsedData.area || Math.floor(Math.random() * 800) + 200,
+          starCount: parsedData.starCount || 0,
+          area: parsedData.area || 0,
           visibility: {
             hemisphere:
               parsedData.hemisphere || this.determineHemisphere(link.name),
             bestMonth:
               parsedData.bestMonth || this.determineBestMonth(link.name),
-            declination:
-              parsedData.declination || Math.floor(Math.random() * 160) - 80,
+            declination: parsedData.declination || 0,
           },
         },
         coordinates: {
-          ra: parsedData.ra || Math.floor(Math.random() * 24),
-          dec: parsedData.dec || Math.floor(Math.random() * 160) - 80,
+          ra: parsedData.ra || 0,
+          dec: parsedData.dec || 0,
         },
-        stars: parsedData.stars || this.generateDefaultStars(link.name),
-        deepSkyObjects:
-          parsedData.deepSkyObjects || this.generateDefaultDSOs(link.name),
+        stars: parsedData.stars || [],
+        deepSkyObjects: parsedData.deepSkyObjects || [],
         imageUrl:
           parsedData.imageUrl || this.extractImageFromHTML(html, id) || "",
         starMapUrl:
@@ -574,39 +571,7 @@ export class ConstellationApiService {
     return months[hash % 12];
   }
 
-  private generateDefaultStars(constellationName: string): any[] {
-    return [
-      {
-        name: `Alpha ${constellationName}`,
-        magnitude: 1.5,
-        type: "Main Sequence",
-        distance: 50,
-      },
-      {
-        name: `Beta ${constellationName}`,
-        magnitude: 2.0,
-        type: "Giant",
-        distance: 75,
-      },
-      {
-        name: `Gamma ${constellationName}`,
-        magnitude: 2.5,
-        type: "Supergiant",
-        distance: 100,
-      },
-    ];
-  }
-
-  private generateDefaultDSOs(constellationName: string): any[] {
-    return [
-      {
-        name: `${constellationName} Nebula`,
-        type: "Nebula",
-        magnitude: 7.5,
-        description: `Beautiful nebula in ${constellationName}`,
-      },
-    ];
-  }
+  // Removed synthetic data generators - only authentic scraped data will be used
 
   async getSkyConditions(lat: number, lon: number): Promise<any> {
     try {

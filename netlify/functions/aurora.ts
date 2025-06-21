@@ -17,13 +17,13 @@ export const handler: Handler = async (event, context) => {
       statusCode: 503,
       headers,
       body: JSON.stringify({
-        error: "Sky conditions API unavailable",
+        error: "NOAA Aurora Forecast API unavailable",
         message:
-          "Unable to fetch authentic astronomical conditions from observational services. Please check API configuration.",
+          "Unable to fetch authentic aurora forecast data from NOAA Space Weather Prediction Center. Please check API configuration.",
       }),
     };
   } catch (error) {
-    console.error("Sky Conditions API Error:", error);
+    console.error("Aurora API Error:", error);
     return {
       statusCode: 500,
       headers,
