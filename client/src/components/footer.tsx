@@ -205,7 +205,7 @@ export function Footer() {
             via public NASA APIs.
             <br />
             Built with ❤️ by{" "}
-            <a href="https://saranshseth.me" class="underline">
+            <a href="https://saranshseth.me" className="underline">
               Saransh Seth
             </a>
           </p>
