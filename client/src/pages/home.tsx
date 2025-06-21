@@ -5,7 +5,7 @@ import { HeroSection } from '@/components/hero-section';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Camera, Satellite, Zap, Circle, Rocket, ArrowRight, Globe, Newspaper, Volume2 } from 'lucide-react';
+import { Camera, Satellite, Zap, Circle, Rocket, ArrowRight, Globe, Newspaper, Volume2, Cloud, Telescope, Calendar, MapPin, Star, Radio, Sun } from 'lucide-react';
 import { Footer } from '@/components/footer';
 
 export default function Home() {
@@ -87,6 +87,62 @@ export default function Home() {
       icon: Volume2,
       href: '/sounds',
       stats: 'Authentic Audio'
+    },
+    {
+      id: 'space-weather',
+      title: 'Space Weather',
+      description: 'Monitor solar activity, geomagnetic storms, and space radiation with real-time NOAA data.',
+      icon: Cloud,
+      href: '/space-weather',
+      stats: 'Live Data'
+    },
+    {
+      id: 'telescope',
+      title: 'Virtual Telescope',
+      description: 'Access live feeds from Hubble, James Webb, and ground observatories with observation schedules.',
+      icon: Telescope,
+      href: '/telescope',
+      stats: 'Live Feeds'
+    },
+    {
+      id: 'events',
+      title: 'Cosmic Events',
+      description: 'Track upcoming eclipses, meteor showers, planetary alignments with detailed countdown timers.',
+      icon: Calendar,
+      href: '/events',
+      stats: 'Upcoming Events'
+    },
+    {
+      id: 'mars-rover',
+      title: 'Mars Rover Live',
+      description: 'Real photos and mission updates from Perseverance and Curiosity rovers with interactive data.',
+      icon: MapPin,
+      href: '/mars-rover',
+      stats: 'Latest Photos'
+    },
+    {
+      id: 'constellations',
+      title: 'Constellation Guide',
+      description: 'Interactive star patterns with mythology, visibility tracking based on your location and time.',
+      icon: Star,
+      href: '/constellations',
+      stats: '88 Constellations'
+    },
+    {
+      id: 'satellite-tracker',
+      title: 'Satellite Tracker',
+      description: 'Real-time positions of satellites, space stations, and debris with detailed flyover predictions.',
+      icon: Radio,
+      href: '/satellite-tracker',
+      stats: '20+ Satellites'
+    },
+    {
+      id: 'panchang',
+      title: 'Hindu Panchang',
+      description: 'Traditional Vedic calendar with daily Tithi, Nakshatra, Yoga, and auspicious timings.',
+      icon: Sun,
+      href: '/panchang',
+      stats: 'Daily Updates'
     }
   ];
 
