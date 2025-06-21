@@ -3,22 +3,51 @@ export interface PanchangData {
   tithi: {
     name: string;
     deity: string;
+    type: string;
+    number: number;
+    start: string;
+    end: string;
+    nextTithi: string;
+    meaning: string;
+    special: string;
     significance: string;
     endTime: string;
   };
   nakshatra: {
     name: string;
+    lord: string;
     deity: string;
+    number: number;
+    start: string;
+    end: string;
+    nextNakshatra: string;
+    meaning: string;
+    special: string;
+    summary: string;
+    words: string;
     qualities: string;
     endTime: string;
   };
   yoga: {
     name: string;
+    number: number;
+    start: string;
+    end: string;
     meaning: string;
+    special: string;
+    nextYoga: string;
     endTime: string;
   };
   karana: {
     name: string;
+    lord: string;
+    deity: string;
+    type: string;
+    number: number;
+    start: string;
+    end: string;
+    special: string;
+    nextKarana: string;
     meaning: string;
     endTime: string;
   };
@@ -37,6 +66,32 @@ export interface PanchangData {
     gulikaKaal: string;
     yamaGandaKaal: string;
   };
+  advancedDetails: {
+    solarNoon: string;
+    nextFullMoon: string;
+    nextNewMoon: string;
+    masa: {
+      amantaName: string;
+      purnimaName: string;
+      adhikMaasa: boolean;
+      ayana: string;
+      moonPhase: string;
+      paksha: string;
+      ritu: string;
+    };
+    vaara: string;
+    dishaShool: string;
+  };
+  auspiciousTimes: Array<{
+    name: string;
+    time: string;
+    description: string;
+  }>;
+  inauspiciousTimes: Array<{
+    name: string;
+    time: string;
+    description: string;
+  }>;
   festivals: string[];
   vratsAndOccasions: string[];
 }
