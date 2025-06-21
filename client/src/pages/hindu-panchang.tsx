@@ -5,104 +5,33 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Navigation } from '@/components/navigation';
 import { CosmicCursor } from '@/components/cosmic-cursor';
-// Animated Hindu Background Component
+// Animated Hindu Background Component - Similar to CodePen effect
 const DivineBackground = () => (
   <div className="absolute inset-0 overflow-hidden">
-    {/* Animated Gradient Background - Traditional Hindu Colors */}
-    <div className="absolute inset-0 bg-gradient-to-br from-orange-500 via-red-600 via-orange-700 to-yellow-600 animate-pulse" 
-         style={{
-           background: `
-             radial-gradient(circle at 20% 50%, rgba(255, 140, 0, 0.8) 0%, transparent 50%),
-             radial-gradient(circle at 80% 20%, rgba(255, 69, 0, 0.8) 0%, transparent 50%),
-             radial-gradient(circle at 40% 80%, rgba(255, 215, 0, 0.8) 0%, transparent 50%),
-             linear-gradient(135deg, #FF8C00 0%, #FF4500 25%, #FF6347 50%, #FFD700 75%, #FFA500 100%)
-           `,
-           animation: 'hinduGradient 8s ease-in-out infinite alternate'
-         }}
+    <div 
+      className="absolute inset-0"
+      style={{
+        background: 'linear-gradient(-45deg, #FF8C00, #FF4500, #FF6347, #FFD700, #FFA500, #DC143C)',
+        backgroundSize: '400% 400%',
+        animation: 'hinduGradientWave 15s ease infinite'
+      }}
     />
     
-    {/* Secondary Animated Layer */}
-    <div className="absolute inset-0 opacity-60"
-         style={{
-           background: `
-             radial-gradient(circle at 60% 40%, rgba(255, 140, 0, 0.6) 0%, transparent 40%),
-             radial-gradient(circle at 30% 70%, rgba(255, 69, 0, 0.5) 0%, transparent 40%),
-             radial-gradient(circle at 70% 80%, rgba(255, 215, 0, 0.7) 0%, transparent 40%)
-           `,
-           animation: 'hinduWave 10s ease-in-out infinite alternate-reverse'
-         }}
-    />
-    
-    {/* Tertiary Floating Gradient Orbs */}
-    <div className="absolute inset-0 opacity-40">
-      {[...Array(5)].map((_, i) => (
-        <div
-          key={i}
-          className="absolute rounded-full"
-          style={{
-            left: `${20 + i * 15}%`,
-            top: `${15 + i * 12}%`,
-            width: `${80 + i * 20}px`,
-            height: `${80 + i * 20}px`,
-            background: `radial-gradient(circle, rgba(255, ${140 + i * 20}, 0, 0.6) 0%, transparent 70%)`,
-            animation: `hinduFloat${i} ${6 + i * 2}s ease-in-out infinite alternate`,
-            animationDelay: `${i * 0.5}s`
-          }}
-        />
-      ))}
-    </div>
-    
-    <style jsx>{`
-      @keyframes hinduGradient {
-        0% {
-          background: linear-gradient(135deg, #FF8C00 0%, #FF4500 25%, #FF6347 50%, #FFD700 75%, #FFA500 100%);
+    <style dangerouslySetInnerHTML={{
+      __html: `
+        @keyframes hinduGradientWave {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
         }
-        25% {
-          background: linear-gradient(165deg, #FFA500 0%, #FF6347 25%, #FFD700 50%, #FF4500 75%, #FF8C00 100%);
-        }
-        50% {
-          background: linear-gradient(195deg, #FFD700 0%, #FF8C00 25%, #FFA500 50%, #FF6347 75%, #FF4500 100%);
-        }
-        75% {
-          background: linear-gradient(225deg, #FF4500 0%, #FFD700 25%, #FF8C00 50%, #FFA500 75%, #FF6347 100%);
-        }
-        100% {
-          background: linear-gradient(255deg, #FF6347 0%, #FFA500 25%, #FF4500 50%, #FF8C00 75%, #FFD700 100%);
-        }
-      }
-      
-      @keyframes hinduWave {
-        0% { transform: translateX(0px) translateY(0px) scale(1); }
-        33% { transform: translateX(20px) translateY(-10px) scale(1.1); }
-        66% { transform: translateX(-15px) translateY(15px) scale(0.9); }
-        100% { transform: translateX(0px) translateY(0px) scale(1); }
-      }
-      
-      @keyframes hinduFloat0 {
-        0% { transform: translateY(0px) scale(1); opacity: 0.4; }
-        100% { transform: translateY(-20px) scale(1.2); opacity: 0.7; }
-      }
-      
-      @keyframes hinduFloat1 {
-        0% { transform: translateY(0px) scale(1); opacity: 0.3; }
-        100% { transform: translateY(-30px) scale(1.1); opacity: 0.6; }
-      }
-      
-      @keyframes hinduFloat2 {
-        0% { transform: translateY(0px) scale(1); opacity: 0.5; }
-        100% { transform: translateY(-25px) scale(1.3); opacity: 0.8; }
-      }
-      
-      @keyframes hinduFloat3 {
-        0% { transform: translateY(0px) scale(1); opacity: 0.4; }
-        100% { transform: translateY(-35px) scale(1.15); opacity: 0.7; }
-      }
-      
-      @keyframes hinduFloat4 {
-        0% { transform: translateY(0px) scale(1); opacity: 0.3; }
-        100% { transform: translateY(-40px) scale(1.25); opacity: 0.6; }
-      }
-    `}</style>
+      `
+    }} />
   </div>
 );
 
@@ -339,8 +268,8 @@ export default function HinduPanchangPage() {
         {/* Divine Hindu Background */}
         <DivineBackground />
         
-        {/* Light Overlay - allows background to show through */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/50 sm:bg-gradient-to-b sm:from-black/45 sm:via-black/35 sm:to-black/45 md:bg-gradient-to-b md:from-black/40 md:via-black/30 md:to-black/40" />
+        {/* Light Overlay for text readability */}
+        <div className="absolute inset-0 bg-black/20" />
         
         {/* Content Container */}
         <div className="relative z-10">
@@ -348,38 +277,55 @@ export default function HinduPanchangPage() {
           {/* Location Chip */}
           <div className="flex justify-center">
             {locationStatus === 'requesting' && (
-              <Badge variant="outline" className="px-4 py-2 text-sm bg-yellow-500/10 border-yellow-500/30 text-yellow-400">
-                <MapPin className="h-4 w-4 mr-2 animate-pulse" />
-                Requesting location...
-              </Badge>
+              <div className="bg-black/50 backdrop-blur-md rounded-full px-6 py-3 border border-yellow-500/40 shadow-lg">
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-yellow-400 animate-pulse" />
+                  <span className="text-yellow-200 font-medium text-sm">Requesting location...</span>
+                </div>
+              </div>
             )}
             {locationData && locationStatus !== 'requesting' && (
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className={`px-4 py-2 text-sm ${
+              <div className="flex items-center gap-3">
+                <div className={`bg-black/50 backdrop-blur-md rounded-full px-6 py-3 border shadow-lg ${
                   locationStatus === 'granted' 
-                    ? 'bg-green-500/10 border-green-500/30 text-green-400' 
-                    : 'bg-orange-500/10 border-orange-500/30 text-orange-400'
+                    ? 'border-green-500/40' 
+                    : 'border-orange-500/40'
                 }`}>
-                  <MapPin className="h-4 w-4 mr-2" />
-                  {locationData.city}
-                </Badge>
+                  <div className="flex items-center gap-2">
+                    <MapPin className={`h-4 w-4 ${
+                      locationStatus === 'granted' ? 'text-green-400' : 'text-orange-400'
+                    }`} />
+                    <span className={`font-medium text-sm ${
+                      locationStatus === 'granted' ? 'text-green-200' : 'text-orange-200'
+                    }`}>
+                      {locationData.city}
+                    </span>
+                  </div>
+                </div>
                 {locationStatus === 'denied' && (
-                  <Badge variant="outline" className="bg-orange-500/10 border-orange-500/30 text-orange-400 text-xs">
-                    Default location
-                  </Badge>
+                  <div className="bg-black/40 backdrop-blur-md rounded-full px-4 py-2 border border-orange-500/30">
+                    <span className="text-orange-300 text-xs font-medium">Default location</span>
+                  </div>
                 )}
               </div>
             )}
           </div>
 
           {/* Header */}
-          <div className="text-center space-y-4">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-400 via-red-500 to-yellow-500 bg-clip-text text-transparent">
-              Hindu Panchang
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Daily Hindu calendar with Tithi, Nakshatra, Yoga, Karana and auspicious timings
-            </p>
+          <div className="text-center space-y-6">
+            <div className="inline-block bg-black/40 backdrop-blur-md rounded-2xl px-8 py-6 border border-white/20 shadow-xl">
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-3 drop-shadow-lg">
+                हिंदू पंचांग
+              </h1>
+              <h2 className="text-2xl md:text-3xl font-semibold text-orange-200 drop-shadow-md">
+                Hindu Panchang
+              </h2>
+            </div>
+            <div className="bg-black/30 backdrop-blur-sm rounded-xl px-6 py-4 border border-white/10 max-w-2xl mx-auto">
+              <p className="text-lg text-white/90 drop-shadow-sm">
+                Daily Hindu calendar with Tithi, Nakshatra, Yoga, Karana and auspicious timings
+              </p>
+            </div>
           </div>
 
           {/* Current Date and Time */}
