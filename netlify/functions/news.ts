@@ -15,7 +15,7 @@ export const handler: Handler = async (event, context) => {
   try {
     // Fetch authentic space news from Spaceflight News API
     const response = await fetch(
-      "https://api.spaceflightnewsapi.net/v4/articles?limit=20"
+      "https://api.spaceflightnewsapi.net/v4/articles?limit=50"
     );
 
     if (!response.ok) {
