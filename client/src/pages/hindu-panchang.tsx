@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Navigation } from '@/components/navigation';
 import { CosmicCursor } from '@/components/cosmic-cursor';
+// Import Shiva background image
+const shivaBgImage = '/attached_assets/shiva-bg_1750485532403.jpg';
 
 interface LocationData {
   latitude: number;
@@ -215,7 +217,7 @@ export default function HinduPanchangPage() {
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: `url('/attached_assets/shiva-bg_1750485532403.jpg')`,
+              backgroundImage: `url(${shivaBgImage})`,
             }}
           />
           
@@ -245,7 +247,7 @@ export default function HinduPanchangPage() {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `url('/attached_assets/shiva-bg_1750485532403.jpg')`,
+            backgroundImage: `url(${shivaBgImage})`,
           }}
         />
         
