@@ -335,6 +335,19 @@ export default function ConstellationStorytellerPage() {
             </Card>
           )}
 
+          {/* Observation Location Info */}
+          {userLocation && (
+            <div className="text-center mb-4">
+              <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                <MapPin className="h-4 w-4" />
+                <span>Observation Location:</span>
+                <Badge variant="outline" className="bg-background/50 text-foreground">
+                  {userLocation.city}
+                </Badge>
+              </div>
+            </div>
+          )}
+
           {/* Search */}
           <div className="relative max-w-md mx-auto">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
