@@ -8,6 +8,7 @@ import { Satellite, MapPin, Clock, Bell, Search, Orbit, Zap } from 'lucide-react
 import { useQuery } from '@tanstack/react-query';
 import { Navigation } from '@/components/navigation';
 import { CosmicCursor } from '@/components/cosmic-cursor';
+import { Footer } from '@/components/footer';
 
 interface SatelliteData {
   id: string;
@@ -225,9 +226,11 @@ export default function SatelliteTrackerPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
       <CosmicCursor />
       <Navigation />
+      
+      <div className="min-h-screen bg-background">
       
       <div className="container mx-auto px-4 py-8 space-y-8">
       {/* Header */}
@@ -549,6 +552,8 @@ export default function SatelliteTrackerPage() {
         </CardContent>
       </Card>
     </div>
-    </div>
+      </div>
+      <Footer />
+    </>
   );
 }

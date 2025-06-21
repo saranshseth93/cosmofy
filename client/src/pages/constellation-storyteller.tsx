@@ -7,6 +7,7 @@ import { MapPin, Clock, Eye, Star, Moon, Sun, Search, Globe, Telescope, Calendar
 import { useQuery } from '@tanstack/react-query';
 import { Navigation } from '@/components/navigation';
 import { CosmicCursor } from '@/components/cosmic-cursor';
+import { Footer } from '@/components/footer';
 
 interface Constellation {
   id: string;
@@ -533,6 +534,7 @@ export default function ConstellationStorytellerPage() {
           )}
         </div>
       </div>
+      <Footer />
     </>
   );
 }

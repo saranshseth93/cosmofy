@@ -7,6 +7,7 @@ import { Camera, MapPin, Calendar, Battery, Thermometer, Gauge } from 'lucide-re
 import { useQuery } from '@tanstack/react-query';
 import { Navigation } from '@/components/navigation';
 import { CosmicCursor } from '@/components/cosmic-cursor';
+import { Footer } from '@/components/footer';
 
 interface RoverPhoto {
   id: number;
