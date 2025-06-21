@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Home, ArrowLeft, Rocket } from 'lucide-react';
 import { Navigation } from '@/components/navigation';
 import { CosmicCursor } from '@/components/cosmic-cursor';
+import { Footer } from '@/components/footer';
 
 export default function NotFoundPage() {
   useEffect(() => {
@@ -169,6 +170,7 @@ export default function NotFoundPage() {
 
       {/* Bottom gradient overlay */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-900 to-transparent" />
+      <Footer />
     </div>
   );
 }

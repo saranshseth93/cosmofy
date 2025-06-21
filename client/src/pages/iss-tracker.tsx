@@ -1165,6 +1165,7 @@ export default function ISSTracker() {
           </Card>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

@@ -492,6 +492,7 @@ export default function SpaceMissions() {
           </div>
         </div>
       )}
+      <Footer />
     </div>
   );
 }
