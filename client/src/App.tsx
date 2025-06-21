@@ -18,6 +18,7 @@ import CosmicEvents from "@/pages/cosmic-events";
 import MarsRover from "@/pages/mars-rover";
 import ConstellationStoryteller from "@/pages/constellation-storyteller";
 import SatelliteTracker from "@/pages/satellite-tracker";
+import HinduPanchang from "@/pages/hindu-panchang";
 import NotFound from "@/pages/not-found";
 
 function Router() {

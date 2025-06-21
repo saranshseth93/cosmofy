@@ -5,6 +5,7 @@ import { nasaApi } from "./services/nasa-api";
 import { geolocationService } from "./services/geolocation";
 import { spaceNewsService } from "./services/space-news";
 import { constellationApi } from "./services/constellation-api";
+import { panchangApi } from "./services/panchang-api";
 import { insertApodImageSchema, insertAsteroidSchema, insertIssPositionSchema, insertIssPassSchema, insertIssCrewSchema, insertAuroraForecastSchema, insertSpaceMissionSchema } from "@shared/schema";
 
 // Background refresh function
@@ -1272,6 +1273,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Sky conditions error:", error);
       res.status(500).json({ error: "Failed to fetch sky conditions" });
+    }
+  });
+
+  // Hindu Panchang API endpoints
+  app.get("/api/panchang", async (req, res) => {
+    try {
+      const lat = parseFloat(req.query.lat as string);
+      const lon = parseFloat(req.query.lon as string);
+      
+      if (isNaN(lat) || isNaN(lon)) {
+        return res.status(400).json({ error: "Valid latitude and longitude are required" });
+      }
+      
+      const panchangData = await panchangApi.getPanchangData(lat, lon);
+      res.json(panchangData);
+    } catch (error) {
+      console.error("Panchang error:", error);
+      res.status(500).json({ error: "Failed to fetch Panchang data" });
     }
   });
 
