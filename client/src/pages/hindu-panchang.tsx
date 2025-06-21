@@ -125,28 +125,49 @@ export default function HinduPanchangPage() {
   // Get user location with browser geolocation
   const [userCoords, setUserCoords] = useState<{lat: number, lon: number} | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
+  const [locationStatus, setLocationStatus] = useState<'requesting' | 'granted' | 'denied' | 'default'>('requesting');
 
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserCoords({
-            lat: position.coords.latitude,
-            lon: position.coords.longitude
-          });
-        },
-        (error) => {
-          console.log("Geolocation error:", error.message);
-          setLocationError(error.message);
-          // Use default coordinates as fallback
-          setUserCoords({ lat: 19.0760, lon: 72.8777 });
-        },
-        { timeout: 10000, enableHighAccuracy: true }
-      );
-    } else {
-      setLocationError("Geolocation not supported");
-      setUserCoords({ lat: 19.0760, lon: 72.8777 });
-    }
+    const requestLocation = async () => {
+      if (!navigator.geolocation) {
+        setLocationError("Geolocation not supported by this browser");
+        setLocationStatus('default');
+        setUserCoords({ lat: 19.0760, lon: 72.8777 });
+        return;
+      }
+
+      try {
+        setLocationStatus('requesting');
+        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(
+            resolve,
+            reject,
+            { 
+              timeout: 15000, 
+              enableHighAccuracy: true,
+              maximumAge: 300000 // 5 minutes cache
+            }
+          );
+        });
+        
+        console.log("User location obtained:", position.coords.latitude, position.coords.longitude);
+        setUserCoords({
+          lat: position.coords.latitude,
+          lon: position.coords.longitude
+        });
+        setLocationStatus('granted');
+        setLocationError(null);
+        
+      } catch (error: any) {
+        console.log("Geolocation error:", error.message);
+        setLocationError(error.message);
+        setLocationStatus('denied');
+        // Use default coordinates as fallback
+        setUserCoords({ lat: 19.0760, lon: 72.8777 });
+      }
+    };
+
+    requestLocation();
   }, []);
 
   // Get location details using coordinates
@@ -204,13 +225,36 @@ export default function HinduPanchangPage() {
       <div className="min-h-screen bg-gradient-to-b from-black via-orange-950/20 to-black pt-24">
         <div className="container mx-auto px-4 py-8 space-y-8">
           {/* Location Chip */}
-          {locationData?.city && (
-            <div className="flex justify-center">
-              <Badge variant="outline" className="px-4 py-2 text-sm bg-orange-500/10 border-orange-500/30 text-orange-400">
-                📍 {locationData.city}
+          <div className="flex justify-center">
+            {locationStatus === 'requesting' && (
+              <Badge variant="outline" className="px-4 py-2 text-sm bg-yellow-500/10 border-yellow-500/30 text-yellow-400">
+                <MapPin className="h-4 w-4 mr-2 animate-pulse" />
+                Requesting location...
               </Badge>
-            </div>
-          )}
+            )}
+            {locationData && locationStatus !== 'requesting' && (
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className={`px-4 py-2 text-sm ${
+                  locationStatus === 'granted' 
+                    ? 'bg-green-500/10 border-green-500/30 text-green-400' 
+                    : 'bg-orange-500/10 border-orange-500/30 text-orange-400'
+                }`}>
+                  <MapPin className="h-4 w-4 mr-2" />
+                  {locationData.city}
+                </Badge>
+                {locationStatus === 'denied' && (
+                  <Badge variant="outline" className="bg-orange-500/10 border-orange-500/30 text-orange-400 text-xs">
+                    Default location
+                  </Badge>
+                )}
+                {locationStatus === 'granted' && (
+                  <Badge variant="outline" className="bg-green-500/10 border-green-500/30 text-green-400 text-xs">
+                    Your location
+                  </Badge>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* Header */}
           <div className="text-center space-y-4">
