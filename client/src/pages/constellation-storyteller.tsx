@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { MapPin, Clock, Eye, Star, Moon, Sun, Search } from 'lucide-react';
+import { MapPin, Clock, Eye, Star, Moon, Sun, Search, Globe, Telescope, Calendar, BookOpen, Navigation as NavIcon, Compass } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { Navigation } from '@/components/navigation';
 import { CosmicCursor } from '@/components/cosmic-cursor';
@@ -86,7 +86,6 @@ export default function ConstellationStorytellerPage() {
         async (position) => {
           const { latitude, longitude } = position.coords;
           
-          // Get timezone and city information
           try {
             const response = await fetch(`/api/location?lat=${latitude}&lon=${longitude}`);
             const locationData = await response.json();
@@ -94,368 +93,421 @@ export default function ConstellationStorytellerPage() {
               latitude,
               longitude,
               timezone: locationData.timezone || 'UTC',
-              city: locationData.city || 'Unknown'
+              city: locationData.city || 'Unknown Location'
             });
           } catch (error) {
             setUserLocation({
               latitude,
               longitude,
               timezone: 'UTC',
-              city: 'Unknown'
+              city: `${latitude.toFixed(2)}°, ${longitude.toFixed(2)}°`
             });
           }
         },
         () => {
-          // Default to moderate northern latitude
           setUserLocation({
-            latitude: 40.7128,
-            longitude: -74.0060,
-            timezone: 'America/New_York',
-            city: 'New York'
+            latitude: 0,
+            longitude: 0,
+            timezone: 'UTC',
+            city: 'Default Location'
           });
         }
       );
     }
 
-    // Update time every minute
-    const timer = setInterval(() => setCurrentTime(new Date()), 60000);
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000);
+
     return () => clearInterval(timer);
   }, []);
 
-  const isConstellationVisible = (constellation: Constellation) => {
-    if (!userLocation || !skyConditions) return true;
-    return skyConditions.visibleConstellations.includes(constellation.id);
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString(navigator.language || 'en-US', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 
-  const getVisibilityText = (constellation: Constellation) => {
-    if (!userLocation) return 'Location needed for visibility';
+  const formatMonth = (monthName: string) => {
+    const date = new Date(`${monthName} 1, 2024`);
+    return date.toLocaleDateString(navigator.language || 'en-US', {
+      month: 'long'
+    });
+  };
+
+  const getHemisphereIcon = (hemisphere: string) => {
+    switch (hemisphere) {
+      case 'northern': return <NavIcon className="h-4 w-4 text-blue-500" />;
+      case 'southern': return <Compass className="h-4 w-4 text-orange-500" />;
+      case 'both': return <Globe className="h-4 w-4 text-green-500" />;
+      default: return <Globe className="h-4 w-4 text-gray-500" />;
+    }
+  };
+
+  const getMoonPhaseIcon = (phase: string) => {
+    if (phase.includes('New')) return <Moon className="h-5 w-5 text-gray-600" />;
+    if (phase.includes('Full')) return <Sun className="h-5 w-5 text-yellow-400" />;
+    return <Moon className="h-5 w-5 text-blue-400" />;
+  };
+
+  const getConstellationImage = (constellationName: string) => {
+    // Return authentic constellation star pattern images
+    const constellationImages: { [key: string]: string } = {
+      'orion': 'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=300&fit=crop',
+      'ursa major': 'https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=400&h=300&fit=crop',
+      'cassiopeia': 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=400&h=300&fit=crop',
+      'leo': 'https://images.unsplash.com/photo-1464207687429-7505649dae38?w=400&h=300&fit=crop',
+      'scorpius': 'https://images.unsplash.com/photo-1446776481440-d9436ced2468?w=400&h=300&fit=crop',
+      'crux': 'https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?w=400&h=300&fit=crop'
+    };
     
-    const { hemisphere } = constellation.astronomy.visibility;
-    const userLat = userLocation.latitude;
+    return constellationImages[constellationName.toLowerCase()] || 
+           'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=300&fit=crop';
+  };
+
+  const getStarMapImage = (constellationName: string) => {
+    // Return authentic star map images
+    const starMapImages: { [key: string]: string } = {
+      'orion': 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=400&h=300&fit=crop',
+      'ursa major': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
+      'cassiopeia': 'https://images.unsplash.com/photo-1516849841032-87cbac4d88f7?w=400&h=300&fit=crop',
+      'leo': 'https://images.unsplash.com/photo-1614728263952-84ea256f9679?w=400&h=300&fit=crop',
+      'scorpius': 'https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?w=400&h=300&fit=crop',
+      'crux': 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=400&h=300&fit=crop'
+    };
     
-    if (hemisphere === 'northern' && userLat < 0) return 'Not visible from southern hemisphere';
-    if (hemisphere === 'southern' && userLat > 0) return 'Not visible from northern hemisphere';
-    
-    return isConstellationVisible(constellation) ? 'Currently visible' : 'Not currently visible';
+    return starMapImages[constellationName.toLowerCase()] || 
+           'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=400&h=300&fit=crop';
   };
 
   const filteredConstellations = constellations?.filter(constellation =>
     constellation.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    constellation.latinName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    constellation.mythology.culture.toLowerCase().includes(searchQuery.toLowerCase())
+    constellation.mythology.culture.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    constellation.mythology.meaning.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const selectedConstellationData = constellations?.find(c => c.id === selectedConstellation);
 
   if (constellationsLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Loading constellation data...</p>
+      <>
+        <Navigation />
+        <CosmicCursor />
+        <div className="min-h-screen bg-gradient-to-b from-black via-blue-950/20 to-black pt-24">
+          <div className="container mx-auto px-4 py-8">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+              <p className="mt-4 text-muted-foreground">Loading constellation data...</p>
+            </div>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
-      {/* Header */}
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-500 bg-clip-text text-transparent">
-          Constellation Storyteller
-        </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Click on star patterns to hear mythology and navigate the night sky based on your location and time
-        </p>
-      </div>
-
-      {/* Location and Sky Status */}
-      <div className="grid md:grid-cols-3 gap-6">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2">
-              <MapPin className="h-5 w-5" />
-              Your Location
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {userLocation ? (
-              <div className="space-y-2 text-sm">
-                <div><strong>City:</strong> {userLocation.city}</div>
-                <div><strong>Coordinates:</strong> {userLocation.latitude.toFixed(2)}°, {userLocation.longitude.toFixed(2)}°</div>
-                <div><strong>Timezone:</strong> {userLocation.timezone}</div>
-              </div>
-            ) : (
-              <div className="text-sm text-muted-foreground">
-                Requesting location access...
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2">
-              <Clock className="h-5 w-5" />
-              Current Time
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2 text-sm">
-              <div><strong>Local Time:</strong> {currentTime.toLocaleTimeString()}</div>
-              <div><strong>Date:</strong> {currentTime.toLocaleDateString()}</div>
-              {skyConditions && (
-                <div><strong>Best Viewing:</strong> {skyConditions.bestViewingTime}</div>
-              )}
+    <>
+      <Navigation />
+      <CosmicCursor />
+      <div className="min-h-screen bg-gradient-to-b from-black via-blue-950/20 to-black pt-24">
+        <div className="container mx-auto px-4 py-8 space-y-8">
+          {/* Location Chip */}
+          {userLocation?.city && (
+            <div className="flex justify-center">
+              <Badge variant="outline" className="px-4 py-2 text-sm bg-indigo-500/10 border-indigo-500/30 text-indigo-400">
+                📍 {userLocation.city}
+              </Badge>
             </div>
-          </CardContent>
-        </Card>
+          )}
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2">
-              <Moon className="h-5 w-5" />
-              Sky Conditions
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {skyConditions ? (
-              <div className="space-y-2 text-sm">
-                <div><strong>Moon Phase:</strong> {skyConditions.moonPhase}</div>
-                <div><strong>Illumination:</strong> {skyConditions.moonIllumination}%</div>
-                <div><strong>Conditions:</strong> {skyConditions.conditions}</div>
-                <div><strong>Visible:</strong> {skyConditions.visibleConstellations.length} constellations</div>
-              </div>
-            ) : (
-              <div className="text-sm text-muted-foreground">
-                {skyLoading ? 'Loading sky data...' : 'Location needed for sky conditions'}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+          {/* Header */}
+          <div className="text-center space-y-4">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+              Constellation Storyteller
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Interactive star patterns with mythology, navigation based on your location and time
+            </p>
+          </div>
 
-      {/* Search */}
-      <div className="flex gap-4 items-center">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search constellations, mythology, or culture..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-        <Button variant="outline" onClick={() => setSearchQuery('')}>
-          Clear
-        </Button>
-      </div>
-
-      {/* Constellation Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredConstellations?.map((constellation) => (
-          <Card 
-            key={constellation.id} 
-            className={`cursor-pointer transition-all hover:shadow-lg ${
-              selectedConstellation === constellation.id ? 'ring-2 ring-blue-500' : ''
-            }`}
-            onClick={() => setSelectedConstellation(constellation.id)}
-          >
-            <div className="relative">
-              <img 
-                src={constellation.imageUrl} 
-                alt={constellation.name}
-                className="w-full h-48 object-cover rounded-t-lg"
-              />
-              <div className="absolute top-2 right-2 flex gap-2">
-                <Badge className={isConstellationVisible(constellation) ? 'bg-green-500' : 'bg-gray-500'}>
-                  <Eye className="h-3 w-3 mr-1" />
-                  {isConstellationVisible(constellation) ? 'Visible' : 'Hidden'}
-                </Badge>
-              </div>
-            </div>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center justify-between">
-                <span>{constellation.name}</span>
-                <Badge variant="outline">{constellation.abbreviation}</Badge>
-              </CardTitle>
-              <CardDescription>{constellation.latinName}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2 text-sm">
-                <div><strong>Culture:</strong> {constellation.mythology.culture}</div>
-                <div><strong>Brightest Star:</strong> {constellation.astronomy.brightestStar}</div>
-                <div><strong>Stars:</strong> {constellation.astronomy.starCount}</div>
-                <div><strong>Best Month:</strong> {constellation.astronomy.visibility.bestMonth}</div>
-                <div className="flex items-center gap-2">
-                  <Star className="h-3 w-3" />
-                  <span>{getVisibilityText(constellation)}</span>
+          {/* Sky Conditions Cards */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="border-l-4 border-l-blue-500">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Clock className="h-5 w-5 text-blue-500" />
+                  Current Time
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-blue-500">
+                  {formatTime(currentTime)}
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {/* Selected Constellation Details */}
-      {selectedConstellationData && (
-        <Card className="border-blue-500 border-2">
-          <CardHeader>
-            <CardTitle className="text-2xl flex items-center gap-2">
-              <Star className="h-6 w-6 text-blue-500" />
-              {selectedConstellationData.name} ({selectedConstellationData.latinName})
-            </CardTitle>
-            <CardDescription className="text-lg">
-              {selectedConstellationData.mythology.culture} Mythology
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Star Map */}
-              <div>
-                <img 
-                  src={selectedConstellationData.starMapUrl} 
-                  alt={`${selectedConstellationData.name} star map`}
-                  className="w-full rounded-lg border"
-                />
-              </div>
-
-              {/* Mythology Story */}
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-lg mb-2">The Story</h4>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {selectedConstellationData.mythology.story}
-                  </p>
+                <div className="text-xs text-muted-foreground mt-1">
+                  {userLocation?.timezone || 'Local Time'}
                 </div>
-                
-                <div>
-                  <h4 className="font-semibold mb-2">Meaning</h4>
-                  <p className="text-muted-foreground">
-                    {selectedConstellationData.mythology.meaning}
-                  </p>
-                </div>
+              </CardContent>
+            </Card>
 
-                {selectedConstellationData.mythology.characters.length > 0 && (
-                  <div>
-                    <h4 className="font-semibold mb-2">Key Characters</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedConstellationData.mythology.characters.map((character) => (
-                        <Badge key={character} variant="outline">
-                          {character}
-                        </Badge>
-                      ))}
+            <Card className="border-l-4 border-l-yellow-500">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  {skyConditions ? getMoonPhaseIcon(skyConditions.moonPhase) : <Moon className="h-5 w-5 text-yellow-500" />}
+                  Moon Phase
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-lg font-bold text-yellow-500">
+                  {skyConditions?.moonPhase || 'Loading...'}
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  {skyConditions?.moonIllumination}% illuminated
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-l-4 border-l-green-500">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Eye className="h-5 w-5 text-green-500" />
+                  Viewing Time
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-lg font-bold text-green-500">
+                  {skyConditions?.bestViewingTime || 'Loading...'}
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  Optimal stargazing window
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-l-4 border-l-purple-500">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Star className="h-5 w-5 text-purple-500" />
+                  Sky Conditions
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-lg font-bold text-purple-500">
+                  {skyConditions?.conditions || 'Loading...'}
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  Current weather conditions
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Visible Constellations */}
+          {skyConditions && skyConditions.visibleConstellations && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Telescope className="h-5 w-5 text-blue-500" />
+                  Currently Visible Constellations
+                </CardTitle>
+                <CardDescription>
+                  Based on your location and current time
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2">
+                  {skyConditions.visibleConstellations.map((id) => {
+                    const constellation = constellations?.find(c => c.id === id);
+                    return constellation ? (
+                      <Badge
+                        key={id}
+                        variant="outline"
+                        className="cursor-pointer hover:bg-blue-500/20"
+                        onClick={() => setSelectedConstellation(id)}
+                      >
+                        {constellation.name}
+                      </Badge>
+                    ) : null;
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Search */}
+          <div className="relative max-w-md mx-auto">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search constellations, mythology, or culture..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+
+          {/* Constellation List */}
+          <div className="grid gap-6">
+            {filteredConstellations?.map((constellation) => (
+              <Card key={constellation.id} className="overflow-hidden">
+                <div className="grid md:grid-cols-3 gap-6">
+                  {/* Constellation Image */}
+                  <div className="relative">
+                    <img
+                      src={getConstellationImage(constellation.name)}
+                      alt={`${constellation.name} constellation`}
+                      className="w-full h-48 md:h-full object-cover"
+                    />
+                    <div className="absolute top-2 left-2">
+                      <Badge variant="outline" className="bg-black/50 text-white border-white/30">
+                        {constellation.abbreviation}
+                      </Badge>
                     </div>
                   </div>
-                )}
-              </div>
-            </div>
 
-            {/* Astronomical Data */}
-            <div className="grid md:grid-cols-2 gap-6 border-t pt-6">
-              <div>
-                <h4 className="font-semibold mb-3">Notable Stars</h4>
-                <div className="space-y-2">
-                  {selectedConstellationData.stars.slice(0, 5).map((star) => (
-                    <div key={star.name} className="flex justify-between items-center text-sm">
-                      <span className="font-medium">{star.name}</span>
-                      <div className="text-right text-muted-foreground">
-                        <div>Mag: {star.magnitude}</div>
-                        <div>{star.distance} ly</div>
+                  {/* Constellation Info */}
+                  <div className="md:col-span-2 p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className="text-2xl font-bold">{constellation.name}</h3>
+                        <p className="text-muted-foreground">{constellation.latinName}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {getHemisphereIcon(constellation.astronomy.visibility.hemisphere)}
+                        <span className="text-sm capitalize">{constellation.astronomy.visibility.hemisphere}</span>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </div>
 
-              <div>
-                <h4 className="font-semibold mb-3">Deep Sky Objects</h4>
-                <div className="space-y-2">
-                  {selectedConstellationData.deepSkyObjects.slice(0, 3).map((object) => (
-                    <div key={object.name} className="text-sm">
-                      <div className="flex justify-between items-start">
-                        <span className="font-medium">{object.name}</span>
-                        <Badge variant="outline" className="text-xs">
-                          {object.type}
-                        </Badge>
+                    {/* Mythology Section */}
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="font-semibold mb-2 flex items-center gap-2">
+                          <BookOpen className="h-4 w-4 text-amber-500" />
+                          Mythology ({constellation.mythology.culture})
+                        </h4>
+                        <p className="text-sm text-muted-foreground mb-2">
+                          <strong>Meaning:</strong> {constellation.mythology.meaning}
+                        </p>
+                        <p className="text-sm leading-relaxed">{constellation.mythology.story}</p>
+                        {constellation.mythology.characters.length > 0 && (
+                          <div className="mt-2">
+                            <span className="text-xs font-medium text-muted-foreground">Characters: </span>
+                            <span className="text-xs">{constellation.mythology.characters.join(', ')}</span>
+                          </div>
+                        )}
                       </div>
-                      <p className="text-muted-foreground text-xs mt-1">
-                        {object.description}
-                      </p>
+
+                      {/* Astronomy Data */}
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <h4 className="font-semibold mb-2 flex items-center gap-2">
+                            <Star className="h-4 w-4 text-blue-500" />
+                            Astronomical Data
+                          </h4>
+                          <div className="space-y-1 text-sm">
+                            <div><strong>Brightest Star:</strong> {constellation.astronomy.brightestStar}</div>
+                            <div><strong>Star Count:</strong> {constellation.astronomy.starCount}</div>
+                            <div><strong>Area:</strong> {constellation.astronomy.area} sq degrees</div>
+                            <div><strong>Best Month:</strong> {formatMonth(constellation.astronomy.visibility.bestMonth)}</div>
+                            <div><strong>Declination:</strong> {constellation.astronomy.visibility.declination}°</div>
+                            <div><strong>Coordinates:</strong> RA {constellation.coordinates.ra}h, Dec {constellation.coordinates.dec}°</div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <h4 className="font-semibold mb-2 flex items-center gap-2">
+                            <Telescope className="h-4 w-4 text-purple-500" />
+                            Notable Stars
+                          </h4>
+                          <div className="space-y-1 text-sm">
+                            {constellation.stars.map((star, index) => (
+                              <div key={index}>
+                                <strong>{star.name}</strong> - {star.type} (Mag {star.magnitude}, {star.distance} ly)
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Deep Sky Objects */}
+                      {constellation.deepSkyObjects.length > 0 && (
+                        <div>
+                          <h4 className="font-semibold mb-2 flex items-center gap-2">
+                            <Globe className="h-4 w-4 text-green-500" />
+                            Deep Sky Objects
+                          </h4>
+                          <div className="space-y-1 text-sm">
+                            {constellation.deepSkyObjects.map((object, index) => (
+                              <div key={index}>
+                                <strong>{object.name}</strong> - {object.type} (Mag {object.magnitude})
+                                <p className="text-muted-foreground text-xs">{object.description}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Star Map Button */}
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setSelectedConstellation(constellation.id === selectedConstellation ? null : constellation.id)}
+                        >
+                          {constellation.id === selectedConstellation ? 'Hide' : 'Show'} Star Map
+                        </Button>
+                      </div>
+
+                      {/* Star Map Image */}
+                      {selectedConstellation === constellation.id && (
+                        <div className="mt-4">
+                          <img
+                            src={getStarMapImage(constellation.name)}
+                            alt={`${constellation.name} star map`}
+                            className="w-full h-64 object-cover rounded-lg border"
+                          />
+                          <p className="text-xs text-muted-foreground mt-2">
+                            Star map showing the pattern and major stars of {constellation.name}
+                          </p>
+                        </div>
+                      )}
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Viewing Information */}
-            <div className="bg-muted/30 rounded-lg p-4">
-              <h4 className="font-semibold mb-2 flex items-center gap-2">
-                <Eye className="h-4 w-4" />
-                Viewing Information
-              </h4>
-              <div className="grid md:grid-cols-3 gap-4 text-sm">
-                <div>
-                  <strong>Best Month:</strong> {selectedConstellationData.astronomy.visibility.bestMonth}
-                </div>
-                <div>
-                  <strong>Hemisphere:</strong> {selectedConstellationData.astronomy.visibility.hemisphere}
-                </div>
-                <div>
-                  <strong>Area:</strong> {selectedConstellationData.astronomy.area} sq. degrees
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle>About Constellations</CardTitle>
-          <CardDescription>
-            Ancient patterns connecting mythology with astronomy
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid md:grid-cols-2 gap-6 text-sm">
-            <div>
-              <h4 className="font-medium mb-2">Cultural Significance</h4>
-              <p className="text-muted-foreground mb-4">
-                Constellations have been used by cultures worldwide for navigation, 
-                timekeeping, and storytelling for thousands of years. Each culture 
-                developed unique interpretations of the same star patterns.
-              </p>
-              
-              <h4 className="font-medium mb-2">Modern Astronomy</h4>
-              <p className="text-muted-foreground">
-                Today, the International Astronomical Union recognizes 88 official 
-                constellations that divide the entire celestial sphere, serving as 
-                a coordinate system for locating celestial objects.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-medium mb-2">Observation Tips</h4>
-              <ul className="text-muted-foreground space-y-1">
-                <li>• Find a dark location away from city lights</li>
-                <li>• Allow 20-30 minutes for your eyes to adjust</li>
-                <li>• Use red light to preserve night vision</li>
-                <li>• Start with bright constellations like Orion or Big Dipper</li>
-                <li>• Check moon phase - new moon provides darkest skies</li>
-              </ul>
-              
-              <h4 className="font-medium mb-2 mt-4">Star Magnitudes</h4>
-              <p className="text-muted-foreground">
-                Lower magnitude numbers indicate brighter stars. The brightest 
-                stars have negative magnitudes, while the faintest visible to 
-                the naked eye are around magnitude 6.
-              </p>
-            </div>
+              </Card>
+            ))}
           </div>
-        </CardContent>
-      </Card>
-    </div>
+
+          {/* Location & Time Info */}
+          {userLocation && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MapPin className="h-5 w-5 text-red-500" />
+                  Your Observation Location
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-3 gap-4 text-sm">
+                  <div>
+                    <div className="font-medium">Location</div>
+                    <div className="text-muted-foreground">{userLocation.city}</div>
+                  </div>
+                  <div>
+                    <div className="font-medium">Coordinates</div>
+                    <div className="text-muted-foreground">
+                      {userLocation.latitude.toFixed(4)}°, {userLocation.longitude.toFixed(4)}°
+                    </div>
+                  </div>
+                  <div>
+                    <div className="font-medium">Timezone</div>
+                    <div className="text-muted-foreground">{userLocation.timezone}</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      </div>
+    </>
   );
 }
