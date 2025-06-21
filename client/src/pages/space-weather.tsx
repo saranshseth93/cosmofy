@@ -208,7 +208,7 @@ export default function SpaceWeatherPage() {
                   </div>
                   <Progress value={(spaceWeather?.solarWind.speed || 0) / 8} className="h-2" />
                   <div className="text-xs text-muted-foreground">
-                    Normal: 300-500 km/s | High: {'>'}600 km/s
+                    Normal: 300-500 km/s | High: &gt;600 km/s
                   </div>
                 </CardContent>
               </Card>
@@ -226,7 +226,7 @@ export default function SpaceWeatherPage() {
                   </div>
                   <Progress value={(spaceWeather?.solarWind.density || 0) * 5} className="h-2" />
                   <div className="text-xs text-muted-foreground">
-                    Normal: 1-10 p/cm³ | High: {'>'}20 p/cm³
+                    Normal: 1-10 p/cm³ | High: &gt;20 p/cm³
                   </div>
                 </CardContent>
               </Card>
@@ -244,7 +244,7 @@ export default function SpaceWeatherPage() {
                   </div>
                   <Progress value={(spaceWeather?.solarWind.temperature || 0) / 3000} className="h-2" />
                   <div className="text-xs text-muted-foreground">
-                    Normal: 50-150K K | High: {'>'}250K K
+                    Normal: 50-150K K | High: &gt;250K K
                   </div>
                 </CardContent>
               </Card>
@@ -534,7 +534,7 @@ export default function SpaceWeatherPage() {
                     {spaceWeather?.radiationEnvironment.electronFlux?.toLocaleString()}
                   </div>
                   <div className="text-xs text-muted-foreground mt-2">
-                    High-energy electrons ({'>'}2 MeV)
+                    High-energy electrons (&gt;2 MeV)
                   </div>
                 </CardContent>
               </Card>
@@ -548,7 +548,7 @@ export default function SpaceWeatherPage() {
                     {spaceWeather?.radiationEnvironment.highEnergyProtons}
                   </div>
                   <div className="text-xs text-muted-foreground mt-2">
-                    Proton flux ({'>'}10 MeV)
+                    Proton flux (&gt;10 MeV)
                   </div>
                 </CardContent>
               </Card>
