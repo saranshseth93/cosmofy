@@ -5,8 +5,73 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Navigation } from '@/components/navigation';
 import { CosmicCursor } from '@/components/cosmic-cursor';
-// Import Shiva background image
-const shivaBgImage = '/attached_assets/shiva-bg_1750485532403.jpg';
+// Divine Hindu Background Component
+const DivineBackground = () => (
+  <div className="absolute inset-0 overflow-hidden">
+    {/* Gradient Background */}
+    <div className="absolute inset-0 bg-gradient-to-br from-orange-900 via-red-900 to-purple-900 opacity-90" />
+    
+    {/* Sacred Geometry Pattern */}
+    <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 1000 1000">
+      <defs>
+        <pattern id="om-pattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+          <g fill="none" stroke="url(#gold-gradient)" strokeWidth="2" opacity="0.3">
+            {/* Om Symbol */}
+            <path d="M50 100 Q 80 80, 100 100 Q 120 120, 100 140 Q 80 160, 50 140 Q 30 120, 50 100" />
+            <circle cx="110" cy="90" r="8" />
+            <path d="M100 110 Q 120 130, 140 110" />
+          </g>
+        </pattern>
+        <linearGradient id="gold-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#FFD700" />
+          <stop offset="50%" stopColor="#FFA500" />
+          <stop offset="100%" stopColor="#FF6B35" />
+        </linearGradient>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#om-pattern)" />
+    </svg>
+    
+    {/* Lotus Petals */}
+    <div className="absolute inset-0">
+      {[...Array(8)].map((_, i) => (
+        <div
+          key={i}
+          className="absolute w-32 h-32 opacity-10"
+          style={{
+            left: `${20 + (i * 15)}%`,
+            top: `${10 + (i * 10)}%`,
+            transform: `rotate(${i * 45}deg)`,
+          }}
+        >
+          <svg viewBox="0 0 100 100" className="w-full h-full">
+            <path
+              d="M50 10 Q 70 30, 50 50 Q 30 30, 50 10"
+              fill="url(#gold-gradient)"
+              opacity="0.4"
+            />
+          </svg>
+        </div>
+      ))}
+    </div>
+    
+    {/* Divine Light Rays */}
+    <div className="absolute inset-0">
+      {[...Array(12)].map((_, i) => (
+        <div
+          key={i}
+          className="absolute w-1 bg-gradient-to-t from-transparent via-yellow-400 to-transparent opacity-20"
+          style={{
+            left: `${50 + Math.cos(i * 30 * Math.PI / 180) * 40}%`,
+            top: `${50 + Math.sin(i * 30 * Math.PI / 180) * 40}%`,
+            height: '30%',
+            transform: `rotate(${i * 30}deg)`,
+            transformOrigin: 'center bottom',
+          }}
+        />
+      ))}
+    </div>
+  </div>
+);
 
 interface LocationData {
   latitude: number;
@@ -213,13 +278,8 @@ export default function HinduPanchangPage() {
         <Navigation />
         <CosmicCursor />
         <div className="min-h-screen relative pt-24">
-          {/* Shiva Background Image */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{
-              backgroundImage: `url(${shivaBgImage})`,
-            }}
-          />
+          {/* Divine Hindu Background */}
+          <DivineBackground />
           
           {/* Responsive Overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/80 md:bg-gradient-to-b md:from-black/70 md:via-black/60 md:to-black/70" />
@@ -243,13 +303,8 @@ export default function HinduPanchangPage() {
       <Navigation />
       <CosmicCursor />
       <div className="min-h-screen relative pt-24">
-        {/* Shiva Background Image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url(${shivaBgImage})`,
-          }}
-        />
+        {/* Divine Hindu Background */}
+        <DivineBackground />
         
         {/* Responsive Overlay - stronger on mobile for better readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/75 to-black/85 sm:bg-gradient-to-b sm:from-black/75 sm:via-black/65 sm:to-black/75 md:bg-gradient-to-b md:from-black/70 md:via-black/60 md:to-black/70" />
