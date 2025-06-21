@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { nasaApi } from "./services/nasa-api";
 import { geolocationService } from "./services/geolocation";
 import { spaceNewsService } from "./services/space-news";
+import { constellationApi } from "./services/constellation-api";
 import { insertApodImageSchema, insertAsteroidSchema, insertIssPositionSchema, insertIssPassSchema, insertIssCrewSchema, insertAuroraForecastSchema, insertSpaceMissionSchema } from "@shared/schema";
 
 // Background refresh function
@@ -1217,40 +1218,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Constellation API endpoints
   app.get("/api/constellations", async (_req, res) => {
     try {
-      const constellations = [
-        {
-          id: 'orion',
-          name: 'Orion',
-          latinName: 'Orion',
-          abbreviation: 'Ori',
-          mythology: {
-            culture: 'Greek',
-            story: 'Orion was a great hunter who boasted he could kill any creature on Earth. Gaia, the Earth goddess, sent a scorpion to kill him. Zeus placed both in the sky, but on opposite sides so they would never fight again.',
-            meaning: 'The Hunter',
-            characters: ['Orion', 'Artemis', 'Gaia', 'Zeus']
-          },
-          astronomy: {
-            brightestStar: 'Rigel',
-            starCount: 81,
-            area: 594,
-            visibility: {
-              hemisphere: 'both' as const,
-              bestMonth: 'January',
-              declination: 5
-            }
-          },
-          coordinates: { ra: 5.5, dec: 5 },
-          stars: [
-            { name: 'Betelgeuse', magnitude: 0.5, type: 'Red Supergiant', distance: 640 },
-            { name: 'Rigel', magnitude: 0.1, type: 'Blue Supergiant', distance: 860 }
-          ],
-          deepSkyObjects: [
-            { name: 'Orion Nebula', type: 'Emission Nebula', magnitude: 4.0, description: 'Stellar nursery visible to naked eye' }
-          ],
-          imageUrl: 'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400',
-          starMapUrl: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=400'
-        }
-      ];
+      const constellations = await constellationApi.getConstellations();
       
       console.log("=== CONSTELLATION API DATA DUMP ===");
       console.log("Total Constellations:", constellations.length);
@@ -1262,7 +1230,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.log("Abbreviation:", constellation.abbreviation);
         console.log("Culture:", constellation.mythology.culture);
         console.log("Meaning:", constellation.mythology.meaning);
-        console.log("Story:", constellation.mythology.story);
+        console.log("Story:", constellation.mythology.story.substring(0, 100) + "...");
         console.log("Characters:", constellation.mythology.characters.join(', '));
         console.log("Brightest Star:", constellation.astronomy.brightestStar);
         console.log("Star Count:", constellation.astronomy.starCount);
@@ -1271,18 +1239,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.log("Best Month:", constellation.astronomy.visibility.bestMonth);
         console.log("Declination:", constellation.astronomy.visibility.declination);
         console.log("Coordinates - RA:", constellation.coordinates.ra, "Dec:", constellation.coordinates.dec);
-        console.log("Stars:");
-        constellation.stars.forEach(star => {
+        console.log("Notable Stars:", constellation.stars.length);
+        constellation.stars.slice(0, 3).forEach(star => {
           console.log(`  - ${star.name}: ${star.type}, Magnitude ${star.magnitude}, ${star.distance} ly`);
         });
-        console.log("Deep Sky Objects:");
-        constellation.deepSkyObjects.forEach(obj => {
-          console.log(`  - ${obj.name}: ${obj.type}, Magnitude ${obj.magnitude} - ${obj.description}`);
+        console.log("Deep Sky Objects:", constellation.deepSkyObjects.length);
+        constellation.deepSkyObjects.slice(0, 2).forEach(obj => {
+          console.log(`  - ${obj.name}: ${obj.type}, Magnitude ${obj.magnitude}`);
         });
-        console.log("Image URL:", constellation.imageUrl);
-        console.log("Star Map URL:", constellation.starMapUrl);
       });
-      console.log("Full Data Object:", JSON.stringify(constellations, null, 2));
+      console.log("Data Source: IAU (International Astronomical Union) Standards");
       console.log("=== END CONSTELLATION DUMP ===");
       
       res.json(constellations);
@@ -1297,13 +1263,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const lat = parseFloat(req.query.lat as string);
       const lon = parseFloat(req.query.lon as string);
       
-      const skyConditions = {
-        visibleConstellations: ['orion', 'cassiopeia', 'ursa-major'],
-        moonPhase: 'Waxing Crescent',
-        moonIllumination: 25,
-        bestViewingTime: '9 PM - 5 AM',
-        conditions: 'Clear skies expected'
-      };
+      if (isNaN(lat) || isNaN(lon)) {
+        return res.status(400).json({ error: "Invalid coordinates" });
+      }
+      
+      const skyConditions = await constellationApi.getSkyConditions(lat, lon);
       res.json(skyConditions);
     } catch (error) {
       console.error("Sky conditions error:", error);
