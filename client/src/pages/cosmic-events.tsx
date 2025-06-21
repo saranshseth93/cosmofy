@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock, MapPin, Eye, Rocket, Moon, Sun, Star } from 'lucide-react';
+import { Calendar, Clock, MapPin, Eye, Rocket, Moon, Sun, Star, Globe, Camera, Telescope } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { Navigation } from '@/components/navigation';
 import { CosmicCursor } from '@/components/cosmic-cursor';
@@ -48,7 +48,7 @@ interface RocketLaunch {
 
 export default function CosmicEventsPage() {
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lon: number; city?: string } | null>(null);
 
   const { data: events, isLoading: eventsLoading } = useQuery<CosmicEvent[]>({
     queryKey: ['/api/cosmic-events', selectedCategory],
@@ -63,14 +63,28 @@ export default function CosmicEventsPage() {
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            lat: position.coords.latitude,
-            lon: position.coords.longitude
-          });
+        async (position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          
+          try {
+            const response = await fetch(`/api/location?lat=${lat}&lon=${lon}`);
+            const locationData = await response.json();
+            setUserLocation({
+              lat,
+              lon,
+              city: locationData.city || `${lat.toFixed(2)}°, ${lon.toFixed(2)}°`
+            });
+          } catch (error) {
+            setUserLocation({
+              lat,
+              lon,
+              city: `${lat.toFixed(2)}°, ${lon.toFixed(2)}°`
+            });
+          }
         },
         () => {
-          setUserLocation({ lat: 40.7128, lon: -74.0060 });
+          setUserLocation({ lat: 40.7128, lon: -74.0060, city: 'Default Location' });
         }
       );
     }
@@ -112,6 +126,40 @@ export default function CosmicEventsPage() {
     if (hours > 0) return `${hours}h ${minutes}m ${secs}s`;
     if (minutes > 0) return `${minutes}m ${secs}s`;
     return `${secs}s`;
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString(navigator.language || 'en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  const formatTime = (timeString: string) => {
+    const [hours, minutes] = timeString.split(':');
+    const date = new Date();
+    date.setHours(parseInt(hours, 10), parseInt(minutes, 10));
+    return date.toLocaleTimeString(navigator.language || 'en-US', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  const formatDateTime = (dateString: string, timeString?: string) => {
+    const date = new Date(dateString);
+    if (timeString) {
+      const [hours, minutes] = timeString.split(':');
+      date.setHours(parseInt(hours, 10), parseInt(minutes, 10));
+    }
+    return date.toLocaleString(navigator.language || 'en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 
   const isEventVisibleFromLocation = (event: CosmicEvent) => {
@@ -167,6 +215,16 @@ export default function CosmicEventsPage() {
       <CosmicCursor />
       <div className="min-h-screen bg-gradient-to-b from-black via-blue-950/20 to-black pt-24">
         <div className="container mx-auto px-4 py-8 space-y-8">
+          {/* Location Chip */}
+          {userLocation?.city && (
+            <div className="flex justify-center">
+              <Badge variant="outline" className="px-4 py-2 text-sm bg-purple-500/10 border-purple-500/30 text-purple-400">
+                📍 {userLocation.city}
+              </Badge>
+            </div>
+          )}
+
+          {/* Header */}
           <div className="text-center space-y-4">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
               Cosmic Event Calendar
@@ -176,6 +234,7 @@ export default function CosmicEventsPage() {
             </p>
           </div>
 
+          {/* Category Filters */}
           <div className="flex flex-wrap gap-2 justify-center">
             {categories.map(category => {
               const Icon = category.icon;
@@ -193,6 +252,7 @@ export default function CosmicEventsPage() {
             })}
           </div>
 
+          {/* Upcoming Rocket Launches */}
           {upcomingLaunches && upcomingLaunches.length > 0 && (
             <div className="space-y-4">
               <h2 className="text-2xl font-semibold flex items-center gap-2">
@@ -200,7 +260,7 @@ export default function CosmicEventsPage() {
                 Upcoming Rocket Launches
               </h2>
               <div className="grid gap-4">
-                {upcomingLaunches.slice(0, 3).map((launch) => (
+                {upcomingLaunches.slice(0, 5).map((launch) => (
                   <Card key={launch.id} className="border-l-4 border-l-red-500">
                     <CardHeader>
                       <div className="flex justify-between items-start">
@@ -222,14 +282,28 @@ export default function CosmicEventsPage() {
                     </CardHeader>
                     <CardContent>
                       <p className="text-muted-foreground mb-4">{launch.description}</p>
+                      
+                      {/* Mission Objectives */}
+                      {launch.objectives && launch.objectives.length > 0 && (
+                        <div className="mb-4">
+                          <h4 className="font-medium text-sm mb-2">Mission Objectives</h4>
+                          <ul className="text-sm text-muted-foreground space-y-1">
+                            {launch.objectives.map((objective, index) => (
+                              <li key={index}>• {objective}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <div className="flex items-center gap-1">
                           <Calendar className="h-4 w-4" />
-                          {launch.date} at {launch.time}
+                          {formatDateTime(launch.date, launch.time)}
                         </div>
                         {launch.livestreamUrl && (
                           <a href={launch.livestreamUrl} target="_blank" rel="noopener noreferrer" 
-                             className="text-blue-500 hover:underline">
+                             className="text-blue-500 hover:underline flex items-center gap-1">
+                            <Eye className="h-4 w-4" />
                             Watch Live
                           </a>
                         )}
@@ -241,6 +315,7 @@ export default function CosmicEventsPage() {
             </div>
           )}
 
+          {/* Cosmic Events */}
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold flex items-center gap-2">
               <Star className="h-6 w-6 text-purple-500" />
@@ -256,7 +331,7 @@ export default function CosmicEventsPage() {
                         <div>
                           <CardTitle className="text-xl">{event.title}</CardTitle>
                           <CardDescription className="mt-1">
-                            {event.date} at {event.time} • Duration: {event.duration}
+                            {formatDate(event.date)} at {formatTime(event.time)} • Duration: {event.duration}
                           </CardDescription>
                         </div>
                       </div>
@@ -275,15 +350,24 @@ export default function CosmicEventsPage() {
                     
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <h4 className="font-medium mb-2">Visibility</h4>
+                        <h4 className="font-medium mb-2 flex items-center gap-2">
+                          <Globe className="h-4 w-4" />
+                          Visibility Information
+                        </h4>
                         <div className="space-y-1 text-sm">
-                          <div>Global: {event.visibility.global ? 'Yes' : 'No'}</div>
-                          <div>Regions: {event.visibility.regions.join(', ')}</div>
-                          <div>Best Time: {event.visibility.bestTime}</div>
+                          <div><strong>Global Event:</strong> {event.visibility.global ? 'Yes' : 'No'}</div>
+                          <div><strong>Visible Regions:</strong> {event.visibility.regions.join(', ')}</div>
+                          <div><strong>Best Viewing Time:</strong> {event.visibility.bestTime}</div>
+                          {event.coordinates && (
+                            <div><strong>Optimal Location:</strong> {event.coordinates.latitude}°, {event.coordinates.longitude}°</div>
+                          )}
                         </div>
                       </div>
                       <div>
-                        <h4 className="font-medium mb-2">Viewing Tips</h4>
+                        <h4 className="font-medium mb-2 flex items-center gap-2">
+                          <Camera className="h-4 w-4" />
+                          Viewing Tips
+                        </h4>
                         <ul className="space-y-1 text-sm">
                           {event.viewingTips.map((tip, index) => (
                             <li key={index}>• {tip}</li>
@@ -292,9 +376,40 @@ export default function CosmicEventsPage() {
                       </div>
                     </div>
                     
+                    {/* Event Significance */}
                     <div className="p-3 bg-muted rounded-lg">
-                      <div className="text-sm font-medium text-muted-foreground mb-1">Significance</div>
+                      <div className="text-sm font-medium text-muted-foreground mb-1">Scientific Significance</div>
                       <div className="text-sm">{event.significance}</div>
+                    </div>
+
+                    {/* Event Images */}
+                    {event.images && event.images.length > 0 && (
+                      <div>
+                        <h4 className="font-medium mb-2 flex items-center gap-2">
+                          <Telescope className="h-4 w-4" />
+                          Related Images
+                        </h4>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                          {event.images.slice(0, 3).map((image, index) => (
+                            <img
+                              key={index}
+                              src={image}
+                              alt={`${event.title} ${index + 1}`}
+                              className="w-full h-20 object-cover rounded border"
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Event Type Badge */}
+                    <div className="flex items-center justify-between">
+                      <Badge variant="outline" className="capitalize">
+                        {event.type.replace('_', ' ')}
+                      </Badge>
+                      {!isEventVisibleFromLocation(event) && (
+                        <span className="text-xs text-muted-foreground">Not visible from your location</span>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -302,32 +417,35 @@ export default function CosmicEventsPage() {
             </div>
           </div>
 
+          {/* Event Statistics */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Eye className="h-5 w-5 text-green-500" />
-                Viewing Guidelines
+                <Calendar className="h-5 w-5" />
+                Event Overview
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-2 gap-6 text-sm">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                 <div>
-                  <h4 className="font-medium mb-2">General Tips</h4>
-                  <div className="space-y-1">
-                    <div><strong>Dark Location:</strong> Find areas away from city lights</div>
-                    <div><strong>Weather:</strong> Check for clear skies in advance</div>
-                    <div><strong>Timing:</strong> Arrive 30 minutes early for eye adjustment</div>
-                    <div><strong>Comfort:</strong> Bring chairs or blankets for extended viewing</div>
-                  </div>
+                  <div className="text-2xl font-bold text-blue-500">{events?.length || 0}</div>
+                  <div className="text-sm text-muted-foreground">Total Events</div>
                 </div>
                 <div>
-                  <h4 className="font-medium mb-2">Safety & Equipment</h4>
-                  <div className="space-y-1">
-                    <div><strong>Solar Events:</strong> Never look directly at the Sun without proper filters</div>
-                    <div><strong>Red Light:</strong> Use red flashlights to preserve night vision</div>
-                    <div><strong>Apps:</strong> Use astronomy apps to help locate objects</div>
-                    <div><strong>Equipment:</strong> Some events benefit from binoculars or telescopes</div>
+                  <div className="text-2xl font-bold text-red-500">{launches?.length || 0}</div>
+                  <div className="text-sm text-muted-foreground">Rocket Launches</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-green-500">
+                    {events?.filter(e => isEventVisibleFromLocation(e)).length || 0}
                   </div>
+                  <div className="text-sm text-muted-foreground">Visible from Location</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-purple-500">
+                    {events?.filter(e => e.status === 'upcoming').length || 0}
+                  </div>
+                  <div className="text-sm text-muted-foreground">Upcoming Events</div>
                 </div>
               </div>
             </CardContent>
