@@ -117,19 +117,29 @@ export default function MarsRoverPage() {
 
   if (photosLoading || statusLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500 mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Loading Mars rover data...</p>
-        </div>
-      </div>
+      <>
+        <Navigation />
+        <CosmicCursor />
+        <div className="min-h-screen bg-gradient-to-b from-black via-blue-950/20 to-black pt-24">
+            <div className="container mx-auto px-4 py-8">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500 mx-auto"></div>
+                <p className="mt-4 text-muted-foreground">Loading Mars rover data...</p>
+              </div>
+            </div>
+          </div>
+        </>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
-      {/* Header */}
-      <div className="text-center space-y-4">
+    <>
+      <Navigation />
+      <CosmicCursor />
+      <div className="min-h-screen bg-gradient-to-b from-black via-blue-950/20 to-black pt-24">
+          <div className="container mx-auto px-4 py-8 space-y-8">
+            {/* Header */}
+            <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold bg-gradient-to-r from-red-400 via-orange-500 to-yellow-500 bg-clip-text text-transparent">
           Mars Rover Mission Control
         </h1>
@@ -404,6 +414,8 @@ export default function MarsRoverPage() {
           </div>
         </CardContent>
       </Card>
-    </div>
+        </div>
+      </div>
+    </>
   );
 }
