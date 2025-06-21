@@ -4,6 +4,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar, Clock, MapPin, Eye, Rocket, Moon, Sun, Star } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
+import { Navigation } from '@/components/navigation';
+import { CosmicCursor } from '@/components/cosmic-cursor';
 
 interface CosmicEvent {
   id: string;

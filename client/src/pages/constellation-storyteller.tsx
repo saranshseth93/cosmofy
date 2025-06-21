@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MapPin, Clock, Eye, Star, Moon, Sun, Search } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
+import { Navigation } from '@/components/navigation';
+import { CosmicCursor } from '@/components/cosmic-cursor';
 
 interface Constellation {
   id: string;

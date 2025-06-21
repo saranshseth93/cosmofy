@@ -4,6 +4,8 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { AlertTriangle, Zap, Sun, Shield, Globe } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
+import { Navigation } from '@/components/navigation';
+import { CosmicCursor } from '@/components/cosmic-cursor';
 
 interface SpaceWeatherData {
   solarWind: {

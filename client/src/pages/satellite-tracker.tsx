@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Satellite, MapPin, Clock, Bell, Search, Orbit, Zap } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
+import { Navigation } from '@/components/navigation';
+import { CosmicCursor } from '@/components/cosmic-cursor';
 
 interface SatelliteData {
   id: string;
