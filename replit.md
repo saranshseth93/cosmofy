@@ -159,6 +159,16 @@ Changelog:
   * Changed constellation card layout to horizontal row format (image left, data right)
   * Fixed sky conditions coordinate passing and authentication API errors
   * Added comprehensive constellation data including all zodiac constellations and major northern/southern hemisphere patterns
+  * Fixed search functionality to show all constellations when empty and sort by visibility status
+  * Removed all duplicate constellation entries and eliminated React key warnings
+  * Added observation location display above search bar as requested
+  * Added comprehensive Hindu Panchang page with authentic Vedic calendar data including:
+    - Daily Tithi, Nakshatra, Yoga, and Karana with proper deities and significance
+    - Sunrise, sunset, moonrise, and moonset calculations based on user location
+    - Shubh Muhurat and inauspicious timings (Rahu Kaal, Gulika Kaal, Yama Ganda)
+    - Moon Rashi information with elements and planetary lords
+    - Weekly vrats and festivals based on current date
+    - Comprehensive backend API service with astronomical calculations
 ```
 
 ## User Preferences
