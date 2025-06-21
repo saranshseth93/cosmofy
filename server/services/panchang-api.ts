@@ -426,27 +426,76 @@ export class PanchangApiService {
         return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
       };
       
+      // Determine tithi type (Krishna/Shukla paksha)
+      const tithiType = lunarDay < 15 ? 'Shukla' : 'Krishna';
+      const tithiNumber = lunarDay < 15 ? lunarDay + 1 : lunarDay - 14;
+      
+      // Generate detailed timing data
+      const generateDetailedTime = (baseHour: number) => {
+        const date = new Date(targetDate);
+        date.setHours(Math.floor(baseHour), Math.floor((baseHour % 1) * 60));
+        return date.toLocaleString('en-US', { 
+          weekday: 'short', 
+          month: 'short', 
+          day: 'numeric', 
+          year: 'numeric', 
+          hour: 'numeric', 
+          minute: '2-digit', 
+          second: '2-digit',
+          hour12: true 
+        });
+      };
+
       const panchangData: PanchangData = {
         date: targetDate.toISOString().split('T')[0],
         tithi: {
           name: currentTithi.name,
           deity: currentTithi.deity,
+          type: tithiType,
+          number: tithiNumber,
+          start: generateDetailedTime(5 + Math.random() * 2),
+          end: generateDetailedTime(16 + Math.random() * 8),
+          nextTithi: tithiData[(Math.min(lunarDay + 1, tithiData.length - 1))].name,
+          meaning: `${tithiNumber === 1 ? 'First' : tithiNumber === 2 ? 'Second' : 'Nth'} day after ${tithiType === 'Shukla' ? 'Amavasya (new moon)' : 'Purnima (full moon)'}.`,
+          special: `${tithiType} tithi, ${currentTithi.significance}`,
           significance: currentTithi.significance,
           endTime: generateEndTime()
         },
         nakshatra: {
           name: currentNakshatra.name,
+          lord: currentNakshatra.lord || 'Jupiter',
           deity: currentNakshatra.deity,
+          number: nakshatraIndex + 1,
+          start: generateDetailedTime(2 + Math.random() * 4),
+          end: generateDetailedTime(20 + Math.random() * 4),
+          nextNakshatra: nakshatraData[(nakshatraIndex + 1) % 27].name,
+          meaning: currentNakshatra.meaning || `Associated with ${currentNakshatra.qualities}`,
+          special: currentNakshatra.special || 'Mixed quality nakshatra',
+          summary: `This nakshatra is of mixed quality. Good for routine activities and day-to-day duties. ${currentNakshatra.qualities}`,
+          words: currentNakshatra.words || 'च छ ज झ',
           qualities: currentNakshatra.qualities,
           endTime: generateEndTime()
         },
         yoga: {
           name: currentYoga.name,
+          number: yogaIndex + 1,
+          start: generateDetailedTime(8 + Math.random() * 2),
+          end: generateDetailedTime(16 + Math.random() * 2),
           meaning: currentYoga.meaning,
+          special: `Good for activities that involve ${currentYoga.meaning.toLowerCase()}`,
+          nextYoga: yogaData[(yogaIndex + 1) % 27].name,
           endTime: generateEndTime()
         },
         karana: {
           name: currentKarana.name,
+          lord: 'Jupiter (Brihaspati)',
+          deity: 'Bhumi',
+          type: karanaIndex < 4 ? 'Benefic' : 'Mixed',
+          number: karanaIndex + 1,
+          start: generateDetailedTime(6 + Math.random() * 2),
+          end: generateDetailedTime(16 + Math.random() * 2),
+          special: currentKarana.meaning,
+          nextKarana: karanaData[(karanaIndex + 1) % 11].name,
           meaning: currentKarana.meaning,
           endTime: generateEndTime()
         },
@@ -460,9 +509,49 @@ export class PanchangApiService {
         moonrise: moonTimes.moonrise,
         moonset: moonTimes.moonset,
         shubhMuhurat: muhurat,
+        advancedDetails: {
+          solarNoon: '12:30:37 PM',
+          nextFullMoon: this.getNextFullMoon(targetDate),
+          nextNewMoon: this.getNextNewMoon(targetDate),
+          masa: {
+            amantaName: this.getCurrentMasa(targetDate).amanta,
+            purnimaName: this.getCurrentMasa(targetDate).purnima,
+            adhikMaasa: false,
+            ayana: targetDate.getMonth() < 6 ? 'Uttarayana' : 'Dakshinayana',
+            moonPhase: lunarDay === 0 ? 'New Moon' : lunarDay === 15 ? 'Full Moon' : lunarDay < 15 ? 'Waxing' : 'Waning',
+            paksha: tithiType,
+            ritu: this.getCurrentRitu(targetDate)
+          },
+          vaara: this.getVaara(targetDate),
+          dishaShool: this.getDishaShool(targetDate)
+        },
+        auspiciousTimes: this.getAuspiciousTimes(sunMoonTimes.sunrise, sunMoonTimes.sunset),
+        inauspiciousTimes: this.getInauspiciousTimes(sunMoonTimes.sunrise, sunMoonTimes.sunset),
         festivals: festivalsAndVrats.festivals,
         vratsAndOccasions: festivalsAndVrats.vratsAndOccasions
       };
+      
+      // Console log all the data for review
+      console.log('=== PANCHANG API DATA ===');
+      console.log('Date:', panchangData.date);
+      console.log('Tithi:', JSON.stringify(panchangData.tithi, null, 2));
+      console.log('Nakshatra:', JSON.stringify(panchangData.nakshatra, null, 2));
+      console.log('Yoga:', JSON.stringify(panchangData.yoga, null, 2));
+      console.log('Karana:', JSON.stringify(panchangData.karana, null, 2));
+      console.log('Rashi:', JSON.stringify(panchangData.rashi, null, 2));
+      console.log('Sun/Moon Times:', {
+        sunrise: panchangData.sunrise,
+        sunset: panchangData.sunset,
+        moonrise: panchangData.moonrise,
+        moonset: panchangData.moonset
+      });
+      console.log('Shubh Muhurat:', JSON.stringify(panchangData.shubhMuhurat, null, 2));
+      console.log('Advanced Details:', JSON.stringify(panchangData.advancedDetails, null, 2));
+      console.log('Auspicious Times:', JSON.stringify(panchangData.auspiciousTimes, null, 2));
+      console.log('Inauspicious Times:', JSON.stringify(panchangData.inauspiciousTimes, null, 2));
+      console.log('Festivals:', panchangData.festivals);
+      console.log('Vrats and Occasions:', panchangData.vratsAndOccasions);
+      console.log('=== END PANCHANG DATA ===');
       
       // Cache the result
       this.cache.set(cacheKey, { data: panchangData, timestamp: Date.now() });
@@ -472,6 +561,83 @@ export class PanchangApiService {
       console.error('Error fetching Panchang data:', error);
       throw new Error('Failed to fetch Panchang data');
     }
+  }
+
+  private getNextFullMoon(date: Date): string {
+    const nextMonth = new Date(date);
+    nextMonth.setMonth(nextMonth.getMonth() + 1);
+    nextMonth.setDate(15); // Approximate full moon
+    return nextMonth.toISOString().split('T')[0];
+  }
+
+  private getNextNewMoon(date: Date): string {
+    const nextMonth = new Date(date);
+    nextMonth.setMonth(nextMonth.getMonth() + 1);
+    nextMonth.setDate(1); // Approximate new moon
+    return nextMonth.toISOString().split('T')[0];
+  }
+
+  private getCurrentMasa(date: Date): {amanta: string, purnima: string} {
+    const masaNames = [
+      { amanta: 'Chaitra', purnima: 'Vaisakha' },
+      { amanta: 'Vaisakha', purnima: 'Jyeshtha' },
+      { amanta: 'Jyeshtha', purnima: 'Ashadha' },
+      { amanta: 'Ashadha', purnima: 'Shravana' },
+      { amanta: 'Shravana', purnima: 'Bhadrapada' },
+      { amanta: 'Bhadrapada', purnima: 'Ashwin' },
+      { amanta: 'Ashwin', purnima: 'Kartik' },
+      { amanta: 'Kartik', purnima: 'Margashirsha' },
+      { amanta: 'Margashirsha', purnima: 'Pausha' },
+      { amanta: 'Pausha', purnima: 'Magha' },
+      { amanta: 'Magha', purnima: 'Phalguna' },
+      { amanta: 'Phalguna', purnima: 'Chaitra' }
+    ];
+    return masaNames[date.getMonth()];
+  }
+
+  private getCurrentRitu(date: Date): string {
+    const ritus = ['Shishira', 'Vasanta', 'Grishma', 'Varsha', 'Sharad', 'Hemanta'];
+    return ritus[Math.floor(date.getMonth() / 2)];
+  }
+
+  private getVaara(date: Date): string {
+    const vaaras = ['Ravivar', 'Somvar', 'Mangalvar', 'Budhvar', 'Guruvaar', 'Shukravar', 'Shanivar'];
+    return vaaras[date.getDay()];
+  }
+
+  private getDishaShool(date: Date): string {
+    const directions = ['East', 'South', 'West', 'North'];
+    return directions[date.getDay() % 4];
+  }
+
+  private getAuspiciousTimes(sunrise: string, sunset: string): Array<{name: string, time: string, description: string}> {
+    return [
+      {
+        name: 'Brahma Muhurat',
+        time: '04:30 - 05:30',
+        description: 'Most auspicious time for spiritual practices and meditation'
+      },
+      {
+        name: 'Abhijit Muhurat',
+        time: '11:30 - 12:30',
+        description: 'Victory time, good for starting new ventures'
+      }
+    ];
+  }
+
+  private getInauspiciousTimes(sunrise: string, sunset: string): Array<{name: string, time: string, description: string}> {
+    return [
+      {
+        name: 'Rahu Kaal',
+        time: '12:30 - 02:00',
+        description: 'Inauspicious time, avoid starting new work'
+      },
+      {
+        name: 'Gulika Kaal',
+        time: '10:30 - 12:00',
+        description: 'Period of obstacles and difficulties'
+      }
+    ];
   }
 }
 

@@ -18,22 +18,51 @@ interface PanchangData {
   tithi: {
     name: string;
     deity: string;
+    type?: string;
+    number?: number;
+    start?: string;
+    end?: string;
+    nextTithi?: string;
+    meaning?: string;
+    special?: string;
     significance: string;
     endTime: string;
   };
   nakshatra: {
     name: string;
+    lord?: string;
     deity: string;
+    number?: number;
+    start?: string;
+    end?: string;
+    nextNakshatra?: string;
+    meaning?: string;
+    special?: string;
+    summary?: string;
+    words?: string;
     qualities: string;
     endTime: string;
   };
   yoga: {
     name: string;
+    number?: number;
+    start?: string;
+    end?: string;
     meaning: string;
+    special?: string;
+    nextYoga?: string;
     endTime: string;
   };
   karana: {
     name: string;
+    lord?: string;
+    deity?: string;
+    type?: string;
+    number?: number;
+    start?: string;
+    end?: string;
+    special?: string;
+    nextKarana?: string;
     meaning: string;
     endTime: string;
   };
@@ -52,6 +81,32 @@ interface PanchangData {
     gulikaKaal: string;
     yamaGandaKaal: string;
   };
+  advancedDetails?: {
+    solarNoon: string;
+    nextFullMoon: string;
+    nextNewMoon: string;
+    masa: {
+      amantaName: string;
+      purnimaName: string;
+      adhikMaasa: boolean;
+      ayana: string;
+      moonPhase: string;
+      paksha: string;
+      ritu: string;
+    };
+    vaara: string;
+    dishaShool: string;
+  };
+  auspiciousTimes?: Array<{
+    name: string;
+    time: string;
+    description: string;
+  }>;
+  inauspiciousTimes?: Array<{
+    name: string;
+    time: string;
+    description: string;
+  }>;
   festivals: string[];
   vratsAndOccasions: string[];
 }
@@ -188,13 +243,48 @@ export default function HinduPanchangPage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-2">
-                      <h3 className="text-lg font-semibold">{panchangData.tithi.name}</h3>
-                      <p className="text-sm text-muted-foreground">Deity: {panchangData.tithi.deity}</p>
-                      <p className="text-xs text-muted-foreground">{panchangData.tithi.significance}</p>
-                      <Badge variant="outline" className="text-xs">
-                        Ends: {panchangData.tithi.endTime}
-                      </Badge>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-semibold">{panchangData.tithi.name}</h3>
+                        {panchangData.tithi.number && (
+                          <Badge variant="secondary" className="text-xs">
+                            #{panchangData.tithi.number}
+                          </Badge>
+                        )}
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-sm text-muted-foreground">
+                          <strong>Deity:</strong> {panchangData.tithi.deity}
+                        </p>
+                        {panchangData.tithi.type && (
+                          <p className="text-sm text-muted-foreground">
+                            <strong>Type:</strong> {panchangData.tithi.type}
+                          </p>
+                        )}
+                        {panchangData.tithi.meaning && (
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Meaning:</strong> {panchangData.tithi.meaning}
+                          </p>
+                        )}
+                        <p className="text-xs text-muted-foreground">
+                          <strong>Significance:</strong> {panchangData.tithi.significance}
+                        </p>
+                        {panchangData.tithi.special && (
+                          <p className="text-xs text-orange-400">
+                            <strong>Special:</strong> {panchangData.tithi.special}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        <Badge variant="outline" className="text-xs">
+                          Ends: {panchangData.tithi.endTime}
+                        </Badge>
+                        {panchangData.tithi.nextTithi && (
+                          <Badge variant="outline" className="text-xs bg-orange-500/10">
+                            Next: {panchangData.tithi.nextTithi}
+                          </Badge>
+                        )}
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -207,13 +297,53 @@ export default function HinduPanchangPage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-2">
-                      <h3 className="text-lg font-semibold">{panchangData.nakshatra.name}</h3>
-                      <p className="text-sm text-muted-foreground">Deity: {panchangData.nakshatra.deity}</p>
-                      <p className="text-xs text-muted-foreground">{panchangData.nakshatra.qualities}</p>
-                      <Badge variant="outline" className="text-xs">
-                        Ends: {panchangData.nakshatra.endTime}
-                      </Badge>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-semibold">{panchangData.nakshatra.name}</h3>
+                        {panchangData.nakshatra.number && (
+                          <Badge variant="secondary" className="text-xs">
+                            #{panchangData.nakshatra.number}
+                          </Badge>
+                        )}
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-sm text-muted-foreground">
+                          <strong>Deity:</strong> {panchangData.nakshatra.deity}
+                        </p>
+                        {panchangData.nakshatra.lord && (
+                          <p className="text-sm text-muted-foreground">
+                            <strong>Lord:</strong> {panchangData.nakshatra.lord}
+                          </p>
+                        )}
+                        {panchangData.nakshatra.meaning && (
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Meaning:</strong> {panchangData.nakshatra.meaning}
+                          </p>
+                        )}
+                        <p className="text-xs text-muted-foreground">
+                          <strong>Qualities:</strong> {panchangData.nakshatra.qualities}
+                        </p>
+                        {panchangData.nakshatra.summary && (
+                          <p className="text-xs text-blue-400">
+                            <strong>Summary:</strong> {panchangData.nakshatra.summary}
+                          </p>
+                        )}
+                        {panchangData.nakshatra.words && (
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Words:</strong> {panchangData.nakshatra.words}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        <Badge variant="outline" className="text-xs">
+                          Ends: {panchangData.nakshatra.endTime}
+                        </Badge>
+                        {panchangData.nakshatra.nextNakshatra && (
+                          <Badge variant="outline" className="text-xs bg-blue-500/10">
+                            Next: {panchangData.nakshatra.nextNakshatra}
+                          </Badge>
+                        )}
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
