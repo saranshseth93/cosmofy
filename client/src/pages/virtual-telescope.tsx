@@ -85,28 +85,38 @@ export default function VirtualTelescopePage() {
 
   if (observationsLoading || telescopesLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Loading telescope data...</p>
+      <>
+        <Navigation />
+        <CosmicCursor />
+        <div className="min-h-screen bg-gradient-to-b from-black via-blue-950/20 to-black pt-24">
+          <div className="container mx-auto px-4 py-8">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+              <p className="mt-4 text-muted-foreground">Loading telescope data...</p>
+            </div>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
-      {/* Header */}
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-blue-500 to-cyan-500 bg-clip-text text-transparent">
-          Virtual Telescope Network
-        </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Real-time feeds and schedules from Hubble, James Webb, and ground-based observatories
-        </p>
-      </div>
+    <>
+      <Navigation />
+      <CosmicCursor />
+      <div className="min-h-screen bg-gradient-to-b from-black via-blue-950/20 to-black pt-24">
+          <div className="container mx-auto px-4 py-8 space-y-8">
+            {/* Header */}
+            <div className="text-center space-y-4">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-blue-500 to-cyan-500 bg-clip-text text-transparent">
+                Virtual Telescope Network
+              </h1>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Real-time feeds and schedules from Hubble, James Webb, and ground-based observatories
+              </p>
+            </div>
 
-      <Tabs value={selectedTelescope} onValueChange={setSelectedTelescope} className="w-full">
+            <Tabs value={selectedTelescope} onValueChange={setSelectedTelescope} className="w-full">
         {/* Telescope Selection */}
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="hubble">Hubble Space Telescope</TabsTrigger>
@@ -395,6 +405,9 @@ export default function VirtualTelescopePage() {
           </div>
         </CardContent>
       </Card>
-    </div>
-  );
+            </Tabs>
+          </div>
+        </div>
+      </>
+    );
 }
