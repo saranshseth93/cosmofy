@@ -210,11 +210,25 @@ export default function HinduPanchangPage() {
       <>
         <Navigation />
         <CosmicCursor />
-        <div className="min-h-screen bg-gradient-to-b from-black via-orange-950/20 to-black pt-24">
-          <div className="container mx-auto px-4 py-8">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
-              <p className="mt-4 text-muted-foreground">Loading Panchang data...</p>
+        <div className="min-h-screen relative pt-24">
+          {/* Shiva Background Image */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: `url('/attached_assets/shiva-bg_1750485532403.jpg')`,
+            }}
+          />
+          
+          {/* Responsive Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/80 md:bg-gradient-to-b md:from-black/70 md:via-black/60 md:to-black/70" />
+          
+          {/* Content Container */}
+          <div className="relative z-10">
+            <div className="container mx-auto px-4 py-8">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
+                <p className="mt-4 text-muted-foreground">Loading Panchang data...</p>
+              </div>
             </div>
           </div>
         </div>
@@ -226,8 +240,21 @@ export default function HinduPanchangPage() {
     <>
       <Navigation />
       <CosmicCursor />
-      <div className="min-h-screen bg-gradient-to-b from-black via-orange-950/20 to-black pt-24">
-        <div className="container mx-auto px-4 py-8 space-y-8">
+      <div className="min-h-screen relative pt-24">
+        {/* Shiva Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url('/attached_assets/shiva-bg_1750485532403.jpg')`,
+          }}
+        />
+        
+        {/* Responsive Overlay - stronger on mobile for better readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/75 to-black/85 sm:bg-gradient-to-b sm:from-black/75 sm:via-black/65 sm:to-black/75 md:bg-gradient-to-b md:from-black/70 md:via-black/60 md:to-black/70" />
+        
+        {/* Content Container */}
+        <div className="relative z-10">
+          <div className="container mx-auto px-4 py-8 space-y-8">
           {/* Location Chip */}
           <div className="flex justify-center">
             {locationStatus === 'requesting' && (
@@ -249,11 +276,6 @@ export default function HinduPanchangPage() {
                 {locationStatus === 'denied' && (
                   <Badge variant="outline" className="bg-orange-500/10 border-orange-500/30 text-orange-400 text-xs">
                     Default location
-                  </Badge>
-                )}
-                {locationStatus === 'granted' && (
-                  <Badge variant="outline" className="bg-green-500/10 border-green-500/30 text-green-400 text-xs">
-                    Your location
                   </Badge>
                 )}
               </div>
@@ -810,6 +832,7 @@ export default function HinduPanchangPage() {
               )}
             </>
           )}
+          </div>
         </div>
       </div>
     </>
