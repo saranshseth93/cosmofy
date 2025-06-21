@@ -1,5 +1,7 @@
 import { Handler } from "@netlify/functions";
 
+const NASA_API_KEY = process.env.NASA_API_KEY || "";
+
 export const handler: Handler = async (event, context) => {
   const headers = {
     "Access-Control-Allow-Origin": "*",
@@ -13,49 +15,72 @@ export const handler: Handler = async (event, context) => {
   }
 
   try {
-    // Sample APOD data for deployment
-    const apodData = [
-      {
-        id: 1,
-        date: "2024-12-21",
-        title: "Orion Nebula in Infrared",
-        explanation:
-          "The Orion Nebula is a stellar nursery where new stars are born, located about 1,340 light-years from Earth.",
-        url: "https://science.nasa.gov/wp-content/uploads/2023/09/orion-nebula-by-hubble-and-spitzer.jpg",
-        hdurl:
-          "https://science.nasa.gov/wp-content/uploads/2023/09/orion-nebula-by-hubble-and-spitzer.jpg",
-        mediaType: "image",
-        copyright: "NASA/ESA",
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: 2,
-        date: "2024-12-20",
-        title: "Andromeda Galaxy",
-        explanation:
-          "The Andromeda Galaxy is the nearest major galaxy to the Milky Way and is approaching us at about 250,000 mph.",
-        url: "https://science.nasa.gov/wp-content/uploads/2023/09/andromeda-galaxy-with-h-alpha.jpg",
-        hdurl:
-          "https://science.nasa.gov/wp-content/uploads/2023/09/andromeda-galaxy-with-h-alpha.jpg",
-        mediaType: "image",
-        copyright: "NASA/ESA",
-        createdAt: new Date().toISOString(),
-      },
-    ];
+    // Only proceed if NASA API key is available for authentic data
+    if (!NASA_API_KEY) {
+      return {
+        statusCode: 503,
+        headers,
+        body: JSON.stringify({
+          error: "NASA API key required for authentic APOD data",
+          message:
+            "Please configure NASA_API_KEY environment variable to access live NASA astronomy images",
+        }),
+      };
+    }
+
+    // Fetch authentic data from NASA APOD API
+    const today = new Date().toISOString().split("T")[0];
+    const endDate = today;
+    const startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .split("T")[0];
+
+    const response = await fetch(
+      `https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}&start_date=${startDate}&end_date=${endDate}`
+    );
+
+    if (!response.ok) {
+      return {
+        statusCode: 503,
+        headers,
+        body: JSON.stringify({
+          error: "NASA APOD API unavailable",
+          message: `NASA API returned status ${response.status}. Please try again later.`,
+        }),
+      };
+    }
+
+    const nasaData = await response.json();
+    const formattedData = Array.isArray(nasaData) ? nasaData : [nasaData];
+
+    const apodImages = formattedData.map((item: any, index: number) => ({
+      id: index + 1,
+      date: item.date,
+      title: item.title,
+      explanation: item.explanation,
+      url: item.url,
+      hdurl: item.hdurl || item.url,
+      mediaType: item.media_type,
+      copyright: item.copyright || "NASA",
+      createdAt: new Date().toISOString(),
+    }));
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify(apodData),
+      body: JSON.stringify(apodImages),
     };
   } catch (error) {
     console.error("APOD API Error:", error);
     return {
-      statusCode: 500,
+      statusCode: 503,
       headers,
       body: JSON.stringify({
-        error: "Internal server error",
-        message: error instanceof Error ? error.message : "Unknown error",
+        error: "Failed to fetch authentic NASA APOD data",
+        message:
+          error instanceof Error
+            ? error.message
+            : "NASA API service unavailable",
       }),
     };
   }
