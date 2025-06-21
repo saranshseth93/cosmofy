@@ -60,19 +60,19 @@ export function Footer() {
   const socialLinks = [
     {
       icon: FaLinkedin,
-      href: "https://twitter.com/cosmofy",
+      href: "https://www.linkedin.com/in/saranshseth/",
       label: "Twitter",
       color: "text-[hsl(158,76%,36%)]",
     },
     {
       icon: FaInstagram,
-      href: "https://instagram.com/cosmofy",
+      href: "https://www.instagram.com/pixel._.pundit/",
       label: "Instagram",
       color: "text-[hsl(330,81%,60%)]",
     },
     {
       icon: FaGithub,
-      href: "https://github.com/cosmofy",
+      href: "https://github.com/saranshseth93/Cosmofy",
       label: "GitHub",
       color: "text-white",
     },
