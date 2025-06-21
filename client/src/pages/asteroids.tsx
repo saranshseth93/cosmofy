@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Navigation } from '@/components/navigation';
 import { AnimatedAsteroids } from '@/components/animated-asteroids';
+import { Footer } from '@/components/footer';
 
 const nearEarthAsteroids = [
   {
@@ -266,6 +267,7 @@ export default function Asteroids() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

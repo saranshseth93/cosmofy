@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Navigation } from '@/components/navigation';
 import { CosmicCursor } from '@/components/cosmic-cursor';
+import { Footer } from '@/components/footer';
 // Animated Hindu Background Component - Similar to CodePen effect
 const DivineBackground = () => (
   <div className="absolute inset-0 overflow-hidden">

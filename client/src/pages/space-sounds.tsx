@@ -1,5 +1,6 @@
 import { Navigation } from '@/components/navigation';
 import { SpaceSoundLibrary } from '@/components/space-sound-library';
+import { Footer } from '@/components/footer';
 
 export default function SpaceSounds() {
   return (
@@ -9,6 +10,7 @@ export default function SpaceSounds() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8">
         <SpaceSoundLibrary />
       </div>
+      <Footer />
     </div>
   );
 }

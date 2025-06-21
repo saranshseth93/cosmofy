@@ -417,6 +417,7 @@ export default function MarsRoverPage() {
       </Card>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

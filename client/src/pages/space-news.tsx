@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Search, ExternalLink, Clock, Star, Newspaper } from 'lucide-react';
 import { Navigation } from '@/components/navigation';
+import { Footer } from '@/components/footer';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -279,6 +280,7 @@ export default function SpaceNews() {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 }
