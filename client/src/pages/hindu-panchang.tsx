@@ -11,9 +11,9 @@ const DivineBackground = () => (
     {/* Rich Gradient Background */}
     <div className="absolute inset-0 bg-gradient-to-br from-orange-600 via-red-700 via-purple-800 to-indigo-900" />
     
-    {/* Large Central Om Symbol */}
+    {/* Authentic Om Symbol */}
     <div className="absolute inset-0 flex items-center justify-center">
-      <svg className="w-96 h-96 opacity-30" viewBox="0 0 400 400">
+      <svg className="w-80 h-80 opacity-40" viewBox="0 0 300 300">
         <defs>
           <linearGradient id="om-gold" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#FFD700" />
@@ -21,125 +21,249 @@ const DivineBackground = () => (
             <stop offset="100%" stopColor="#FF4500" />
           </linearGradient>
         </defs>
-        {/* Detailed Om Symbol */}
-        <path
-          d="M100 200 C 100 150, 150 100, 200 100 C 250 100, 300 150, 300 200 C 300 250, 250 300, 200 300 C 150 300, 100 250, 100 200"
-          fill="url(#om-gold)"
-          strokeWidth="4"
-          stroke="#FFD700"
-        />
-        <circle cx="320" cy="160" r="25" fill="url(#om-gold)" />
-        <path d="M200 220 C 240 260, 280 240, 320 220" stroke="url(#om-gold)" strokeWidth="6" fill="none" />
+        {/* Authentic Om Symbol - ॐ */}
+        <g fill="url(#om-gold)" stroke="#FFD700" strokeWidth="2">
+          {/* Main curve */}
+          <path d="M80 180 Q 60 140, 90 120 Q 120 100, 150 120 Q 180 140, 160 180 Q 140 200, 110 180 Z" />
+          {/* Upper curve */}
+          <path d="M90 120 Q 110 80, 140 100 Q 170 120, 150 140" fill="none" strokeWidth="8" />
+          {/* Lower part */}
+          <path d="M80 180 Q 60 220, 100 240 Q 140 250, 160 220" fill="none" strokeWidth="8" />
+          {/* Right curve */}
+          <path d="M160 180 Q 200 160, 220 190 Q 230 220, 200 230 Q 180 220, 160 200" />
+          {/* Bindu (dot) */}
+          <circle cx="150" cy="70" r="8" />
+          {/* Chandrabindu (crescent) */}
+          <path d="M130 85 Q 150 75, 170 85" fill="none" strokeWidth="4" />
+        </g>
       </svg>
     </div>
     
-    {/* Corner Lotus Flowers */}
-    <div className="absolute top-10 left-10">
-      <svg className="w-32 h-32 opacity-40" viewBox="0 0 100 100">
-        <g fill="url(#lotus-gradient)">
+    {/* Authentic Lotus Flowers in Corners */}
+    <div className="absolute top-8 left-8">
+      <svg className="w-24 h-24 opacity-50" viewBox="0 0 100 100">
+        <defs>
+          <radialGradient id="lotus-gradient-1" cx="50%" cy="50%">
+            <stop offset="0%" stopColor="#FFD700" />
+            <stop offset="70%" stopColor="#FF8C00" />
+            <stop offset="100%" stopColor="#FF6B35" />
+          </radialGradient>
+        </defs>
+        {/* Outer petals */}
+        <g fill="url(#lotus-gradient-1)" stroke="#FFD700" strokeWidth="0.5">
           {[...Array(8)].map((_, i) => (
-            <path
+            <ellipse
               key={i}
-              d="M50 30 Q 65 45, 50 60 Q 35 45, 50 30"
+              cx="50"
+              cy="30"
+              rx="8"
+              ry="18"
               transform={`rotate(${i * 45} 50 50)`}
             />
           ))}
         </g>
-        <defs>
-          <radialGradient id="lotus-gradient">
-            <stop offset="0%" stopColor="#FFD700" />
-            <stop offset="100%" stopColor="#FF6B35" />
-          </radialGradient>
-        </defs>
+        {/* Inner petals */}
+        <g fill="url(#lotus-gradient-1)" stroke="#FFD700" strokeWidth="0.5">
+          {[...Array(8)].map((_, i) => (
+            <ellipse
+              key={i}
+              cx="50"
+              cy="38"
+              rx="5"
+              ry="12"
+              transform={`rotate(${i * 45 + 22.5} 50 50)`}
+            />
+          ))}
+        </g>
+        {/* Center */}
+        <circle cx="50" cy="50" r="6" fill="#FFD700" />
       </svg>
     </div>
     
-    <div className="absolute top-10 right-10">
-      <svg className="w-32 h-32 opacity-40" viewBox="0 0 100 100">
-        <g fill="url(#lotus-gradient2)">
+    <div className="absolute top-8 right-8">
+      <svg className="w-24 h-24 opacity-50" viewBox="0 0 100 100">
+        <defs>
+          <radialGradient id="lotus-gradient-2" cx="50%" cy="50%">
+            <stop offset="0%" stopColor="#FFD700" />
+            <stop offset="70%" stopColor="#FF8C00" />
+            <stop offset="100%" stopColor="#FF6B35" />
+          </radialGradient>
+        </defs>
+        <g fill="url(#lotus-gradient-2)" stroke="#FFD700" strokeWidth="0.5">
           {[...Array(8)].map((_, i) => (
-            <path
+            <ellipse
               key={i}
-              d="M50 30 Q 65 45, 50 60 Q 35 45, 50 30"
+              cx="50"
+              cy="30"
+              rx="8"
+              ry="18"
               transform={`rotate(${i * 45} 50 50)`}
             />
           ))}
         </g>
-        <defs>
-          <radialGradient id="lotus-gradient2">
-            <stop offset="0%" stopColor="#FFD700" />
-            <stop offset="100%" stopColor="#FF6B35" />
-          </radialGradient>
-        </defs>
+        <g fill="url(#lotus-gradient-2)" stroke="#FFD700" strokeWidth="0.5">
+          {[...Array(8)].map((_, i) => (
+            <ellipse
+              key={i}
+              cx="50"
+              cy="38"
+              rx="5"
+              ry="12"
+              transform={`rotate(${i * 45 + 22.5} 50 50)`}
+            />
+          ))}
+        </g>
+        <circle cx="50" cy="50" r="6" fill="#FFD700" />
       </svg>
     </div>
     
-    <div className="absolute bottom-10 left-10">
-      <svg className="w-32 h-32 opacity-40" viewBox="0 0 100 100">
-        <g fill="url(#lotus-gradient3)">
+    <div className="absolute bottom-8 left-8">
+      <svg className="w-24 h-24 opacity-50" viewBox="0 0 100 100">
+        <defs>
+          <radialGradient id="lotus-gradient-3" cx="50%" cy="50%">
+            <stop offset="0%" stopColor="#FFD700" />
+            <stop offset="70%" stopColor="#FF8C00" />
+            <stop offset="100%" stopColor="#FF6B35" />
+          </radialGradient>
+        </defs>
+        <g fill="url(#lotus-gradient-3)" stroke="#FFD700" strokeWidth="0.5">
           {[...Array(8)].map((_, i) => (
-            <path
+            <ellipse
               key={i}
-              d="M50 30 Q 65 45, 50 60 Q 35 45, 50 30"
+              cx="50"
+              cy="30"
+              rx="8"
+              ry="18"
               transform={`rotate(${i * 45} 50 50)`}
             />
           ))}
         </g>
-        <defs>
-          <radialGradient id="lotus-gradient3">
-            <stop offset="0%" stopColor="#FFD700" />
-            <stop offset="100%" stopColor="#FF6B35" />
-          </radialGradient>
-        </defs>
+        <g fill="url(#lotus-gradient-3)" stroke="#FFD700" strokeWidth="0.5">
+          {[...Array(8)].map((_, i) => (
+            <ellipse
+              key={i}
+              cx="50"
+              cy="38"
+              rx="5"
+              ry="12"
+              transform={`rotate(${i * 45 + 22.5} 50 50)`}
+            />
+          ))}
+        </g>
+        <circle cx="50" cy="50" r="6" fill="#FFD700" />
       </svg>
     </div>
     
-    <div className="absolute bottom-10 right-10">
-      <svg className="w-32 h-32 opacity-40" viewBox="0 0 100 100">
-        <g fill="url(#lotus-gradient4)">
+    <div className="absolute bottom-8 right-8">
+      <svg className="w-24 h-24 opacity-50" viewBox="0 0 100 100">
+        <defs>
+          <radialGradient id="lotus-gradient-4" cx="50%" cy="50%">
+            <stop offset="0%" stopColor="#FFD700" />
+            <stop offset="70%" stopColor="#FF8C00" />
+            <stop offset="100%" stopColor="#FF6B35" />
+          </radialGradient>
+        </defs>
+        <g fill="url(#lotus-gradient-4)" stroke="#FFD700" strokeWidth="0.5">
           {[...Array(8)].map((_, i) => (
-            <path
+            <ellipse
               key={i}
-              d="M50 30 Q 65 45, 50 60 Q 35 45, 50 30"
+              cx="50"
+              cy="30"
+              rx="8"
+              ry="18"
               transform={`rotate(${i * 45} 50 50)`}
             />
           ))}
         </g>
-        <defs>
-          <radialGradient id="lotus-gradient4">
-            <stop offset="0%" stopColor="#FFD700" />
-            <stop offset="100%" stopColor="#FF6B35" />
-          </radialGradient>
-        </defs>
+        <g fill="url(#lotus-gradient-4)" stroke="#FFD700" strokeWidth="0.5">
+          {[...Array(8)].map((_, i) => (
+            <ellipse
+              key={i}
+              cx="50"
+              cy="38"
+              rx="5"
+              ry="12"
+              transform={`rotate(${i * 45 + 22.5} 50 50)`}
+            />
+          ))}
+        </g>
+        <circle cx="50" cy="50" r="6" fill="#FFD700" />
       </svg>
     </div>
     
-    {/* Mandala Pattern */}
+    {/* Sacred Geometry and Rangoli Pattern */}
     <div className="absolute inset-0 flex items-center justify-center">
-      <svg className="w-full h-full opacity-20" viewBox="0 0 800 800">
+      <svg className="w-full h-full opacity-25" viewBox="0 0 800 800">
         <defs>
-          <pattern id="mandala-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
-            <circle cx="50" cy="50" r="20" fill="none" stroke="#FFD700" strokeWidth="1" opacity="0.5" />
-            <circle cx="50" cy="50" r="35" fill="none" stroke="#FF8C00" strokeWidth="1" opacity="0.3" />
+          <pattern id="rangoli-pattern" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+            {/* Central flower */}
+            <g transform="translate(60,60)">
+              <circle cx="0" cy="0" r="15" fill="none" stroke="#FFD700" strokeWidth="1" opacity="0.6" />
+              <circle cx="0" cy="0" r="25" fill="none" stroke="#FF8C00" strokeWidth="1" opacity="0.4" />
+              {/* Petals */}
+              {[...Array(6)].map((_, i) => (
+                <circle 
+                  key={i}
+                  cx={Math.cos(i * Math.PI / 3) * 20} 
+                  cy={Math.sin(i * Math.PI / 3) * 20} 
+                  r="8" 
+                  fill="none" 
+                  stroke="#FFD700" 
+                  strokeWidth="0.8" 
+                  opacity="0.5" 
+                />
+              ))}
+            </g>
           </pattern>
         </defs>
-        <rect width="100%" height="100%" fill="url(#mandala-pattern)" />
+        <rect width="100%" height="100%" fill="url(#rangoli-pattern)" />
       </svg>
     </div>
     
-    {/* Swastika Symbols in Corners */}
-    <div className="absolute top-20 left-1/4 opacity-25">
-      <svg className="w-16 h-16" viewBox="0 0 50 50">
-        <g stroke="#FFD700" strokeWidth="3" fill="none">
-          <path d="M25 10 L25 40 M10 25 L40 25 M25 10 L35 10 M40 25 L40 15 M25 40 L15 40 M10 25 L10 35" />
+    {/* Diya (Oil Lamp) Elements */}
+    <div className="absolute top-32 right-20 opacity-40">
+      <svg className="w-12 h-12" viewBox="0 0 40 40">
+        <g fill="#FFD700" stroke="#FF8C00" strokeWidth="0.5">
+          <ellipse cx="20" cy="25" rx="12" ry="6" />
+          <ellipse cx="20" cy="23" rx="10" ry="4" fill="#FF8C00" />
+          <path d="M28 25 Q 32 22, 30 28" fill="#FFD700" />
+          <ellipse cx="20" cy="18" rx="2" ry="4" fill="#FF4500" />
         </g>
       </svg>
     </div>
     
-    <div className="absolute bottom-20 right-1/4 opacity-25">
+    <div className="absolute bottom-32 left-20 opacity-40">
+      <svg className="w-12 h-12" viewBox="0 0 40 40">
+        <g fill="#FFD700" stroke="#FF8C00" strokeWidth="0.5">
+          <ellipse cx="20" cy="25" rx="12" ry="6" />
+          <ellipse cx="20" cy="23" rx="10" ry="4" fill="#FF8C00" />
+          <path d="M28 25 Q 32 22, 30 28" fill="#FFD700" />
+          <ellipse cx="20" cy="18" rx="2" ry="4" fill="#FF4500" />
+        </g>
+      </svg>
+    </div>
+    
+    {/* Sacred Trishul and Kalash Symbols */}
+    <div className="absolute top-20 left-1/4 opacity-35">
       <svg className="w-16 h-16" viewBox="0 0 50 50">
-        <g stroke="#FFD700" strokeWidth="3" fill="none">
-          <path d="M25 10 L25 40 M10 25 L40 25 M25 10 L35 10 M40 25 L40 15 M25 40 L15 40 M10 25 L10 35" />
+        <g stroke="#FFD700" strokeWidth="2.5" fill="#FFD700">
+          {/* Trishul (Trident) */}
+          <line x1="25" y1="10" x2="25" y2="45" />
+          <path d="M15 15 L25 10 L35 15" fill="none" />
+          <path d="M20 12 L25 8 L30 12" fill="none" />
+          <circle cx="25" cy="38" r="3" fill="none" />
+        </g>
+      </svg>
+    </div>
+    
+    <div className="absolute bottom-20 right-1/4 opacity-35">
+      <svg className="w-16 h-16" viewBox="0 0 50 50">
+        <g stroke="#FFD700" strokeWidth="2" fill="#FFD700">
+          {/* Kalash (Sacred Pot) */}
+          <path d="M18 35 Q 18 30, 25 30 Q 32 30, 32 35 L32 42 Q 32 45, 25 45 Q 18 45, 18 42 Z" />
+          <rect x="22" y="25" width="6" height="5" />
+          <path d="M15 20 Q 20 15, 25 18 Q 30 15, 35 20" fill="none" />
+          <circle cx="25" cy="22" r="2" />
         </g>
       </svg>
     </div>
