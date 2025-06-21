@@ -321,9 +321,7 @@ export default function HinduPanchangPage() {
             
             {/* Educational Description */}
             <div className="bg-black/30 backdrop-blur-sm rounded-xl px-6 py-6 border border-white/10 max-w-4xl mx-auto space-y-4">
-              <p className="text-lg text-white/95 drop-shadow-sm font-medium">
-                Ancient Hindu Calendar System - A Comprehensive Guide to Vedic Timekeeping
-              </p>
+              <p className="text-lg text-white/95 drop-shadow-sm font-medium">Ancient Hindu Calendar System</p>
               
               <div className="grid md:grid-cols-2 gap-6 text-left">
                 <div className="space-y-3">
