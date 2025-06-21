@@ -1,3 +1,4 @@
+import { Link } from 'wouter';
 import { Rocket } from 'lucide-react';
 import { FaTwitter, FaInstagram, FaYoutube, FaGithub } from 'react-icons/fa';
 import logoImage from '@assets/Cosmo - 1_1750298158776.png';
@@ -14,23 +15,29 @@ export function Footer() {
 
   const footerLinks = {
     explore: [
-      { label: 'APOD Gallery', href: '#gallery' },
-      { label: 'ISS Tracker', href: '#iss-tracker' },
-      { label: 'Aurora Forecast', href: '#aurora' },
-      { label: 'Asteroid Tracker', href: '#asteroids' },
-      { label: 'Space Missions', href: '#missions' }
+      { label: 'APOD Gallery', href: '/gallery' },
+      { label: 'ISS Tracker', href: '/iss-tracker' },
+      { label: 'Solar System', href: '/solar-system' },
+      { label: 'Aurora Forecast', href: '/aurora' },
+      { label: 'Asteroid Watch', href: '/asteroids' },
+      { label: 'Space Missions', href: '/missions' },
+      { label: 'Space News', href: '/news' },
+      { label: 'Space Sounds', href: '/sounds' }
+    ],
+    discover: [
+      { label: 'Space Weather', href: '/space-weather' },
+      { label: 'Virtual Telescope', href: '/telescope' },
+      { label: 'Cosmic Events', href: '/events' },
+      { label: 'Mars Rover Live', href: '/mars-rover' },
+      { label: 'Constellation Guide', href: '/constellations' },
+      { label: 'Satellite Tracker', href: '/satellite-tracker' },
+      { label: 'Hindu Panchang', href: '/panchang' }
     ],
     resources: [
       { label: 'NASA APIs', href: 'https://api.nasa.gov/', external: true },
-      { label: 'Space News', href: 'https://www.space.com/', external: true },
+      { label: 'Space News API', href: 'https://www.space.com/', external: true },
       { label: 'Educational Content', href: 'https://www.nasa.gov/audience/forstudents/', external: true },
       { label: 'Developer Docs', href: 'https://github.com/nasa', external: true }
-    ],
-    support: [
-      { label: 'Contact Us', href: 'mailto:contact@cosmofy.space', external: true },
-      { label: 'Privacy Policy', href: '/privacy' },
-      { label: 'Terms of Service', href: '/terms' },
-      { label: 'Accessibility', href: '/accessibility' }
     ]
   };
 
@@ -51,7 +58,7 @@ export function Footer() {
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Brand Section */}
           <div className="md:col-span-1">
             <div className="flex items-center space-x-2 mb-6">
@@ -90,12 +97,27 @@ export function Footer() {
             <ul className="space-y-2">
               {footerLinks.explore.map((link) => (
                 <li key={link.label}>
-                  <button
-                    onClick={() => scrollToSection(link.href)}
-                    className="text-sm opacity-70 hover:text-[hsl(158,76%,36%)] hover:opacity-100 transition-all duration-300 text-left"
-                  >
-                    {link.label}
-                  </button>
+                  <Link href={link.href}>
+                    <a className="text-sm opacity-70 hover:text-[hsl(158,76%,36%)] hover:opacity-100 transition-all duration-300">
+                      {link.label}
+                    </a>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Discover Section */}
+          <div>
+            <h4 className="font-orbitron font-bold mb-4 text-[hsl(330,81%,60%)]">Discover</h4>
+            <ul className="space-y-2">
+              {footerLinks.discover.map((link) => (
+                <li key={link.label}>
+                  <Link href={link.href}>
+                    <a className="text-sm opacity-70 hover:text-[hsl(330,81%,60%)] hover:opacity-100 transition-all duration-300">
+                      {link.label}
+                    </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -103,7 +125,7 @@ export function Footer() {
 
           {/* Resources Section */}
           <div>
-            <h4 className="font-orbitron font-bold mb-4 text-[hsl(330,81%,60%)]">Resources</h4>
+            <h4 className="font-orbitron font-bold mb-4 text-[hsl(43,96%,56%)]">Resources</h4>
             <ul className="space-y-2">
               {footerLinks.resources.map((link) => (
                 <li key={link.label}>
@@ -111,7 +133,7 @@ export function Footer() {
                     href={link.href}
                     target={link.external ? '_blank' : '_self'}
                     rel={link.external ? 'noopener noreferrer' : undefined}
-                    className="text-sm opacity-70 hover:text-[hsl(330,81%,60%)] hover:opacity-100 transition-all duration-300"
+                    className="text-sm opacity-70 hover:text-[hsl(43,96%,56%)] hover:opacity-100 transition-all duration-300"
                   >
                     {link.label}
                   </a>
@@ -119,8 +141,6 @@ export function Footer() {
               ))}
             </ul>
           </div>
-
-
         </div>
 
         {/* Bottom Section */}
